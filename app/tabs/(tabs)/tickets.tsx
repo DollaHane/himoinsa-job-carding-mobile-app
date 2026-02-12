@@ -14,6 +14,10 @@ import { useRouter } from "expo-router";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import TicketCard from "@/components/tickets/TicketCard";
 import { tickets } from "@/utils/mock-data";
+import { FleetStatus } from "@/components/dashboard/FleetStatus";
+import { KvaUtilisationChart } from "@/components/dashboard/KvaUtilisationChart";
+import StatCards from "@/components/dashboard/StatCards";
+
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -95,61 +99,15 @@ export default function Tickets() {
       <Center className="flex-1">
         <Box className="mx-auto w-full max-w-md px-4 pt-16">
           <VStack className="mb-6 pt-4" space="xs">
-            <Heading className="text-3xl font-bold text-primary-900 dark:text-white mb-5">Support Tickets</Heading>
+            <Heading className="text-3xl font-bold text-primary-900 dark:text-white mb-5">Dashboard</Heading>
           </VStack>
-
-          {/* Tab Triggers */}
-          <HStack className="mb-6 gap-5 justify-center">
-            <AnimatedPressable className="w-32" style={animatedStyleOpen} onPress={() => setActiveTab("open")}>
-              <HStack
-                className={`items-center justify-between bg-background-0 rounded-full shadow-md shadow-secondary-200 px-3 py-2 ${
-                  activeTab === "open" ? "bg-blue-950" : "bg-background-0"
-                }`}
-              >
-                <Text className={`text-[10px] ${activeTab === "open" ? "text-white" : "text-primary-800"}`}>Open</Text>
-                <Text className="text-xl font-bold text-red-500">{openCount}</Text>
-              </HStack>
-            </AnimatedPressable>
-
-            <AnimatedPressable className="w-32" style={animatedStyleInProgress} onPress={() => setActiveTab("inProgress")}>
-              <HStack
-                className={`items-center justify-between bg-background-0 rounded-full shadow-md shadow-secondary-200 px-3 py-2 ${
-                  activeTab === "inProgress" ? "bg-blue-950" : "bg-background-0"
-                }`}
-              >
-                <Text className={`text-[10px] ${activeTab === "inProgress" ? "text-white" : "text-primary-800"}`}>
-                  In Progress
-                </Text>
-                <Text className={`text-xl font-bold text-blue-500`}>{inProgressCount}</Text>
-              </HStack>
-            </AnimatedPressable>
+          <VStack className="mb-4 flex gap-4">
+            <StatCards/>
+            <FleetStatus />
+          </VStack>
+          <HStack className="h-[50vh] mb-4 space-x-4">
+            <KvaUtilisationChart />
           </HStack>
-
-          {/* Ticket Cards List */}
-          {filteredTickets.length === 0 ? (
-            <Box className="bg-background-50 rounded-xl p-6 border border-secondary-300">
-              <Text className="text-center text-primary-800">
-                No {activeTab === "open" ? "open" : "in progress"} tickets found
-              </Text>
-            </Box>
-          ) : (
-            filteredTickets.map((ticket) => (
-              <TicketCard
-                key={ticket.id}
-                ticket={ticket}
-                handleOpenModal={handleOpenModal}
-              />
-            ))
-          )}
-
-          {/* Tickets Card Modal */}
-          {selectedTicket && (
-            <TicketModal
-              showModal={showModal}
-              setShowModal={setShowModal}
-              ticket={selectedTicket}
-            />
-          )}
         </Box>
       </Center>
     </ScrollView>
