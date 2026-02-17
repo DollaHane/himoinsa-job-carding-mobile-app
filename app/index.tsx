@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormField } from "@/components/form/FormField";
 import { Image } from "@/components/ui/image";
-import { domain, auth_token, post_login } from "@/http/api";
+import { domain, auth_token, post_login, post_auth } from "@/http/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { encodeURL } from "@/utils/helpers";
 import { validateAuth, authCreationRequest } from "@/utils/validators/validate-auth";
@@ -28,14 +28,13 @@ export default function Home() {
 
   React.useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace("/tabs/(tabs)/tickets");
+      router.replace("/tabs/tickets");
     }
   }, [isAuthenticated, isLoading, router]);
 
   const form = useForm({
     resolver: zodResolver(validateAuth),
     defaultValues: {
-      company_code: "",
       username: "",
       password: "",
     },
@@ -43,15 +42,11 @@ export default function Home() {
 
   const { mutate: handleMutation } = useMutation({
     mutationFn: async (payload: authCreationRequest) => {
-      const encodedCompany = encodeURL(payload.company_code);
-      const encodedUsername = encodeURL(payload.username);
-      const encodedPassword = encodeURL(payload.password);
-      const url = domain + post_login + encodedCompany + "/" + encodedUsername + "/" + encodedPassword;
 
-      const response = await axios.get(url, {
+      const response = await axios.post(post_auth, payload, {
         headers: {
-          accept: "application/json",
-          authtoken: auth_token,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
         },
       });
       return response.data;
@@ -95,13 +90,13 @@ export default function Home() {
         console.log("Login successful:", data);
 
         // Save token and user data securely
-        await login(data.api_token, data.contact);
+        await login(data.token, data.user);
 
         setIsSubmitting(false);
         form.reset();
 
         // Navigate to tabs
-        router.replace("/tabs/(tabs)/tickets");
+        router.replace("/tabs/tickets");
 
         // return toast({
         //   title: "Success!",
@@ -124,7 +119,6 @@ export default function Home() {
 
   function onSubmit(value: z.infer<typeof validateAuth>) {
     const payload: authCreationRequest = {
-      company_code: value.company_code,
       username: value.username,
       password: value.password,
     };
@@ -156,20 +150,11 @@ export default function Home() {
             source={require("@/assets/images/logo-light.png")}
             size="2xl"
             resizeMode="contain"
+            alt="Company Logo"
           />
         </Box>
 
         <Text className="w-full text-center text-4xl font-bold">Login</Text>
-
-        <FormField
-          control={form.control}
-          name="company_code"
-          label="Company Code"
-          type="text"
-          placeholder="Enter company code"
-          isRequired={true}
-          isDisabled={isSubmitting}
-        />
 
         <FormField
           control={form.control}

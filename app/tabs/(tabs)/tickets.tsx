@@ -17,11 +17,14 @@ import { tickets } from "@/utils/mock-data";
 import { FleetStatus } from "@/components/dashboard/FleetStatus";
 import { KvaUtilisationChart } from "@/components/dashboard/KvaUtilisationChart";
 import StatCards from "@/components/dashboard/StatCards";
+import { useDashboardData } from "@/http/services";
+import { DashBoardFilter } from "@/types/dashboard";
 
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function Tickets() {
+  
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
@@ -29,8 +32,51 @@ export default function Tickets() {
   const [activeTab, setActiveTab] = useState<"open" | "inProgress">("open");
   const isFirstMount = useRef(true);
 
+  const filters: DashBoardFilter = {
+    date: '',
+    kva: '',
+    show_previous: false
+  }
+
+  const {data: dashboard_data, isLoading: isDashboardLoading, error, isError} = useDashboardData(filters);
+  console.log('Dashboard data:', dashboard_data);
+  console.log('Dashboard loading:', isDashboardLoading);
+  console.log('Dashboard error:', error);
+  console.log('Dashboard isError:', isError);
+
   const scaleOpen = useSharedValue(activeTab === "open" ? 1.05 : 1);
   const scaleInProgress = useSharedValue(activeTab === "inProgress" ? 1.05 : 1);
+
+  const animatedStyleOpen = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleOpen.value }],
+  }));
+
+  const animatedStyleInProgress = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleInProgress.value }],
+  }));
+
+  // All useEffect hooks must be called before any conditional returns
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+
+    scaleOpen.value = withSpring(activeTab === "open" ? 1.05 : 1, {
+      damping: 15,
+      stiffness: 150,
+    });
+    scaleInProgress.value = withSpring(activeTab === "inProgress" ? 1.05 : 1, {
+      damping: 15,
+      stiffness: 150,
+    });
+  }, [activeTab, scaleOpen, scaleInProgress]);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace("/");
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   const handleOpenModal = (ticket: Ticket) => {
     setSelectedTicket(ticket);
@@ -63,36 +109,6 @@ export default function Tickets() {
   if (!isAuthenticated) {
     return null;
   }
-
-  useEffect(() => {
-    if (isFirstMount.current) {
-      isFirstMount.current = false;
-      return;
-    }
-
-    scaleOpen.value = withSpring(activeTab === "open" ? 1.05 : 1, {
-      damping: 15,
-      stiffness: 150,
-    });
-    scaleInProgress.value = withSpring(activeTab === "inProgress" ? 1.05 : 1, {
-      damping: 15,
-      stiffness: 150,
-    });
-  }, [activeTab]);
-
-  const animatedStyleOpen = useAnimatedStyle(() => ({
-    transform: [{ scale: scaleOpen.value }],
-  }));
-
-  const animatedStyleInProgress = useAnimatedStyle(() => ({
-    transform: [{ scale: scaleInProgress.value }],
-  }));
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace("/");
-    }
-  }, [isAuthenticated, isLoading, router]);
 
   return (
     <ScrollView className="flex-1">

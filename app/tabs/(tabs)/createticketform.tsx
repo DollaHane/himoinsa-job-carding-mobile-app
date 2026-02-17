@@ -105,7 +105,7 @@ export default function CreateTicketForm() {
         form.reset();
 
         // Navigate to tickets
-        router.replace("/tabs/(tabs)/tickets");
+        router.replace("/tabs/tickets");
 
         // return toast({
         //   title: "Success!",

@@ -1,10 +1,6 @@
 import { z } from "zod";
 
 export const validateAuth = z.object({
-  company_code: z
-    .string()
-    .min(3, { message: "Company code must be longer than 2 characters" })
-    .max(20, { message: "Company code cannot be longer than 20 characters" }),
   username: z
     .string()
     .min(3, { message: "Username must be longer than 2 characters" })
