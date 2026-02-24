@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Icon } from '@/components/ui/icon';
 import { User, Mail, Phone, Briefcase, Hash } from 'lucide-react-native';
+import ColorPaletteGrid from '@/components/ui/color-pallette-grid';
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -24,7 +25,7 @@ export default function Profile() {
   if (isLoading) {
     return (
       <Box className="flex-1 items-center justify-center">
-        <Text className="text-typography-600">Loading...</Text>
+        <Text className="text-muted">Loading...</Text>
       </Box>
     );
   }
@@ -41,10 +42,10 @@ export default function Profile() {
             className="mb-6 pt-4"
             space="xs"
           >
-            <Heading className="text-3xl font-bold text-primary-900 dark:text-white mb-10">Profile</Heading>
+            <Heading className="text-3xl font-bold text-primary mb-10">Profile</Heading>
 
           {isAuthenticated && user ? (
-            <Box className="bg-background-0 rounded-2xl shadow-sm border border-secondary-300 overflow-hidden">
+            <Box className="bg-background rounded-2xl shadow-sm border border-border overflow-hidden">
               <VStack space="lg" className="p-4">
                 {/* Name */}
                 <HStack className="items-center gap-4">
@@ -52,8 +53,8 @@ export default function Profile() {
                     <Icon as={User} size="lg" className="text-blue-600 dark:text-blue-400" />
                   </Box>
                   <VStack className="flex-1">
-                    <Text className="text-xs text-primary-500 dark:text-primary-400">Name</Text>
-                    <Text className="text-base font-semibold text-primary-900 dark:text-white">
+                    <Text className="text-xs text-primary dark:text-primary">Name</Text>
+                    <Text className="text-base font-semibold text-primary ">
                       {user.firstname} {user.lastname}
                     </Text>
                   </VStack>
@@ -65,8 +66,8 @@ export default function Profile() {
                     <Icon as={Mail} size="lg" className="text-green-600 dark:text-green-400" />
                   </Box>
                   <VStack className="flex-1">
-                    <Text className="text-xs text-primary-500 dark:text-primary-400">Email</Text>
-                    <Text className="text-base font-semibold text-primary-900 dark:text-white">
+                    <Text className="text-xs text-primary dark:text-primary">Email</Text>
+                    <Text className="text-base font-semibold text-primary ">
                       {user.email}
                     </Text>
                   </VStack>
@@ -78,8 +79,8 @@ export default function Profile() {
                     <Icon as={Phone} size="lg" className="text-purple-600 dark:text-purple-400" />
                   </Box>
                   <VStack className="flex-1">
-                    <Text className="text-xs text-primary-500 dark:text-primary-400">Phone</Text>
-                    <Text className="text-base font-semibold text-primary-900 dark:text-white">
+                    <Text className="text-xs text-primary dark:text-primary">Phone</Text>
+                    <Text className="text-base font-semibold text-primary ">
                       {user.phonenumber || 'Not provided'}
                     </Text>
                   </VStack>
@@ -91,8 +92,8 @@ export default function Profile() {
                     <Icon as={Briefcase} size="lg" className="text-orange-600 dark:text-orange-400" />
                   </Box>
                   <VStack className="flex-1">
-                    <Text className="text-xs text-primary-500 dark:text-primary-400">Title</Text>
-                    <Text className="text-base font-semibold text-primary-900 dark:text-white">
+                    <Text className="text-xs text-primary dark:text-primary">Title</Text>
+                    <Text className="text-base font-semibold text-primary ">
                       {user.title || 'Not provided'}
                     </Text>
                   </VStack>
@@ -104,8 +105,8 @@ export default function Profile() {
                     <Icon as={Hash} size="lg" className="text-gray-600 dark:text-gray-400" />
                   </Box>
                   <VStack className="flex-1">
-                    <Text className="text-xs text-primary-500 dark:text-primary-400">User ID</Text>
-                    <Text className="text-sm font-mono text-primary-900 dark:text-white">
+                    <Text className="text-xs text-primary dark:text-primary">User ID</Text>
+                    <Text className="text-sm font-mono text-primary ">
                       {user.userid}
                     </Text>
                   </VStack>
@@ -113,8 +114,12 @@ export default function Profile() {
               </VStack>
             </Box>
           ) : (
-            <Text className="text-center text-primary-500">Not logged in</Text>
+            <Text className="text-center text-primary">Not logged in</Text>
           )}
+
+          <ColorPaletteGrid/>
+
+          
         </VStack>
         </Box>
       </Center>

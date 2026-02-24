@@ -20,7 +20,7 @@ cssInterop(UIProgress, { className: 'style' });
 cssInterop(UIProgress.FilledTrack, { className: 'style' });
 
 const progressStyle = tva({
-  base: 'bg-background-300 rounded-full w-full',
+  base: 'bg-background-subtle rounded-full w-full',
   variants: {
     orientation: {
       horizontal: 'w-full',
@@ -71,7 +71,7 @@ const progressStyle = tva({
 });
 
 const progressFilledTrackStyle = tva({
-  base: 'bg-primary-500 rounded-full',
+  base: 'bg-primary rounded-full',
   parentVariants: {
     orientation: {
       horizontal: 'w-full',

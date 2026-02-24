@@ -31,7 +31,7 @@ export default function HeaderMenu() {
           return (
             <Pressable
               {...triggerProps}
-              className="w-12 h-12 rounded-full bg-blue-950 items-center justify-center"
+              className="w-12 h-12 rounded-full bg-accent-primary items-center justify-center"
             >
               <Icon as={User} size="xl" className="text-white" />
             </Pressable>

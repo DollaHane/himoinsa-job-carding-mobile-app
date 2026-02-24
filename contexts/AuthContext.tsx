@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import axios from 'axios';
+import { router } from 'expo-router';
 
 interface User {
   id: number;
@@ -41,6 +43,7 @@ interface AuthContextType {
   login: (token: string, user: User) => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
+  handleTokenExpired: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,6 +58,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     loadSavedAuth();
   }, []);
+
+  // Setup axios interceptor for handling 401 responses
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response?.status === 401 && isAuthenticated) {
+          console.log('Token expired - logging out');
+          await handleTokenExpired();
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [isAuthenticated]);
 
   const loadSavedAuth = async () => {
     try {
@@ -104,6 +125,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleTokenExpired = async () => {
+    try {
+      await logout();
+      router.replace('/');
+    } catch (error) {
+      console.error('Error handling token expiration:', error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -113,6 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         isLoading,
+        handleTokenExpired,
       }}
     >
       {children}

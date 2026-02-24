@@ -2,8 +2,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import axios, { AxiosError } from "axios";
 
 import { DashBoardFilter } from "@/types/dashboard";
+import { KvaRevenueData, KvaContractDetailsResponse } from "@/types/revenue";
 
-import { get_fleet_control } from "./api";
+import { get_fleet_control, get_kva_revenue, get_kva_contract_details } from "./api";
 
 type ApiError = {
   message: string
@@ -16,15 +17,73 @@ type ApiError = {
  * 
  */
 export async function DashboardData(params: DashBoardFilter, token: string | null) {
-    const response = await axios.get(get_fleet_control, {
-        params: params,
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-    })
-    return response.data
+    console.log('url', get_fleet_control);
+    try {
+        const response = await axios.get(get_fleet_control, {
+            params: params,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        })
+        return response.data.data
+    } catch (error) {
+        console.error('DashboardData error:', error);
+        console.error('Error details:', parseError(error));
+        throw error;
+    }
+}
+
+/**
+ * Fetch KVA Revenue data
+ * 
+ */
+export async function KvaRevenueDataAction(params: { start_date: string; end_date: string }, token: string | null) {
+    console.log('url', get_kva_revenue);
+    try {
+        const response = await axios.get(get_kva_revenue, {
+            params: params,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        })
+        return response.data.data as KvaRevenueData
+    } catch (error) {
+        console.error('KvaRevenueData error:', error);
+        console.error('Error details:', parseError(error));
+        throw error;
+    }
+}
+
+/**
+ * Fetch contract details for a specific kVA size
+ * 
+ */
+export async function KvaContractDetailsAction(params: { start_date: string; end_date: string; kva: number }, token: string | null) {
+    console.log('url', get_kva_contract_details);
+    console.log('params', params);
+    try {
+        const response = await axios.get(get_kva_contract_details, {
+            params: params,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+        })
+        console.log('KvaContractDetails response', response.data);
+        return {
+            kva: response.data.kva,
+            contracts: response.data.contracts
+        } as KvaContractDetailsResponse
+    } catch (error) {
+        console.error('KvaContractDetailsAction error:', error);
+        console.error('Error details:', parseError(error));
+        throw error;
+    }
 }
 
 /**

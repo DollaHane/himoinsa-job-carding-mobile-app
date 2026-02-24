@@ -16,7 +16,7 @@ const Skeleton = React.forwardRef<HTMLDivElement, ISkeletonProps>(
       variant = 'rounded',
       children,
       speed = 2,
-      startColor = 'bg-background-200',
+      startColor = 'bg-background-subtle',
       isLoaded = false,
       ...props
     },
@@ -53,7 +53,7 @@ const SkeletonText = React.forwardRef<HTMLDivElement, ISkeletonTextProps>(
       className,
       _lines,
       isLoaded = false,
-      startColor = 'bg-background-200',
+      startColor = 'bg-background-subtle',
       gap = 2,
       children,
       ...props

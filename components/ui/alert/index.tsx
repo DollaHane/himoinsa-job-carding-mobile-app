@@ -14,7 +14,7 @@ import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
 const SCOPE = 'ALERT';
 
 const alertStyle = tva({
-  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border-outline-100',
+  base: 'items-center py-3 px-4 rounded-md flex-row gap-2 border',
 
   variants: {
     action: {
@@ -27,7 +27,7 @@ const alertStyle = tva({
 
     variant: {
       solid: '',
-      outline: 'border bg-background-0',
+      outline: 'border bg-background',
     },
   },
 });
@@ -73,10 +73,10 @@ const alertTextStyle = tva({
   },
   parentVariants: {
     action: {
-      error: 'text-error-800',
-      warning: 'text-warning-800',
-      success: 'text-success-800',
-      info: 'text-info-800',
+      error: 'text-error',
+      warning: 'text-warning',
+      success: 'text-success',
+      info: 'text-info',
       muted: 'text-background-800',
     },
   },
@@ -96,10 +96,10 @@ const alertIconStyle = tva({
   },
   parentVariants: {
     action: {
-      error: 'text-error-800',
-      warning: 'text-warning-800',
-      success: 'text-success-800',
-      info: 'text-info-800',
+      error: 'text-error',
+      warning: 'text-warning',
+      success: 'text-success',
+      info: 'text-info',
       muted: 'text-background-800',
     },
   },

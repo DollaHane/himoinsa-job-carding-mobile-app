@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Network Associates Mobile Portal",
-    "slug": "network-associates-mobile-portal",
+    "name": "Himoinsa Director Portal",
+    "slug": "himoinsa-director-portal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "networkassociatesmobileportal",
+    "scheme": "himoinsadirectorportal",
     "userInterfaceStyle": "automatic",
     "primaryColor": "#0c0c6e",
-    "description": "IT Support and Service Management Portal for Network Associates clients. Manage support tickets, track issues, and communicate with your support team.",
+    "description": "Himoinsa director portal for viewing kVA utilisation and company data.",
     "privacy": "unlisted",
     "newArchEnabled": true,
     "splash": {
@@ -18,7 +18,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.networkassociates.mobileportal",
+      "bundleIdentifier": "com.himoinsa.directorportal",
       "buildNumber": "1",
       "infoPlist": {
         "NSCameraUsageDescription": "This app does not use the camera.",
@@ -27,7 +27,7 @@
       }
     },
     "android": {
-      "package": "com.networkassociates.mobileportal",
+      "package": "com.himoinsa.directorportal",
       "versionCode": 1,
       "permissions": [
         "INTERNET"

@@ -3,7 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs, Href } from "expo-router";
 import CustomNavBar from "@/components/navigation/custom-nav-bar";
 import HeaderMenu from "@/components/navigation/header-menu";
-import { Ticket, Plus, User, FileText } from "lucide-react-native";
+import { Ticket, Plus, User, FileText, Zap, HandCoins } from "lucide-react-native";
 
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>["name"]; color: string }) {
   return (
@@ -31,12 +31,12 @@ const routes: Record<string, Routes> = {
   tickets: {
     name: "tickets",
     label: "Tickets",
-    icon: Ticket,
+    icon: Zap,
   },
   create_tickets: {
     name: "createticketform",
     label: "Create Ticket",
-    icon: Plus,
+    icon: HandCoins,
   },
   profile: {
     name: "profile",

@@ -133,23 +133,23 @@ export default function Home() {
   // Show loading while checking auth status
   if (isLoading) {
     return (
-      <Box className="flex-1 bg-background-0 items-center justify-center">
-        <Text className="text-typography-600">Loading...</Text>
+      <Box className="flex-1 bg-background items-center justify-center">
+        <Text className="text-muted">Loading...</Text>
       </Box>
     );
   }
 
   return (
-    <Box className="flex-1 bg-background-50 p-5 pt-16">
+    <Box className="flex-1 bg-background-subtle p-5 pt-16">
       <VStack
         className="w-full"
         space="lg"
       >
-        <Box className="flex items-center justify-center bg-blue-900 dark:bg-background-0 rounded-xl h-32 w-full mb-12 shadow-md dark:shadow-none">
+        <Box className="flex items-center justify-center rounded-xl h-20 w-80 my-12 mx-auto shadow-md dark:shadow-none overflow-hidden">
           <Image
-            source={require("@/assets/images/logo-light.png")}
-            size="2xl"
-            resizeMode="contain"
+            source={require("@/assets/images/Himoinsa-Logo.png")}
+            className="w-full h-full"
+            resizeMode="cover"
             alt="Company Logo"
           />
         </Box>
@@ -193,12 +193,12 @@ export default function Home() {
         </Button>
 
         <Box className="w-full">
-          <Text className="text-center text-typography-600">Trouble logging in?</Text>
+          <Text className="text-center text-muted">Trouble logging in?</Text>
           <Link ><Text className="text-center underline text-blue-500">Contact system administrator</Text></Link>
         </Box>
       </VStack>
       <Box className="absolute bottom-4 w-full">
-        <Text className="text-center text-typography-600">{`© ${currentYear} Network Associates`}</Text>
+        <Text className="text-center text-muted">{`© ${currentYear} Network Associates`}</Text>
       </Box>
     </Box>
   );

@@ -8,7 +8,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
   return (
     <Box>
       <Box className="items-center mx-4">
-        <Text className="text-center text-typography-950">
+        <Text className="text-center text">
           Open up the code for this screen:
         </Text>
         <Box className="rounded-sm p-2 my-2 bg-secondary-200">
@@ -17,7 +17,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
           </Text>
         </Box>
 
-        <Text className="text-center text-typography-950">
+        <Text className="text-center text">
           Change any of the text, save the file, and your app will automatically
           update.
         </Text>

@@ -12,24 +12,24 @@ export default function PolicyPage() {
       <Center className="flex-1">
         <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-8">
           <VStack space="lg">
-            <Heading className="text-3xl font-bold text-primary-900 dark:text-white mb-4">
+            <Heading className="text-3xl font-bold text-primary dark:text-white mb-4">
               Privacy Policy
             </Heading>
 
-            <Box className="bg-background-0 rounded-2xl shadow-sm border border-secondary-100 p-4">
+            <Box className="bg-background rounded-2xl shadow-sm border border-secondary p-4">
               <VStack space="md">
-                <Text className="text-sm text-primary-800 dark:text-primary-200">
+                <Text className="text-sm text-primary dark:text-primary">
                   Last Updated: {new Date().toLocaleDateString()}
                 </Text>
 
                 <VStack space="md">
-                  <Heading className="text-lg font-bold text-primary-900 dark:text-white">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
                     1. Information We Collect
                   </Heading>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300">
+                  <Text className="text-sm text-primary dark:text-primary">
                     We collect information you provide directly to us, including:
                   </Text>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300 ml-4">
+                  <Text className="text-sm text-primary dark:text-primary ml-4">
                     • Name and contact information{'\n'}
                     • User ID and authentication credentials{'\n'}
                     • Support ticket information{'\n'}
@@ -38,13 +38,13 @@ export default function PolicyPage() {
                 </VStack>
 
                 <VStack space="md">
-                  <Heading className="text-lg font-bold text-primary-900 dark:text-white">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
                     2. How We Use Your Information
                   </Heading>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300">
+                  <Text className="text-sm text-primary dark:text-primary">
                     We use the information we collect to:
                   </Text>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300 ml-4">
+                  <Text className="text-sm text-primary dark:text-primary ml-4">
                     • Provide, maintain, and improve our services{'\n'}
                     • Process and complete transactions{'\n'}
                     • Send you technical notices and support messages{'\n'}
@@ -53,23 +53,23 @@ export default function PolicyPage() {
                 </VStack>
 
                 <VStack space="md">
-                  <Heading className="text-lg font-bold text-primary-900 dark:text-white">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
                     3. Data Security
                   </Heading>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300">
+                  <Text className="text-sm text-primary dark:text-primary">
                     We use secure storage mechanisms to protect your data. Your authentication
                     credentials are stored securely using industry-standard encryption.
                   </Text>
                 </VStack>
 
                 <VStack space="md">
-                  <Heading className="text-lg font-bold text-primary-900 dark:text-white">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
                     4. Your Rights
                   </Heading>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300">
+                  <Text className="text-sm text-primary dark:text-primary">
                     You have the right to:
                   </Text>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300 ml-4">
+                  <Text className="text-sm text-primary dark:text-primary ml-4">
                     • Access your personal data{'\n'}
                     • Request deletion of your data{'\n'}
                     • Opt-out of communications{'\n'}
@@ -78,17 +78,17 @@ export default function PolicyPage() {
                 </VStack>
 
                 <VStack space="md">
-                  <Heading className="text-lg font-bold text-primary-900 dark:text-white">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
                     5. Contact Us
                   </Heading>
-                  <Text className="text-sm text-primary-700 dark:text-primary-300">
+                  <Text className="text-sm text-primary dark:text-primary">
                     If you have questions about this Privacy Policy, please contact us at:{'\n\n'}
                     Network Associates{'\n'}
                     Email: privacy@networkassociates.com
                   </Text>
                 </VStack>
 
-                <Text className="text-xs text-primary-500 dark:text-primary-400 mt-4">
+                <Text className="text-xs text-primary dark:text-primary mt-4">
                   Note: This is a template privacy policy. Please customize it with your actual
                   data practices and have it reviewed by legal counsel before publishing.
                 </Text>

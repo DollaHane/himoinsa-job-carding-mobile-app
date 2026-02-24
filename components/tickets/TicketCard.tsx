@@ -18,7 +18,7 @@ export default function TicketCard({ ticket, handleOpenModal }: TicketCardProps)
   return (
     <Box
       key={ticket.id}
-      className="bg-background-0 rounded-2xl shadow-sm border border-secondary-300 overflow-hidden mb-6"
+      className="bg-background rounded-2xl shadow-sm border border-secondary overflow-hidden mb-6"
     >
       <Box className="p-3 bg-blue-950">
         <HStack className="items-center justify-between">
@@ -67,20 +67,20 @@ export default function TicketCard({ ticket, handleOpenModal }: TicketCardProps)
         className="p-3"
         space="md"
       >
-        <Heading className="text-lg font-bold text-primary-800">{ticket.subject}</Heading>
+        <Heading className="text-lg font-bold text-primary">{ticket.subject}</Heading>
 
         <HStack className="items-start gap-3">
           <HStack className="items-start gap-3">
-            <Box className="w-8 h-8 rounded-lg bg-background-100 items-center justify-center">
+            <Box className="w-8 h-8 rounded-lg bg-background-subtle items-center justify-center">
               <Icon
                 as={Clock}
-                className="text-primary-600 dark:text-primary-400"
+                className="text-primary dark:text-primary"
                 size="sm"
               />
             </Box>
             <VStack>
-              <Text className="text-xs text-primary-500 dark:text-primary-400 mb-0.5">Last Reply</Text>
-              <Text className="text-sm font-semibold text-primary-800 dark:text-white">
+              <Text className="text-xs text-primary dark:text-primary mb-0.5">Last Reply</Text>
+              <Text className="text-sm font-semibold text-primary dark:text-white">
                 {ticket.lastreply === "0000-00-00 00:00:00" ? "No Reply Yet" : ticket.lastreply}
               </Text>
             </VStack>
@@ -88,15 +88,15 @@ export default function TicketCard({ ticket, handleOpenModal }: TicketCardProps)
         </HStack>
       </VStack>
 
-      <Box className="p-3 bg-background-0 border-t-2 border-dashed border-background-100">
+      <Box className="p-3 bg-background border-t-2 border-dashed border-background-subtle">
         <HStack className="items-center justify-between">
           <VStack>
-            <Text className="text-xs text-primary-800 mb-0.5">Created</Text>
-            <Text className="text-xs font-mono text-primary-600">{ticket.date}</Text>
+            <Text className="text-xs text-primary mb-0.5">Created</Text>
+            <Text className="text-xs font-mono text-primary">{ticket.date}</Text>
           </VStack>
           <VStack className="items-end">
-            <Text className="text-xs text-primary-400 mb-0.5">Ticket ID</Text>
-            <Text className="text-xs font-mono font-bold text-primary-600">#{ticket.ticketid}</Text>
+            <Text className="text-xs text-primary mb-0.5">Ticket ID</Text>
+            <Text className="text-xs font-mono font-bold text-primary">#{ticket.ticketid}</Text>
           </VStack>
         </HStack>
       </Box>

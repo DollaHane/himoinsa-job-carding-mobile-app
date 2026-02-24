@@ -48,7 +48,7 @@ export default function NavBarItem({ item, active }: NavBarItemProps) {
       >
         <View
           className={`h-16 w-16 rounded-full flex items-center justify-center ${
-            active ? "bg-blue-950 text-white" : "bg-background-0"
+            active ? "bg-accent-primary text-white" : "bg-background"
           }`}
         >
           <Icon

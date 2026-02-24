@@ -12,6 +12,7 @@ export const validateTicketCreation = z.object({
   cc: z.string().optional(),
   priority: z.string().optional(),
   tags: z.string().optional(),
+  date: z.string().optional(),
 });
 
 export type ticketCreationRequest = z.infer<typeof validateTicketCreation>;

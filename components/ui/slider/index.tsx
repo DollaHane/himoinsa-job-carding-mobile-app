@@ -43,7 +43,7 @@ const sliderStyle = tva({
 });
 
 const sliderThumbStyle = tva({
-  base: 'bg-primary-500 absolute rounded-full data-[focus=true]:bg-primary-600 data-[active=true]:bg-primary-600 data-[hover=true]:bg-primary-600 data-[disabled=true]:bg-primary-500 web:cursor-pointer web:data-[active=true]:outline web:data-[active=true]:outline-4 web:data-[active=true]:outline-primary-400 shadow-hard-1',
+  base: 'bg-primary absolute rounded-full data-[focus=true]:bg-primary data-[active=true]:bg-primary data-[hover=true]:bg-primary data-[disabled=true]:bg-primary web:cursor-pointer web:data-[active=true]:outline web:data-[active=true]:outline-4 web:data-[active=true]:outline-primary-400 shadow-hard-1',
 
   parentVariants: {
     size: {
@@ -55,7 +55,7 @@ const sliderThumbStyle = tva({
 });
 
 const sliderTrackStyle = tva({
-  base: 'bg-background-300 rounded-lg overflow-hidden',
+  base: 'bg-background-subtle rounded-lg overflow-hidden',
   parentVariants: {
     orientation: {
       horizontal: 'w-full',
@@ -142,7 +142,7 @@ const sliderTrackStyle = tva({
 });
 
 const sliderFilledTrackStyle = tva({
-  base: 'bg-primary-500 data-[focus=true]:bg-primary-600 data-[active=true]:bg-primary-600 data-[hover=true]:bg-primary-600',
+  base: 'bg-primary data-[focus=true]:bg-primary data-[active=true]:bg-primary data-[hover=true]:bg-primary',
   parentVariants: {
     orientation: {
       horizontal: 'h-full',

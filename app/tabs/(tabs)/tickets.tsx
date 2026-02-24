@@ -39,10 +39,8 @@ export default function Tickets() {
   }
 
   const {data: dashboard_data, isLoading: isDashboardLoading, error, isError} = useDashboardData(filters);
-  console.log('Dashboard data:', dashboard_data);
-  console.log('Dashboard loading:', isDashboardLoading);
-  console.log('Dashboard error:', error);
-  console.log('Dashboard isError:', isError);
+
+  console.log('chart_data', dashboard_data);
 
   const scaleOpen = useSharedValue(activeTab === "open" ? 1.05 : 1);
   const scaleInProgress = useSharedValue(activeTab === "inProgress" ? 1.05 : 1);
@@ -113,15 +111,15 @@ export default function Tickets() {
   return (
     <ScrollView className="flex-1">
       <Center className="flex-1">
-        <Box className="mx-auto w-full max-w-md px-4 pt-16">
+        <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-36">
           <VStack className="mb-6 pt-4" space="xs">
-            <Heading className="text-3xl font-bold text-primary-900 dark:text-white mb-5">Dashboard</Heading>
+            <Heading className="text-3xl font-bold text-text mb-5">Dashboard</Heading>
           </VStack>
           <VStack className="mb-4 flex gap-4">
             <StatCards/>
             <FleetStatus />
           </VStack>
-          <HStack className="h-[50vh] mb-4 space-x-4">
+          <HStack className="mb-4 space-x-4">
             <KvaUtilisationChart />
           </HStack>
         </Box>

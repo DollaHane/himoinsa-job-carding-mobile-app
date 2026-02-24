@@ -61,7 +61,7 @@ const modalBackdropStyle = tva({
 });
 
 const modalContentStyle = tva({
-  base: 'bg-background-0 rounded-xl overflow-hidden border border-outline-100 shadow-hard-2 p-6',
+  base: 'bg-background rounded-xl overflow-hidden border border shadow-hard-2 p-6',
   parentVariants: {
     size: {
       xs: 'w-[60%] max-w-[360px]',
@@ -78,7 +78,7 @@ const modalBodyStyle = tva({
 });
 
 const modalCloseButtonStyle = tva({
-  base: 'group/modal-close-button z-10 rounded data-[focus-visible=true]:web:bg-background-100 web:outline-0 cursor-pointer',
+  base: 'group/modal-close-button z-10 rounded data-[focus-visible=true]:web:bg-background-subtle web:outline-0 cursor-pointer',
 });
 
 const modalHeaderStyle = tva({

@@ -81,7 +81,7 @@ const drawerBackdropStyle = tva({
 });
 
 const drawerContentStyle = tva({
-  base: 'bg-background-0 overflow-scroll border-outline-100 p-6 absolute',
+  base: 'bg-background overflow-scroll border p-6 absolute',
   parentVariants: {
     size: {
       sm: 'w-1/4',
@@ -141,7 +141,7 @@ const drawerContentStyle = tva({
 });
 
 const drawerCloseButtonStyle = tva({
-  base: 'z-10 rounded data-[focus-visible=true]:web:bg-background-100 web:outline-0 cursor-pointer',
+  base: 'z-10 rounded data-[focus-visible=true]:web:bg-background-subtle web:outline-0 cursor-pointer',
 });
 
 const drawerHeaderStyle = tva({

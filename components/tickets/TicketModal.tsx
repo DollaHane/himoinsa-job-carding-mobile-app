@@ -37,7 +37,7 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
         <ModalHeader>
           <VStack>
             <Heading size="lg">Ticket #{ticket.ticketid}</Heading>
-            <Text className="text-sm text-typography-600">
+            <Text className="text-sm text-muted">
               {ticket.subject}
             </Text>
           </VStack>
@@ -50,11 +50,11 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
             <VStack space="lg">
               {/* Message */}
               <Box>
-                <Text className="text-sm font-semibold text-typography-900 mb-2">
+                <Text className="text-sm font-semibold text mb-2">
                   Message
                 </Text>
-                <Box className="bg-background-50 p-4 rounded-lg">
-                  <Text className="text-sm text-typography-800">
+                <Box className="bg-background-subtle p-4 rounded-lg">
+                  <Text className="text-sm text">
                     {ticket.message || 'No message provided'}
                   </Text>
                 </Box>
@@ -63,8 +63,8 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Service */}
               {ticket.service && (
                 <Box>
-                  <Text className="text-xs text-typography-500 mb-1">Service</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Service</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.service}
                   </Text>
                 </Box>
@@ -72,8 +72,8 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
 
               {/* Ticket Key */}
               <Box>
-                <Text className="text-xs text-typography-500 mb-1">Ticket Key</Text>
-                <Text className="text-sm font-mono text-typography-900">
+                <Text className="text-xs text-muted mb-1">Ticket Key</Text>
+                <Text className="text-sm font-mono text">
                   {ticket.ticketkey}
                 </Text>
               </Box>
@@ -81,14 +81,14 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Admin Replying */}
               <HStack className="justify-between">
                 <Box className="flex-1">
-                  <Text className="text-xs text-typography-500 mb-1">Admin Replying</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Admin Replying</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.adminreplying === '1' ? 'Yes' : 'No'}
                   </Text>
                 </Box>
                 <Box className="flex-1">
-                  <Text className="text-xs text-typography-500 mb-1">Admin</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Admin</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.admin || 'N/A'}
                   </Text>
                 </Box>
@@ -97,14 +97,14 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Read Status */}
               <HStack className="justify-between">
                 <Box className="flex-1">
-                  <Text className="text-xs text-typography-500 mb-1">Client Read</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Client Read</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.clientread === '1' ? 'Yes' : 'No'}
                   </Text>
                 </Box>
                 <Box className="flex-1">
-                  <Text className="text-xs text-typography-500 mb-1">Admin Read</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Admin Read</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.adminread === '1' ? 'Yes' : 'No'}
                   </Text>
                 </Box>
@@ -113,14 +113,14 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* IDs */}
               <HStack className="justify-between">
                 <Box className="flex-1">
-                  <Text className="text-xs text-typography-500 mb-1">User ID</Text>
-                  <Text className="text-sm font-mono text-typography-900">
+                  <Text className="text-xs text-muted mb-1">User ID</Text>
+                  <Text className="text-sm font-mono text">
                     {ticket.userid}
                   </Text>
                 </Box>
                 <Box className="flex-1">
-                  <Text className="text-xs text-typography-500 mb-1">Contact ID</Text>
-                  <Text className="text-sm font-mono text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Contact ID</Text>
+                  <Text className="text-sm font-mono text">
                     {ticket.contactid}
                   </Text>
                 </Box>
@@ -129,8 +129,8 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Project ID */}
               {ticket.project_id !== '0' && (
                 <Box>
-                  <Text className="text-xs text-typography-500 mb-1">Project ID</Text>
-                  <Text className="text-sm font-mono text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Project ID</Text>
+                  <Text className="text-sm font-mono text">
                     {ticket.project_id}
                   </Text>
                 </Box>
@@ -139,8 +139,8 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Assigned */}
               {ticket.assigned !== '0' && (
                 <Box>
-                  <Text className="text-xs text-typography-500 mb-1">Assigned To</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Assigned To</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.assigned}
                   </Text>
                 </Box>
@@ -149,8 +149,8 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Line Manager */}
               {ticket.line_manager !== '0' && (
                 <Box>
-                  <Text className="text-xs text-typography-500 mb-1">Line Manager</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Line Manager</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.line_manager}
                   </Text>
                 </Box>
@@ -159,8 +159,8 @@ export function TicketModal({ showModal, setShowModal, ticket }: TicketModalProp
               {/* Milestone */}
               {ticket.milestone !== '0' && (
                 <Box>
-                  <Text className="text-xs text-typography-500 mb-1">Milestone</Text>
-                  <Text className="text-sm font-semibold text-typography-900">
+                  <Text className="text-xs text-muted mb-1">Milestone</Text>
+                  <Text className="text-sm font-semibold text">
                     {ticket.milestone}
                   </Text>
                 </Box>

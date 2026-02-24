@@ -75,7 +75,7 @@ const checkboxStyle = tva({
 });
 
 const checkboxIndicatorStyle = tva({
-  base: 'justify-center items-center border-outline-400 bg-transparent rounded web:data-[focus-visible=true]:outline-none web:data-[focus-visible=true]:ring-2 web:data-[focus-visible=true]:ring-indicator-primary data-[checked=true]:bg-primary-600 data-[checked=true]:border-primary-600 data-[hover=true]:data-[checked=false]:border-outline-500 data-[hover=true]:bg-transparent data-[hover=true]:data-[invalid=true]:border-error-700 data-[hover=true]:data-[checked=true]:bg-primary-700 data-[hover=true]:data-[checked=true]:border-primary-700 data-[hover=true]:data-[checked=true]:data-[disabled=true]:border-primary-600 data-[hover=true]:data-[checked=true]:data-[disabled=true]:bg-primary-600 data-[hover=true]:data-[checked=true]:data-[disabled=true]:opacity-40 data-[hover=true]:data-[checked=true]:data-[disabled=true]:data-[invalid=true]:border-error-700 data-[hover=true]:data-[disabled=true]:border-outline-400 data-[hover=true]:data-[disabled=true]:data-[invalid=true]:border-error-700 data-[active=true]:data-[checked=true]:bg-primary-800 data-[active=true]:data-[checked=true]:border-primary-800 data-[invalid=true]:border-error-700 data-[disabled=true]:opacity-40',
+  base: 'justify-center items-center border bg-transparent rounded web:data-[focus-visible=true]:outline-none web:data-[focus-visible=true]:ring-2 web:data-[focus-visible=true]:ring-indicator-primary data-[checked=true]:bg-primary data-[checked=true]:border-primary data-[hover=true]:data-[checked=false]:border data-[hover=true]:bg-transparent data-[hover=true]:data-[invalid=true]:border-error data-[hover=true]:data-[checked=true]:bg-primary data-[hover=true]:data-[checked=true]:border-primary data-[hover=true]:data-[checked=true]:data-[disabled=true]:border-primary data-[hover=true]:data-[checked=true]:data-[disabled=true]:bg-primary data-[hover=true]:data-[checked=true]:data-[disabled=true]:opacity-40 data-[hover=true]:data-[checked=true]:data-[disabled=true]:data-[invalid=true]:border-error data-[hover=true]:data-[disabled=true]:border data-[hover=true]:data-[disabled=true]:data-[invalid=true]:border-error data-[active=true]:data-[checked=true]:bg-primary data-[active=true]:data-[checked=true]:border-primary data-[invalid=true]:border-error data-[disabled=true]:opacity-40',
   parentVariants: {
     size: {
       lg: 'w-6 h-6 border-[3px]',
@@ -86,7 +86,7 @@ const checkboxIndicatorStyle = tva({
 });
 
 const checkboxLabelStyle = tva({
-  base: 'text-typography-600 data-[checked=true]:text-typography-900 data-[hover=true]:text-typography-900 data-[hover=true]:data-[checked=true]:text-typography-900 data-[hover=true]:data-[checked=true]:data-[disabled=true]:text-typography-900 data-[hover=true]:data-[disabled=true]:text-typography-400 data-[active=true]:text-typography-900 data-[active=true]:data-[checked=true]:text-typography-900 data-[disabled=true]:opacity-40 web:select-none',
+  base: 'text-muted data-[checked=true]:text data-[hover=true]:text data-[hover=true]:data-[checked=true]:text data-[hover=true]:data-[checked=true]:data-[disabled=true]:text data-[hover=true]:data-[disabled=true]:text-muted data-[active=true]:text data-[active=true]:data-[checked=true]:text data-[disabled=true]:opacity-40 web:select-none',
   parentVariants: {
     size: {
       lg: 'text-lg',
@@ -97,7 +97,7 @@ const checkboxLabelStyle = tva({
 });
 
 const checkboxIconStyle = tva({
-  base: 'text-typography-50 fill-none',
+  base: 'text fill-none',
 
   parentVariants: {
     size: {

@@ -21,7 +21,7 @@ const badgeStyle = tva({
       warning: 'bg-background-warning border-warning-300',
       success: 'bg-background-success border-success-300',
       info: 'bg-background-info border-info-300',
-      muted: 'bg-background-muted border-background-300',
+      muted: 'bg-background-muted border',
     },
     variant: {
       solid: '',
@@ -36,7 +36,7 @@ const badgeStyle = tva({
 });
 
 const badgeTextStyle = tva({
-  base: 'text-typography-700 font-body font-normal tracking-normal uppercase',
+  base: 'text font-body font-normal tracking-normal uppercase',
 
   parentVariants: {
     action: {
