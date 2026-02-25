@@ -63,7 +63,7 @@ export default function CreateTicketForm() {
     return (
       <Box className="flex-1 items-center justify-center p-4">
         <Spinner size="large" />
-        <Text className="mt-4 text-primary dark:text-white">
+        <Text className="mt-4 text-primary">
           Loading revenue data...
         </Text>
       </Box>
@@ -86,7 +86,7 @@ export default function CreateTicketForm() {
   if (!data) {
     return (
       <Box className="flex-1 items-center justify-center p-4">
-        <Text className="text-primary dark:text-white">No data available</Text>
+        <Text className="text-primary">No data available</Text>
       </Box>
     );
   }

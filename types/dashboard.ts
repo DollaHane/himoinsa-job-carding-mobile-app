@@ -1,6 +1,6 @@
 export interface DashBoardFilter {
     date: string | null | undefined,
-    kva: string | null | undefined,
+    kva: string | string[] | null | undefined,
     show_previous: boolean
 }
 

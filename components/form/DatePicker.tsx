@@ -121,14 +121,22 @@ export function DatePicker<T extends FieldValues>({
   const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || dateValue;
     
+    // Format date as YYYY-MM-DD in local timezone
+    const formatDateToLocalString = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    
     if (Platform.OS === 'android') {
       setShowPicker(false);
       if (event.type === 'set' && externalOnChange) {
-        externalOnChange(currentDate.toISOString());
+        externalOnChange(formatDateToLocalString(currentDate));
       }
     } else {
       if (event.type === 'set' && selectedDate && externalOnChange) {
-        externalOnChange(selectedDate.toISOString());
+        externalOnChange(formatDateToLocalString(selectedDate));
       }
     }
   };

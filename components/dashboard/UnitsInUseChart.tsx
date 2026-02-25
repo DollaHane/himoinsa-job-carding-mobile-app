@@ -5,17 +5,17 @@ import { Text } from "../ui/text";
 import { VStack } from "../ui/vstack";
 import { Heading } from "../ui/heading";
 
-interface KvaUtilisationChartProps {
+interface UnitsInUseChartProps {
   data?: FleetControlData;
   isLoading?: boolean;
 }
 
-export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProps) {
+export function UnitsInUseChart({ data, isLoading }: UnitsInUseChartProps) {
   if (isLoading) {
     return (
-      <VStack className="w-full" space="md">
-        <Heading className="text-center text-lg font-bold text-primary">
-          kVA Utilisation (%)
+      <VStack className="w-full">
+        <Heading className="mb-2 text-center text-lg font-bold text-primary">
+          Units In Use
         </Heading>
         <Text className="text-center text-primary">Loading...</Text>
       </VStack>
@@ -27,19 +27,24 @@ export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProp
   }
 
   // Map the dashboard data to chart format and sort by kVA size (label)
-  // Use chart_data.labels (kVA filters) with datasets[0].kva_utilisation
   const kvaLabels = data.chart_data.labels;
-  const utilisationValues = data.chart_data.datasets[0].kva_utilisation;
+  const unitsInUseValues = data.chart_data.datasets[0].unit_in_use;
   
+  // Apply logarithmic transformation with original value labels
   const chartData = kvaLabels
-    .map((label, index) => ({
-      value: utilisationValues[index],
-      label: label,
-      topLabelComponent: () => (
-        <Text className="text-[10px] font-semibold text-sky-600">{utilisationValues[index]}%</Text>
-      ),
-      sortKey: parseInt(label) || 0,
-    }))
+    .map((label, index) => {
+      const originalValue = unitsInUseValues[index];
+      // Add 1 before log to avoid log(0), and scale up for better visibility
+      const logValue = Math.log10(originalValue + 1) * 20;
+      return {
+        value: logValue,
+        label: label,
+        topLabelComponent: () => (
+          <Text className="text-[10px] font-semibold text-sky-600">{originalValue}</Text>
+        ),
+        sortKey: parseInt(label) || 0,
+      };
+    })
     .sort((a, b) => a.sortKey - b.sortKey);
 
   const currentDate = data.current_date || '';
@@ -48,7 +53,7 @@ export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProp
     <Box className="rounded-lg border border-border bg-background p-4">
       <VStack className="w-full" space="md">
         <Heading className="text-center text-lg font-bold text-primary">
-          kVA Utilisation (%)
+          Units In Use
         </Heading>
         <Text className="text-center text-xs text-sky-500">
           {currentDate}
@@ -57,7 +62,6 @@ export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProp
           <BarChart
             barWidth={50}
             noOfSections={3}
-            maxValue={100}
             barBorderRadius={4}
             frontColor="#38bdf8"
             data={chartData}

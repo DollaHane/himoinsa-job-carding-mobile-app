@@ -5,17 +5,17 @@ import { Text } from "../ui/text";
 import { VStack } from "../ui/vstack";
 import { Heading } from "../ui/heading";
 
-interface KvaUtilisationChartProps {
+interface AvailabilityChartProps {
   data?: FleetControlData;
   isLoading?: boolean;
 }
 
-export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProps) {
+export function AvailabilityChart({ data, isLoading }: AvailabilityChartProps) {
   if (isLoading) {
     return (
       <VStack className="w-full" space="md">
         <Heading className="text-center text-lg font-bold text-primary">
-          kVA Utilisation (%)
+          Monthly Average Availability (%)
         </Heading>
         <Text className="text-center text-primary">Loading...</Text>
       </VStack>
@@ -27,16 +27,15 @@ export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProp
   }
 
   // Map the dashboard data to chart format and sort by kVA size (label)
-  // Use chart_data.labels (kVA filters) with datasets[0].kva_utilisation
   const kvaLabels = data.chart_data.labels;
-  const utilisationValues = data.chart_data.datasets[0].kva_utilisation;
+  const availabilityValues = data.chart_data.datasets[0].total_availability;
   
   const chartData = kvaLabels
     .map((label, index) => ({
-      value: utilisationValues[index],
+      value: availabilityValues[index],
       label: label,
       topLabelComponent: () => (
-        <Text className="text-[10px] font-semibold text-sky-600">{utilisationValues[index]}%</Text>
+        <Text className="text-[10px] font-semibold text-sky-600">{availabilityValues[index]}%</Text>
       ),
       sortKey: parseInt(label) || 0,
     }))
@@ -48,7 +47,7 @@ export function KvaUtilisationChart({ data, isLoading }: KvaUtilisationChartProp
     <Box className="rounded-lg border border-border bg-background p-4">
       <VStack className="w-full" space="md">
         <Heading className="text-center text-lg font-bold text-primary">
-          kVA Utilisation (%)
+          Monthly Average Availability (%)
         </Heading>
         <Text className="text-center text-xs text-sky-500">
           {currentDate}

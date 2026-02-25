@@ -117,9 +117,8 @@ export default function Profile() {
             <Text className="text-center text-primary">Not logged in</Text>
           )}
 
-          <ColorPaletteGrid/>
+          {/* <ColorPaletteGrid/> */}
 
-          
         </VStack>
         </Box>
       </Center>

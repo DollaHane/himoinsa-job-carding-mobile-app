@@ -10,11 +10,11 @@ interface StatCardProps {
 export function StatCard({ label, value, borderColor }: StatCardProps) {
   return (
     <Box
-      className="rounded-lg border-2 bg-card px-3 py-4 text-center"
+      className="rounded-lg border-2 bg-background px-3 py-4 text-center"
       style={{ borderColor }}
     >
-      <Text className="text-xs text-primary dark:text-white">{label}</Text>
-      <Text className="mt-1 text-lg font-bold text-primary dark:text-white">{value}</Text>
+      <Text className="text-center text-primary">{label}</Text>
+      <Text className="mt-1 text-center text-2xl font-bold text-primary">{value}</Text>
     </Box>
   )
 }

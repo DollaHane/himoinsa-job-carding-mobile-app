@@ -17,10 +17,41 @@ type ApiError = {
  * 
  */
 export async function DashboardData(params: DashBoardFilter, token: string | null) {
-    console.log('url', get_fleet_control);
     try {
+        // Prepare params for axios - handle array properly
+        const requestParams: any = {
+            date: params.date,
+            show_previous: params.show_previous,
+        };
+        
+        // Add kva as array if present
+        if (params.kva) {
+            if (Array.isArray(params.kva)) {
+                requestParams.kva = params.kva;
+            } else {
+                requestParams.kva = [params.kva];
+            }
+        }
+
         const response = await axios.get(get_fleet_control, {
-            params: params,
+            params: requestParams,
+            paramsSerializer: {
+                indexes: null, // Send as kva[]=200&kva[]=60 format
+                serialize: (params) => {
+                    const parts: string[] = [];
+                    Object.keys(params).forEach((key) => {
+                        const value = params[key];
+                        if (Array.isArray(value)) {
+                            value.forEach((val) => {
+                                parts.push(`${key}[]=${encodeURIComponent(val)}`);
+                            });
+                        } else if (value !== null && value !== undefined) {
+                            parts.push(`${key}=${encodeURIComponent(value)}`);
+                        }
+                    });
+                    return parts.join('&');
+                }
+            },
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -40,7 +71,6 @@ export async function DashboardData(params: DashBoardFilter, token: string | nul
  * 
  */
 export async function KvaRevenueDataAction(params: { start_date: string; end_date: string }, token: string | null) {
-    console.log('url', get_kva_revenue);
     try {
         const response = await axios.get(get_kva_revenue, {
             params: params,
@@ -63,8 +93,6 @@ export async function KvaRevenueDataAction(params: { start_date: string; end_dat
  * 
  */
 export async function KvaContractDetailsAction(params: { start_date: string; end_date: string; kva: number }, token: string | null) {
-    console.log('url', get_kva_contract_details);
-    console.log('params', params);
     try {
         const response = await axios.get(get_kva_contract_details, {
             params: params,
@@ -74,7 +102,6 @@ export async function KvaContractDetailsAction(params: { start_date: string; end
                 "Accept": "application/json",
             },
         })
-        console.log('KvaContractDetails response', response.data);
         return {
             kva: response.data.kva,
             contracts: response.data.contracts

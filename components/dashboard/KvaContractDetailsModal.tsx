@@ -57,12 +57,12 @@ export function KvaContractDetailsModal({ isOpen, onClose, kva, startDate, endDa
       >
         <VStack space="md" className="h-full">
           {/* Header */}
-          <HStack className="items-center justify-between p-4 border-b border-border bg-card">
-            <Heading size="lg" className="text-primary dark:text-white">
+          <HStack className="items-center justify-between p-4 border-b border-border bg-background">
+            <Heading size="lg" className="text-primary">
               {kva} kVA Contracts
             </Heading>
             <TouchableOpacity onPress={onClose}>
-              <Icon as={X} className="text-primary dark:text-white" size="xl" />
+              <Icon as={X} className="text-primary" size="xl" />
             </TouchableOpacity>
           </HStack>
 
@@ -71,7 +71,7 @@ export function KvaContractDetailsModal({ isOpen, onClose, kva, startDate, endDa
             {isLoading ? (
               <Box className="items-center justify-center py-10">
                 <Spinner size="large" />
-                <Text className="mt-4 text-primary dark:text-white">Loading contracts...</Text>
+                <Text className="mt-4 text-primary">Loading contracts...</Text>
               </Box>
             ) : error ? (
               <Box className="items-center justify-center py-10">
@@ -83,22 +83,22 @@ export function KvaContractDetailsModal({ isOpen, onClose, kva, startDate, endDa
                   {/* Table Header */}
                   <HStack className="pb-3 border-b-2 border-border">
                     <Box style={{ width: 150 }}>
-                      <Text className="text-xs font-semibold text-primary dark:text-white">Contract #</Text>
+                      <Text className="text-xs font-semibold text-primary">Contract #</Text>
                     </Box>
                     <Box style={{ width: 180 }}>
-                      <Text className="text-xs font-semibold text-primary dark:text-white">Customer</Text>
+                      <Text className="text-xs font-semibold text-primary">Customer</Text>
                     </Box>
                     <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary dark:text-white">Industry</Text>
+                      <Text className="text-xs font-semibold text-primary">Industry</Text>
                     </Box>
                     <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary dark:text-white text-right">Contract Value</Text>
+                      <Text className="text-xs font-semibold text-primary text-right">Contract Value</Text>
                     </Box>
                     <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary dark:text-white text-center">Start Date</Text>
+                      <Text className="text-xs font-semibold text-primary text-center">Start Date</Text>
                     </Box>
                     <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary dark:text-white text-center">End Date</Text>
+                      <Text className="text-xs font-semibold text-primary text-center">End Date</Text>
                     </Box>
                   </HStack>
 
@@ -106,28 +106,28 @@ export function KvaContractDetailsModal({ isOpen, onClose, kva, startDate, endDa
                   {data.contracts.map((contract: KvaContractDetail) => (
                     <HStack key={contract.contract_id} className="py-3 border-b border-border">
                       <Box style={{ width: 150 }}>
-                        <Text className="text-sm text-primary dark:text-white font-medium">
+                        <Text className="text-sm text-primary font-medium">
                           {contract.contract_number}
                         </Text>
                       </Box>
                       <Box style={{ width: 180 }}>
-                        <Text className="text-sm text-primary dark:text-white">{contract.customer}</Text>
+                        <Text className="text-sm text-primary">{contract.customer}</Text>
                       </Box>
                       <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary dark:text-white">{contract.industry}</Text>
+                        <Text className="text-sm text-primary">{contract.industry}</Text>
                       </Box>
                       <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary dark:text-white text-right">
+                        <Text className="text-sm text-primary text-right">
                           {formatCurrency(contract.contract_value)}
                         </Text>
                       </Box>
                       <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary dark:text-white text-center">
+                        <Text className="text-sm text-primary text-center">
                           {formatDate(contract.start_date)}
                         </Text>
                       </Box>
                       <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary dark:text-white text-center">
+                        <Text className="text-sm text-primary text-center">
                           {formatDate(contract.end_date)}
                         </Text>
                       </Box>
@@ -137,7 +137,7 @@ export function KvaContractDetailsModal({ isOpen, onClose, kva, startDate, endDa
               </ScrollView>
             ) : (
               <Box className="items-center justify-center py-10">
-                <Text className="text-primary dark:text-white">No contracts found</Text>
+                <Text className="text-primary">No contracts found</Text>
               </Box>
             )}
           </Box>

@@ -30,41 +30,41 @@ export function KvaRevenueTable({ data, grandTotalRevenue, grandTotalContracts, 
 
   return (
     <>
-      <Box className="bg-card rounded-lg p-4 mt-4">
-      <Text className="text-lg font-bold text-primary dark:text-white mb-4">kVA Revenue</Text>
+      <Box className="bg-card border border-border bg-background rounded-lg p-4 mt-4">
+      <Text className="text-lg font-bold text-primary mb-4">kVA Revenue</Text>
       
       <ScrollView horizontal showsHorizontalScrollIndicator={true} className="pb-5">
         <VStack space="sm" style={{ minWidth: 630 }}>
           {/* Table Header */}
-          <HStack className="pb-3 border-b border-gray-200 dark:border-gray-700">
+          <HStack className="pb-3 border-b border-border">
             <Box style={{ width: 50 }}>
-              <Text className="text-xs font-semibold text-primary dark:text-white">kVA Size</Text>
+              <Text className="text-xs font-semibold text-primary">kVA Size</Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-xs font-semibold text-primary dark:text-white text-right">Total Revenue</Text>
+              <Text className="text-xs font-semibold text-primary text-right">Total Revenue</Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-xs font-semibold text-primary dark:text-white text-center">Total Contracts</Text>
+              <Text className="text-xs font-semibold text-primary text-center">Total Contracts</Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-xs font-semibold text-primary dark:text-white text-center">Top Industry</Text>
+              <Text className="text-xs font-semibold text-primary text-center">Top Industry</Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-xs font-semibold text-primary dark:text-white text-right">Avg Revenue/Contract</Text>
+              <Text className="text-xs font-semibold text-primary text-right">Avg Revenue/Contract</Text>
             </Box>
             <Box style={{ width: 100 }}>
-              <Text className="text-xs font-semibold text-primary dark:text-white text-right">% of Total</Text>
+              <Text className="text-xs font-semibold text-primary text-right">% of Total</Text>
             </Box>
           </HStack>
 
           {/* Table Rows */}
           {data.map((item, index) => (
-            <HStack key={index} className="py-3 border-b border-gray-100 dark:border-gray-800">
+            <HStack key={index} className="py-3 border-b border-border">
               <Box style={{ width: 50 }}>
-                <Text className="text-sm text-primary dark:text-white font-medium">{item.kva} kVA</Text>
+                <Text className="text-sm text-primary font-medium">{item.kva} kVA</Text>
               </Box>
               <Box style={{ width: 120 }}>
-                <Text className="text-sm text-primary dark:text-white text-right">
+                <Text className="text-sm text-primary text-right">
                   {formatCurrency(item.total_revenue)}
                 </Text>
               </Box>
@@ -76,42 +76,42 @@ export function KvaRevenueTable({ data, grandTotalRevenue, grandTotalContracts, 
                 </TouchableOpacity>
               </Box>
               <Box style={{ width: 120 }}>
-                <Text className="text-sm text-primary dark:text-white text-center">{item.top_industry}</Text>
+                <Text className="text-sm text-primary text-center">{item.top_industry}</Text>
               </Box>
               <Box style={{ width: 120 }}>
-                <Text className="text-sm text-primary dark:text-white text-right">
+                <Text className="text-sm text-primary text-right">
                   {formatCurrency(item.avg_revenue)}
                 </Text>
               </Box>
               <Box style={{ width: 100 }}>
-                <Text className="text-sm text-primary dark:text-white text-right">{item.percentage}%</Text>
+                <Text className="text-sm text-primary text-right">{item.percentage}%</Text>
               </Box>
             </HStack>
           ))}
 
           {/* Total Row */}
-          <HStack className="pt-3 mt-2 border-t-2 border-gray-300 dark:border-gray-600">
+          <HStack className="pt-3 mt-2 border-t-2 border-border">
             <Box style={{ width: 50 }}>
-              <Text className="text-sm font-bold text-primary dark:text-white">Total</Text>
+              <Text className="text-sm font-bold text-primary">Total</Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-sm font-bold text-primary dark:text-white text-right">
+              <Text className="text-sm font-bold text-primary text-right">
                 {formatCurrency(grandTotalRevenue)}
               </Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-sm font-bold text-primary dark:text-white text-center">
+              <Text className="text-sm font-bold text-primary text-center">
                 {grandTotalContracts}
               </Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-sm text-primary dark:text-white text-center"></Text>
+              <Text className="text-sm text-primary text-center"></Text>
             </Box>
             <Box style={{ width: 120 }}>
-              <Text className="text-sm text-primary dark:text-white text-right">-</Text>
+              <Text className="text-sm text-primary text-right">-</Text>
             </Box>
             <Box style={{ width: 100 }}>
-              <Text className="text-sm font-bold text-primary dark:text-white text-right">100%</Text>
+              <Text className="text-sm font-bold text-primary text-right">100%</Text>
             </Box>
           </HStack>
         </VStack>
