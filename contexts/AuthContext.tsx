@@ -2,39 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import { router } from 'expo-router';
-
-interface User {
-  id: number;
-  user_number: string | null;
-  first_name: string;
-  last_name: string;
-  date_of_birth: string | null;
-  email: string;
-  mobile_number: string | null;
-  verification_token: string;
-  email_verified_at: string | null;
-  username: string;
-  profile_image: string | null;
-  monthly_quotations_value_target: number;
-  monthly_contracts_value_target: number;
-  password_reset_token: string | null;
-  deleted_at: string | null;
-  created_at: string;
-  updated_at: string;
-  account_active: number;
-  is_admin: number;
-  receive_admin_emails: number;
-  position: number;
-  branch: string | null;
-  is_sales_person: number;
-  is_sales_manager: number;
-  is_sales_dashboard: number;
-  is_workshop: number;
-  is_delivery_point: number;
-  is_hiredesk_admin: number;
-  is_accounts: number;
-  country: string | null;
-}
+import { User } from '@/types/user';
 
 interface AuthContextType {
   isAuthenticated: boolean;

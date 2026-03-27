@@ -11,6 +11,7 @@ import { ScrollView } from '@/components/ui/scroll-view';
 import { Icon } from '@/components/ui/icon';
 import { User, Mail, Phone, Briefcase, Hash } from 'lucide-react-native';
 import ColorPaletteGrid from '@/components/ui/color-pallette-grid';
+import { ROLES } from '@/types/user';
 
 export default function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -55,7 +56,7 @@ export default function Profile() {
                   <VStack className="flex-1">
                     <Text className="text-xs text-primary dark:text-primary">Name</Text>
                     <Text className="text-base font-semibold text-primary ">
-                      {user.firstname} {user.lastname}
+                      {user.first_name} {user.last_name}
                     </Text>
                   </VStack>
                 </HStack>
@@ -81,7 +82,7 @@ export default function Profile() {
                   <VStack className="flex-1">
                     <Text className="text-xs text-primary dark:text-primary">Phone</Text>
                     <Text className="text-base font-semibold text-primary ">
-                      {user.phonenumber || 'Not provided'}
+                      {user.mobile_number || 'Not provided'}
                     </Text>
                   </VStack>
                 </HStack>
@@ -94,7 +95,7 @@ export default function Profile() {
                   <VStack className="flex-1">
                     <Text className="text-xs text-primary dark:text-primary">Title</Text>
                     <Text className="text-base font-semibold text-primary ">
-                      {user.title || 'Not provided'}
+                      {user.position ? ROLES[user.position] : 'Not provided'}
                     </Text>
                   </VStack>
                 </HStack>
@@ -107,7 +108,7 @@ export default function Profile() {
                   <VStack className="flex-1">
                     <Text className="text-xs text-primary dark:text-primary">User ID</Text>
                     <Text className="text-sm font-mono text-primary ">
-                      {user.userid}
+                      {user.id}
                     </Text>
                   </VStack>
                 </HStack>
