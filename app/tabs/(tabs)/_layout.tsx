@@ -48,6 +48,11 @@ const routes: Record<string, Routes> = {
     label: "Privacy Policy",
     icon: FileText,
   },
+  terms: {
+    name: "terms",
+    label: "Terms of Use",
+    icon: FileText,
+  },
 };
 
 export const nav_items: NavItem[] = [
@@ -117,6 +122,19 @@ export default function TabLayout() {
           name={routes.policy.name}
           options={{
             title: routes.policy.label,
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon
+                name="star-o"
+                color={color}
+              />
+            ),
+            href: null, 
+          }}
+        />
+        <Tabs.Screen
+          name={routes.terms.name}
+          options={{
+            title: routes.terms.label,
             tabBarIcon: ({ color }) => (
               <TabBarIcon
                 name="star-o"

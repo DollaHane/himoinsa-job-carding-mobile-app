@@ -16,82 +16,295 @@ export default function PolicyPage() {
               Privacy Policy
             </Heading>
 
-            <Box className="bg-background rounded-2xl shadow-sm border border-secondary p-4">
+            <Box className="bg-background rounded-2xl p-4">
               <VStack space="md">
                 <Text className="text-sm text-primary dark:text-primary">
-                  Last Updated: {new Date().toLocaleDateString()}
+                  Last updated __________
                 </Text>
 
                 <VStack space="md">
                   <Heading className="text-lg font-bold text-primary dark:text-white">
-                    1. Information We Collect
+                    Privacy Notice
                   </Heading>
                   <Text className="text-sm text-primary dark:text-primary">
-                    We collect information you provide directly to us, including:
+                    This Privacy Notice for __________ ("we," "us," or "our"), describes
+                    how and why we might access, collect, store, use, and/or share
+                    ("process") your personal information when you use our services
+                    ("Services").
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Questions or concerns? Reading this Privacy Notice will help you
+                    understand your privacy rights and choices. We are responsible for
+                    making decisions about how your personal information is processed. If
+                    you do not agree with our policies and practices, please do not use our
+                    Services.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    Summary of Key Points
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    This summary provides key points from our Privacy Notice.
                   </Text>
                   <Text className="text-sm text-primary dark:text-primary ml-4">
-                    • Name and contact information{'\n'}
-                    • User ID and authentication credentials{'\n'}
-                    • Support ticket information{'\n'}
-                    • Device information
+                    • What personal information do we process? We may process personal
+                    information depending on how you interact with us and the Services,
+                    the choices you make, and the products and features you use.{'\n\n'}
+                    • Do we process any sensitive personal information? We do not process
+                    sensitive personal information.{'\n\n'}
+                    • Do we collect any information from third parties? We may collect
+                    information from public databases, marketing partners, social media
+                    platforms, and other outside sources.{'\n\n'}
+                    • How do we process your information? We process your information to
+                    provide, improve, and administer our Services, communicate with you,
+                    for security and fraud prevention, and to comply with law.{'\n\n'}
+                    • In what situations and with which parties do we share personal
+                    information? We may share information in specific situations and with
+                    specific third parties.{'\n\n'}
+                    • What are your rights? Depending on where you are located
+                    geographically, the applicable privacy law may mean you have certain
+                    rights regarding your personal information.{'\n\n'}
+                    • How do you exercise your rights? The easiest way is by submitting a
+                    data subject access request, or by contacting us.
                   </Text>
                 </VStack>
 
                 <VStack space="md">
                   <Heading className="text-lg font-bold text-primary dark:text-white">
-                    2. How We Use Your Information
+                    Table of Contents
                   </Heading>
                   <Text className="text-sm text-primary dark:text-primary">
-                    We use the information we collect to:
+                    1. What Information Do We Collect?{'\n'}
+                    2. How Do We Process Your Information?{'\n'}
+                    3. When and With Whom Do We Share Your Personal Information?{'\n'}
+                    4. Do We Use Cookies and Other Tracking Technologies?{'\n'}
+                    5. How Do We Handle Your Social Logins?{'\n'}
+                    6. Is Your Information Transferred Internationally?{'\n'}
+                    7. How Long Do We Keep Your Information?{'\n'}
+                    8. Do We Collect Information From Minors?{'\n'}
+                    9. What Are Your Privacy Rights?{'\n'}
+                    10. Controls for Do-Not-Track Features{'\n'}
+                    11. Do We Make Updates to This Notice?{'\n'}
+                    12. How Can You Contact Us About This Notice?{'\n'}
+                    13. How Can You Review, Update, or Delete the Data We Collect From You?
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    1. What Information Do We Collect?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: We collect personal information that you provide to us.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    We collect personal information that you voluntarily provide to us when
+                    you register on the Services, express an interest in obtaining
+                    information about us or our products and Services, when you participate
+                    in activities on the Services, or otherwise when you contact us.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Sensitive Information. We do not process sensitive information.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    All personal information that you provide to us must be true, complete,
+                    and accurate, and you must notify us of any changes to such personal
+                    information.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Information automatically collected:{'\n'}
+                    In Short: Some information — such as your Internet Protocol (IP)
+                    address and/or browser and device characteristics — is collected
+                    automatically when you visit our Services.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    We automatically collect certain information when you visit, use, or
+                    navigate the Services. This information does not reveal your specific
+                    identity (like your name or contact information) but may include device
+                    and usage information, such as your IP address, browser and device
+                    characteristics, operating system, language preferences, referring URLs,
+                    device name, country, location, information about how and when you use
+                    our Services, and other technical information.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Like many businesses, we also collect information through cookies and
+                    similar technologies.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    2. How Do We Process Your Information?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: We process your information to provide, improve, and
+                    administer our Services, communicate with you, for security and fraud
+                    prevention, and to comply with law. We may also process your
+                    information for other purposes with your consent.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    3. When and With Whom Do We Share Your Personal Information?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: We may share information in specific situations described in
+                    this section and/or with the following third parties.
                   </Text>
                   <Text className="text-sm text-primary dark:text-primary ml-4">
-                    • Provide, maintain, and improve our services{'\n'}
-                    • Process and complete transactions{'\n'}
-                    • Send you technical notices and support messages{'\n'}
-                    • Respond to your comments and questions
+                    • Business Transfers. We may share or transfer your information in
+                    connection with, or during negotiations of, any merger, sale of company
+                    assets, financing, or acquisition of all or a portion of our business to
+                    another company.{'\n\n'}
+                    • Affiliates. We may share your information with our affiliates, in
+                    which case we will require those affiliates to honor this Privacy
+                    Notice.{'\n\n'}
+                    • Business Partners. We may share your information with our business
+                    partners to offer you certain products, services, or promotions.
                   </Text>
                 </VStack>
 
                 <VStack space="md">
                   <Heading className="text-lg font-bold text-primary dark:text-white">
-                    3. Data Security
+                    4. Do We Use Cookies and Other Tracking Technologies?
                   </Heading>
                   <Text className="text-sm text-primary dark:text-primary">
-                    We use secure storage mechanisms to protect your data. Your authentication
-                    credentials are stored securely using industry-standard encryption.
+                    In Short: We may use cookies and other tracking technologies to collect
+                    and store your information.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    We may use cookies and similar tracking technologies (like web beacons
+                    and pixels) to gather information when you interact with our Services.
+                    Some online tracking technologies help us maintain the security of our
+                    Services, prevent crashes, fix bugs, save your preferences, and assist
+                    with basic site functions.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    We also permit third parties and service providers to use online
+                    tracking technologies on our Services for analytics and advertising,
+                    including to help manage and display advertisements and to tailor
+                    advertisements to your interests.
                   </Text>
                 </VStack>
 
                 <VStack space="md">
                   <Heading className="text-lg font-bold text-primary dark:text-white">
-                    4. Your Rights
+                    5. How Do We Handle Your Social Logins?
                   </Heading>
                   <Text className="text-sm text-primary dark:text-primary">
-                    You have the right to:
+                    In Short: If you choose to register or log in to our Services using a
+                    social media account, we may have access to certain information about
+                    you.
                   </Text>
-                  <Text className="text-sm text-primary dark:text-primary ml-4">
-                    • Access your personal data{'\n'}
-                    • Request deletion of your data{'\n'}
-                    • Opt-out of communications{'\n'}
-                    • Update your information
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Our Services may offer you the ability to register and log in using your
+                    third-party social media account details. We will use the information we
+                    receive only for the purposes described in this Privacy Notice.
                   </Text>
                 </VStack>
 
                 <VStack space="md">
                   <Heading className="text-lg font-bold text-primary dark:text-white">
-                    5. Contact Us
+                    6. Is Your Information Transferred Internationally?
                   </Heading>
                   <Text className="text-sm text-primary dark:text-primary">
-                    If you have questions about this Privacy Policy, please contact us at:{'\n\n'}
-                    Network Associates{'\n'}
-                    Email: privacy@networkassociates.com
+                    In Short: We may transfer, store, and process your information in
+                    countries other than your own.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    If you are a resident in the European Economic Area (EEA), United
+                    Kingdom (UK), or Switzerland, these countries may not necessarily have
+                    data protection laws as comprehensive as those in your country. However,
+                    we will take all necessary measures to protect your personal information
+                    in accordance with this Privacy Notice and applicable law.
                   </Text>
                 </VStack>
 
-                <Text className="text-xs text-primary dark:text-primary mt-4">
-                  Note: This is a template privacy policy. Please customize it with your actual
-                  data practices and have it reviewed by legal counsel before publishing.
-                </Text>
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    7. How Long Do We Keep Your Information?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: We keep your information for as long as necessary to fulfill
+                    the purposes outlined in this Privacy Notice unless otherwise required
+                    by law.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    8. Do We Collect Information From Minors?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: We do not knowingly collect data from or market to children
+                    under 18 years of age.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    9. What Are Your Privacy Rights?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: You may review, change, or terminate your account at any
+                    time, depending on your country, province, or state of residence.
+                  </Text>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Withdrawing your consent: If we are relying on your consent to process
+                    your personal information, you have the right to withdraw your consent
+                    at any time by contacting us.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    10. Controls for Do-Not-Track Features
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Most web browsers and some mobile operating systems and mobile
+                    applications include a Do-Not-Track ("DNT") feature or setting you can
+                    activate to signal your privacy preference not to have data about your
+                    online browsing activities monitored and collected.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    11. Do We Make Updates to This Notice?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    In Short: Yes, we will update this notice as necessary to stay compliant
+                    with relevant laws.
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    12. How Can You Contact Us About This Notice?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    If you have questions or comments about this notice, you may contact us
+                    by post at:{'\n\n'}
+                    __________{'\n'}
+                    __________
+                  </Text>
+                </VStack>
+
+                <VStack space="md">
+                  <Heading className="text-lg font-bold text-primary dark:text-white">
+                    13. How Can You Review, Update, or Delete the Data We Collect From You?
+                  </Heading>
+                  <Text className="text-sm text-primary dark:text-primary">
+                    Based on the applicable laws of your country, you may have the right to
+                    request access to the personal information we collect from you, details
+                    about how we have processed it, correct inaccuracies, or delete your
+                    personal information. You may also have the right to withdraw your
+                    consent to our processing of your personal information.
+                  </Text>
+                </VStack>
               </VStack>
             </Box>
           </VStack>

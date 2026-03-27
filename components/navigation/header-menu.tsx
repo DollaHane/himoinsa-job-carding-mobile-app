@@ -55,6 +55,14 @@ export default function HeaderMenu() {
           <MenuItemLabel size="md">Privacy Policy</MenuItemLabel>
         </MenuItem>
         <MenuItem
+          key="Terms"
+          textValue="Terms of Use"
+          onPress={() => router.push('/tabs/terms')}
+        >
+          <Icon as={FileText} size="md" className="mr-2" />
+          <MenuItemLabel size="md">Terms of Use</MenuItemLabel>
+        </MenuItem>
+        <MenuItem
           key="DarkMode"
           textValue="Toggle Dark Mode"
           onPress={toggleColorMode}
