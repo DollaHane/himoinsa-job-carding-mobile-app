@@ -13,7 +13,7 @@ import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react-native";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormField } from "@/components/form/FormField";
+import { FormField } from "@/components/form/form-field";
 import { Image } from "@/components/ui/image";
 import { domain, auth_token, post_login, post_auth } from "@/http/api";
 import { useAuth } from "@/contexts/AuthContext";

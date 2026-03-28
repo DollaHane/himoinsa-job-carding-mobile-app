@@ -9,13 +9,13 @@ import { Pressable } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "expo-router";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming, Easing } from "react-native-reanimated";
-import { FleetStatus } from "@/components/dashboard/FleetStatus";
-import { KvaUtilisationChart } from "@/components/dashboard/KvaUtilisationChart";
-import { UnitsInUseChart } from "@/components/dashboard/UnitsInUseChart";
-import { AvailabilityChart } from "@/components/dashboard/AvailabilityChart";
-import { KvaInUseChart } from "@/components/dashboard/KvaInUseChart";
-import StatCards from "@/components/dashboard/StatCards";
-import { DatePicker } from "@/components/form/DatePicker";
+import { FleetStatus } from "@/components/page_fleet_control/fleet-status";
+import { KvaUtilisationChart } from "@/components/page_fleet_control/kva-utilisation-chart";
+import { UnitsInUseChart } from "@/components/page_fleet_control/units-in-use-chart";
+import { AvailabilityChart } from "@/components/page_fleet_control/availability-chart";
+import { KvaInUseChart } from "@/components/page_fleet_control/kva-in-use-chart";
+import StatCards from "@/components/page_fleet_control/stat-cards";
+import { DatePicker } from "@/components/form/date-picker";
 import { Checkbox, CheckboxIndicator, CheckboxIcon, CheckboxLabel } from "@/components/ui/checkbox";
 import { CheckIcon, ChevronDownIcon, Filter } from "lucide-react-native";
 import { useDashboardData } from "@/http/services";
@@ -56,7 +56,7 @@ export default function Tickets() {
     );
   };
 
-  const {data: dashboard_data, isLoading: isDashboardLoading} = useDashboardData(filters);
+  const {data: dashboard_data, isLoading: isDashboardLoading, error} = useDashboardData(filters);
 
   const scaleFilter = useSharedValue(0);
 

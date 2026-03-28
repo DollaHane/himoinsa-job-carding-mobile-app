@@ -1,5 +1,5 @@
 import React from "react";
-import { StatCard } from "./StatCard";
+import { StatCard } from "./stat-card";
 import { Box } from "../ui/box";
 import { Text } from "../ui/text";
 import { FleetControlData } from "@/types/dashboard";

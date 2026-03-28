@@ -5,7 +5,7 @@ import { Text } from "../ui/text"
 import { KvaRevenueItem } from "@/types/revenue"
 import { HStack } from "../ui/hstack"
 import { VStack } from "../ui/vstack"
-import { KvaContractDetailsModal } from "./KvaContractDetailsModal"
+import { KvaContractDetailsModal } from "../page_fleet_control/kva-contract-details-modal"
 
 interface KvaRevenueTableProps {
   data: KvaRevenueItem[]

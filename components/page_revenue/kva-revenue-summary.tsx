@@ -1,6 +1,6 @@
 import React from "react"
 import { Box } from "../ui/box"
-import { KvaRevenueCard } from "./KvaRevenueCard"
+import { KvaRevenueCard } from "./kva-revenue-card"
 import { KvaRevenueData } from "@/types/revenue"
 
 interface KvaRevenueSummaryProps {
