@@ -6,7 +6,7 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming, Easing } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing } from "react-native-reanimated";
 import { FleetStatus } from "@/components/page_fleet_control/fleet-status";
 import { KvaUtilisationChart } from "@/components/page_fleet_control/kva-utilisation-chart";
 import { UnitsInUseChart } from "@/components/page_fleet_control/units-in-use-chart";
@@ -22,12 +22,16 @@ interface FleetControlPageProps {
   dashboard_data: any;
   selectedDate: string;
   selectedKva: string[];
-  setSelectedDateCallback?: (date: string) => void;
+  setSelectedDateCallback: (date: string) => void;
   toggleKva: (kva: string) => void;
   kvaOptions?: string[] | undefined;
 }
 
 export default function FleetControlPage({ dashboard_data, selectedDate, setSelectedDateCallback, selectedKva, toggleKva, kvaOptions }: FleetControlPageProps) {
+
+    if (!dashboard_data) {
+      return null;
+    }
 
     const scaleFilter = useSharedValue(0);
     const [showKvaDropdown, setShowKvaDropdown] = useState<boolean>(false);

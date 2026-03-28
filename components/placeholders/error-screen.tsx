@@ -10,7 +10,7 @@ interface ErrorScreenProps {
 }
 
 export default function ErrorScreen({ error, refetch }: ErrorScreenProps) {
-    if (error) {
+  if (error) {
     return (
       <Box className="flex-1 items-center justify-center p-4">
         <Box className="mb-2">
@@ -25,4 +25,6 @@ export default function ErrorScreen({ error, refetch }: ErrorScreenProps) {
       </Box>
     );
   }
+
+  return null;
 }

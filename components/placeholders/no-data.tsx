@@ -15,5 +15,7 @@ export default function NoData({ data }: NoDataProps) {
         <Text className="text-primary">No data available</Text>
       </Box>
     );
-    }
+  }
+
+  return null;
 }
