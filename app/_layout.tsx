@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { Slot } from "expo-router";
+import { Image, View } from "react-native";
 import { ReactQueryProvider } from "@/providers/query-client-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
@@ -33,10 +34,21 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    SplashScreen.hideAsync();
+  }, []);
+
+  if (!loaded) {
+    return (
+      <View className="flex-1">
+        <Image
+          source={require("../assets/images/himoinsa-splash-screen.png")}
+          style={{ width: '100%', height: '100%' }}
+          resizeMode="cover"
+        />
+      </View>
+    );
+  }
+
   return <RootLayoutNav />;
 }
 
