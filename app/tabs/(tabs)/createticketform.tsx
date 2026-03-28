@@ -40,13 +40,13 @@ export default function CreateTicketForm() {
       <AuthLoading authLoading={authLoading} isAuthenticated={isAuthenticated} />
       <ErrorScreen error={error} refetch={refetch} />
       <NoData data={data} />
-      {/* <RevenueScreen
+      <RevenueScreen
         startDate={startDate}
         endDate={endDate}
         setStartDateCallback={setStartDateCallback}
         setEndDateCallback={setEndDateCallback}
         data={data}
-      /> */}
+      />
     </>
   );
 }
