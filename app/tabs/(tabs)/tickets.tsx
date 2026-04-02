@@ -38,12 +38,11 @@ export default function Tickets() {
 
   const {
     data: dashboard_data,
-    isLoading: isDashboardLoading,
+    isPending: isDashboardLoading,
     error,
     refetch,
   } = useDashboardData(filters);
 
-  // Update KVA options when dashboard data loads
   useEffect(() => {
     if (dashboard_data?.chart_data?.kva_filter) {
       setKvaOptions(dashboard_data.chart_data.kva_filter);
@@ -51,8 +50,8 @@ export default function Tickets() {
   }, [dashboard_data]);
 
   return (
-    <ScrollView className="flex-1">
-      <Center className="flex-1">
+    <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
+      <Center>
         <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-36">
           <VStack className="mb-6 pt-4" space="xs">
             <Heading className="text-3xl font-bold text-text mb-5">

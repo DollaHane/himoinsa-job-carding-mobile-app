@@ -14,8 +14,8 @@ export default function Profile() {
   const { user, isAuthenticated, isLoading } = useAuth();
 
   return (
-    <ScrollView className="flex-1">
-      <Center className="flex-1">
+    <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
+      <Center>
         <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-36">
           <VStack className="mb-6 pt-4" space="xs">
             <Heading className="text-3xl font-bold text-text mb-5">Profile</Heading>

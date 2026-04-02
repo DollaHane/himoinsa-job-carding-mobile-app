@@ -6,8 +6,6 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export function useDashboardData(params: DashBoardFilter) {
     const { token } = useAuth();
-    console.log('token', token);
-    console.log('params', params);
     return useQuery({
         queryKey: ['dashboard-data', params],
         queryFn: () => DashboardData(params, token),

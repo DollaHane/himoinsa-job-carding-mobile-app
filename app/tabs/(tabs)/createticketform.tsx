@@ -3,12 +3,8 @@ import { Center } from "@/components/ui/center";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
-import { Text } from "@/components/ui/text";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { useAuth } from "@/contexts/AuthContext";
-import { DatePicker } from "@/components/form/date-picker";
-import { KvaRevenueSummary } from "@/components/page_revenue/kva-revenue-summary";
-import { KvaRevenueTable } from "@/components/page_revenue/kva-revenue-table";
 import { useKvaRevenueData } from "@/http/services";
 import ErrorScreen from "@/components/placeholders/error-screen";
 import AuthLoading from "@/components/auth/auth-loading";
@@ -23,7 +19,7 @@ export default function CreateTicketForm() {
   );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2026-02-28"));
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const { data, isLoading, error, refetch } = useKvaRevenueData({
+  const { data, isPending, error, refetch } = useKvaRevenueData({
     start_date: formatDate(startDate),
     end_date: formatDate(endDate),
   });
@@ -37,21 +33,21 @@ export default function CreateTicketForm() {
   }
 
   return (
-    <ScrollView className="flex-1">
-      <Center className="flex-1">
+    <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
+      <Center>
         <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-36">
           <VStack className="mb-6 pt-4" space="xs">
             <Heading className="text-3xl font-bold text-text mb-5">
               Revenue
             </Heading>
           </VStack>
-          <RevenueScreenPlaceholder isLoading={isLoading} />
+          <RevenueScreenPlaceholder isLoading={isPending} />
           <AuthLoading
             authLoading={authLoading}
             isAuthenticated={isAuthenticated}
           />
           <ErrorScreen error={error} refetch={refetch} />
-          <NoData data={data} isLoading={isLoading} />
+          <NoData data={data} isLoading={isPending} />
           <RevenueScreen
             startDate={startDate}
             endDate={endDate}

@@ -58,10 +58,8 @@ export default function TabLayout() {
       <Tabs
         tabBar={(props) => <CustomNavBar />}
         screenOptions={{
-          // Disable the static render of the header on web
-          // to prevent a hydration error in React Navigation v6.
           headerShown: false,
-          animation: "shift",
+          animation: "none",
         }}
       >
         <Tabs.Screen

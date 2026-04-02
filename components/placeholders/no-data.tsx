@@ -11,7 +11,7 @@ interface NoDataProps {
 }
 
 export default function NoData({ data, isLoading }: NoDataProps) {
-  if (data && !isLoading) return null;
+  if (isLoading || data) return null;
 
   return (
     <Box className="h-[50vh] flex flex-col items-center justify-center p-4 gap-10">

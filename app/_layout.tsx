@@ -21,14 +21,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  function RootLayoutNav() {
-    return (
-      <ThemeProvider>
-        <ThemedApp />
-      </ThemeProvider>
-    );
-  }
-
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -50,6 +42,14 @@ export default function RootLayout() {
   }
 
   return <RootLayoutNav />;
+}
+
+function RootLayoutNav() {
+  return (
+    <ThemeProvider>
+      <ThemedApp />
+    </ThemeProvider>
+  );
 }
 
 function ThemedApp() {
