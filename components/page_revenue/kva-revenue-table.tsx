@@ -90,7 +90,7 @@ export function KvaRevenueTable({ data, grandTotalRevenue, grandTotalContracts, 
           ))}
 
           {/* Total Row */}
-          <HStack className="pt-3 mt-2 border-t-2 border-border">
+          <HStack className="pt-3 mt-2">
             <Box style={{ width: 50 }}>
               <Text className="text-sm font-bold text-primary">Total</Text>
             </Box>

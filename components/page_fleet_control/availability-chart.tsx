@@ -37,9 +37,8 @@ export function AvailabilityChart({ data, isLoading }: AvailabilityChartProps) {
       topLabelComponent: () => (
         <Text className="text-[10px] font-semibold text-sky-600">{availabilityValues[index]}%</Text>
       ),
-      sortKey: parseInt(label) || 0,
     }))
-    .sort((a, b) => a.sortKey - b.sortKey);
+    .sort((a, b) => b.value - a.value);
 
   const currentDate = data.current_date || '';
 

@@ -42,10 +42,10 @@ export function UnitsInUseChart({ data, isLoading }: UnitsInUseChartProps) {
         topLabelComponent: () => (
           <Text className="text-[10px] font-semibold text-sky-600">{originalValue}</Text>
         ),
-        sortKey: parseInt(label) || 0,
+        originalValue,
       };
     })
-    .sort((a, b) => a.sortKey - b.sortKey);
+    .sort((a, b) => b.originalValue - a.originalValue);
 
   const currentDate = data.current_date || '';
 
