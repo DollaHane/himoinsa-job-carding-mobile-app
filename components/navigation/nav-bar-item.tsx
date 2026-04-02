@@ -3,6 +3,8 @@ import { Link, Href } from "expo-router";
 import { View, Pressable } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 interface NavItem {
   href: Href;
   label: string;
@@ -15,7 +17,6 @@ interface NavBarItemProps {
 }
 
 export default function NavBarItem({ item, active }: NavBarItemProps) {
-  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
   const isFirstMount = useRef(true);
   const scale = useSharedValue(active ? 1.1 : 1);
 

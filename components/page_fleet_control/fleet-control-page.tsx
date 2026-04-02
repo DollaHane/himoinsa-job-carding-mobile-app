@@ -17,7 +17,6 @@ import { DatePicker } from "@/components/form/date-picker";
 import { CheckIcon, ChevronDownIcon, Filter } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
 
-
 interface FleetControlPageProps {
   dashboard_data: any;
   selectedDate: string;
@@ -28,10 +27,6 @@ interface FleetControlPageProps {
 }
 
 export default function FleetControlPage({ dashboard_data, selectedDate, setSelectedDateCallback, selectedKva, toggleKva, kvaOptions }: FleetControlPageProps) {
-
-    if (!dashboard_data) {
-      return null;
-    }
 
     const scaleFilter = useSharedValue(0);
     const [showKvaDropdown, setShowKvaDropdown] = useState<boolean>(false);
@@ -60,6 +55,10 @@ export default function FleetControlPage({ dashboard_data, selectedDate, setSele
           easing: Easing.bezier(0.25, 0.1, 0.25, 1), // Smooth cubic bezier
         });
       }, [showFilters, scaleFilter]);
+
+    if (!dashboard_data) {
+      return null;
+    }
 
   return (
         <ScrollView className="flex-1">

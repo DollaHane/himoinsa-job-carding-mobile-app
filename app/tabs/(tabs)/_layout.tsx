@@ -3,7 +3,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs, Href } from "expo-router";
 import CustomNavBar from "@/components/navigation/custom-nav-bar";
 import HeaderMenu from "@/components/navigation/header-menu";
-import { Ticket, Plus, User, FileText, Zap, HandCoins } from "lucide-react-native";
+import { User, FileText, Zap, HandCoins } from "lucide-react-native";
+export { nav_items } from "@/constants/nav-items";
 
 function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>["name"]; color: string }) {
   return (
@@ -17,12 +18,6 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>["nam
 
 interface Routes {
   name: string;
-  label: string;
-  icon: React.ComponentType<{ size: number; color: string }>;
-}
-
-interface NavItem {
-  href: Href;
   label: string;
   icon: React.ComponentType<{ size: number; color: string }>;
 }
@@ -55,18 +50,6 @@ const routes: Record<string, Routes> = {
   },
 };
 
-export const nav_items: NavItem[] = [
-  {
-    href: `/tabs/${routes.tickets.name}` as Href,
-    label: routes.tickets.label,
-    icon: routes.tickets.icon,
-  },
-  {
-    href: `/tabs/${routes.create_tickets.name}` as Href,
-    label: routes.create_tickets.label,
-    icon: routes.create_tickets.icon,
-  },
-];
 
 export default function TabLayout() {
   return (

@@ -3,13 +3,14 @@ import { View } from "react-native";
 import { usePathname, Href } from "expo-router";
 
 import NavBarItem from "./nav-bar-item";
-import { nav_items } from "@/app/tabs/(tabs)/_layout";
+import { nav_items } from "@/constants/nav-items";
 
 export default function CustomNavBar() {
   const pathname = usePathname();
 
   const isActive = (href: Href) => {
-    return pathname === href || pathname.includes(href.split("/").pop() || "");
+    const hrefStr = typeof href === "string" ? href : href.pathname ?? "";
+    return pathname === hrefStr || pathname.includes(hrefStr.split("/").pop() || "");
   };
 
   return (
