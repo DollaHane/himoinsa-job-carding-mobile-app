@@ -18,7 +18,9 @@ import NoData from "@/components/placeholders/no-data";
 import { formatDate } from "@/utils/helpers";
 
 export default function CreateTicketForm() {
-  const [startDate, setStartDate] = useState<Date | null>(new Date("2026-02-01"),);
+  const [startDate, setStartDate] = useState<Date | null>(
+    new Date("2026-02-01"),
+  );
   const [endDate, setEndDate] = useState<Date | null>(new Date("2026-02-28"));
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { data, isLoading, error, refetch } = useKvaRevenueData({
@@ -35,18 +37,30 @@ export default function CreateTicketForm() {
   }
 
   return (
-    <>
-      <RevenueScreenPlaceholder isLoading={isLoading} />
-      <AuthLoading authLoading={authLoading} isAuthenticated={isAuthenticated} />
-      <ErrorScreen error={error} refetch={refetch} />
-      <NoData data={data} />
-      <RevenueScreen
-        startDate={startDate}
-        endDate={endDate}
-        setStartDateCallback={setStartDateCallback}
-        setEndDateCallback={setEndDateCallback}
-        data={data}
-      />
-    </>
+    <ScrollView className="flex-1">
+      <Center className="flex-1">
+        <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-36">
+          <VStack className="mb-6 pt-4" space="xs">
+            <Heading className="text-3xl font-bold text-text mb-5">
+              Revenue
+            </Heading>
+          </VStack>
+          <RevenueScreenPlaceholder isLoading={isLoading} />
+          <AuthLoading
+            authLoading={authLoading}
+            isAuthenticated={isAuthenticated}
+          />
+          <ErrorScreen error={error} refetch={refetch} />
+          <NoData data={data} isLoading={isLoading} />
+          <RevenueScreen
+            startDate={startDate}
+            endDate={endDate}
+            setStartDateCallback={setStartDateCallback}
+            setEndDateCallback={setEndDateCallback}
+            data={data}
+          />
+        </Box>
+      </Center>
+    </ScrollView>
   );
 }

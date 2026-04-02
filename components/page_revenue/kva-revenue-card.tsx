@@ -16,10 +16,10 @@ export function KvaRevenueCard({ title, value, subtitle, borderColor }: KvaReven
       style={{ borderColor }}
     >
       <VStack space="xs" className="items-center">
-        <Text className="text-sm text-primary text-center">{title}</Text>
+        <Text className="text-xl text-primary text-center">{title}</Text>
         <Text className="text-2xl font-bold text-primary text-center">{value}</Text>
         {subtitle && (
-          <Text className="text-xs text-primary text-center">{subtitle}</Text>
+          <Text className=" text-secondary text-center">{subtitle}</Text>
         )}
       </VStack>
     </Box>

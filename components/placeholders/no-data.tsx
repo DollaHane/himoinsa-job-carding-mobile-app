@@ -2,18 +2,21 @@ import React from "react";
 
 import { Box } from "../ui/box";
 import { Text } from "../ui/text";
+import { Icon } from "../ui/icon";
+import { AlertCircle } from "lucide-react-native";
 
 interface NoDataProps {
   data: any;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 export default function NoData({ data, isLoading }: NoDataProps) {
-  if (data || !isLoading) return null;
+  if (data && !isLoading) return null;
 
   return (
-    <Box className="flex-1 items-center justify-center p-4">
-      <Text className="text-primary">No data available</Text>
+    <Box className="h-[50vh] flex flex-col items-center justify-center p-4 gap-10">
+      <Icon as={AlertCircle} className="w-12 h-12 text-red-500" />
+      <Text className="text-primary text-xl">No data available</Text>
     </Box>
   );
 }

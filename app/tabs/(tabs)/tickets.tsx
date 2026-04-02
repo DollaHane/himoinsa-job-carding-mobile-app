@@ -65,7 +65,7 @@ export default function Tickets() {
             isAuthenticated={isAuthenticated}
           />
           <ErrorScreen error={error} refetch={refetch} />
-          <NoData data={dashboard_data} isLoading={true} />
+          <NoData data={dashboard_data} isLoading={isDashboardLoading} />
           <FleetControlPage
             dashboard_data={dashboard_data}
             isLoading={isDashboardLoading}
