@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import { DatePicker } from "../form/date-picker";
@@ -25,36 +25,34 @@ export default function RevenueScreen({
   if (!data) return null;
 
   return (
-    <>
-      <VStack space="md">
-        {/* Date Filter Section */}
-          <VStack space="lg">
-            <DatePicker
-              name="startDate"
-              placeholder="Select start date"
-              value={startDate?.toISOString()}
-              onChange={(date) => setStartDateCallback(new Date(date))}
-            />
-            <DatePicker
-              name="endDate"
-              placeholder="Select end date"
-              value={endDate?.toISOString()}
-              onChange={(date) => setEndDateCallback(new Date(date))}
-            />
-          </VStack>
+    <VStack space="md">
+      {/* Date Filter Section */}
+        <VStack space="lg">
+          <DatePicker
+            name="startDate"
+            placeholder="Select start date"
+            value={startDate?.toISOString()}
+            onChange={(date) => setStartDateCallback(new Date(date))}
+          />
+          <DatePicker
+            name="endDate"
+            placeholder="Select end date"
+            value={endDate?.toISOString()}
+            onChange={(date) => setEndDateCallback(new Date(date))}
+          />
+        </VStack>
 
-        {/* Summary Cards */}
-        <KvaRevenueSummary data={data} />
+      {/* Summary Cards */}
+      <KvaRevenueSummary data={data} />
 
-        {/* Revenue Table */}
-        <KvaRevenueTable
-          data={data.kva_data}
-          grandTotalRevenue={data.grand_total_revenue}
-          grandTotalContracts={data.grand_total_contracts}
-          startDate={formatDate(startDate)}
-          endDate={formatDate(endDate)}
-        />
-      </VStack>
-    </>
+      {/* Revenue Table */}
+      <KvaRevenueTable
+        data={data.kva_data}
+        grandTotalRevenue={data.grand_total_revenue}
+        grandTotalContracts={data.grand_total_contracts}
+        startDate={formatDate(startDate)}
+        endDate={formatDate(endDate)}
+      />
+    </VStack>
   );
 }

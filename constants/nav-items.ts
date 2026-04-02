@@ -1,6 +1,6 @@
 import { Href } from "expo-router";
 import { Zap, HandCoins } from "lucide-react-native";
-import React from "react";
+import type React from "react";
 
 export interface NavItem {
   href: Href;

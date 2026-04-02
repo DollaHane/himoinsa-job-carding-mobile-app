@@ -14,10 +14,13 @@ import NoData from "@/components/placeholders/no-data";
 import { formatDate } from "@/utils/helpers";
 
 export default function CreateTicketForm() {
+  const now = new Date();
   const [startDate, setStartDate] = useState<Date | null>(
-    new Date("2026-02-01"),
+    new Date(now.getFullYear(), now.getMonth(), 1),
   );
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2026-02-28"));
+  const [endDate, setEndDate] = useState<Date | null>(
+    new Date(now.getFullYear(), now.getMonth() + 1, 0),
+  );
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { data, isPending, error, refetch } = useKvaRevenueData({
     start_date: formatDate(startDate),

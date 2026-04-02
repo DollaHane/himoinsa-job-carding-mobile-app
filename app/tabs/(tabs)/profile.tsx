@@ -23,7 +23,7 @@ export default function Profile() {
           <ProfilePlaceholder isLoading={isLoading} />
           <AuthLoading authLoading={isLoading} isAuthenticated={isAuthenticated} />
           <NoData data={user} isLoading={isLoading} />
-          {isAuthenticated && user && <ProfileScreen user={user} />}
+          {user && <ProfileScreen user={user} />}
         </Box>
       </Center>
     </ScrollView>

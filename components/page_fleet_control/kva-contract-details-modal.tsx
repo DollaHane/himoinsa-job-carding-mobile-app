@@ -1,5 +1,5 @@
 import React from "react"
-import { ScrollView, TouchableOpacity, StyleSheet } from "react-native"
+import { ScrollView, TouchableOpacity, StyleSheet, Modal } from "react-native"
 import { BlurView } from "expo-blur"
 import { Box } from "@/components/ui/box"
 import { Text } from "@/components/ui/text"
@@ -35,114 +35,120 @@ export function KvaContractDetailsModal({ isOpen, onClose, kva, startDate, endDa
     return date.toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
   }
 
-  if (!isOpen) return null
-
   return (
-    <Box style={StyleSheet.absoluteFill} className="items-center justify-center" pointerEvents="box-none">
-      {/* Backdrop */}
+    <Modal
+      visible={isOpen}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+      statusBarTranslucent
+    >
+      {/* Backdrop — fills true full screen */}
       <TouchableOpacity
-        // style={StyleSheet.absoluteFill}
-        className="absolute w-[100vw] h-[100vh]"
+        style={StyleSheet.absoluteFill}
         onPress={onClose}
         activeOpacity={1}
       >
         <BlurView intensity={50} style={StyleSheet.absoluteFill} tint="dark" />
       </TouchableOpacity>
 
-      {/* Modal Content */}
-      <Box 
-        className="w-[90%] max-h-[80%] bg-background border border-border rounded-lg shadow-lg overflow-hidden" 
-        style={{ position: 'absolute' }}
-        pointerEvents="auto"
-      >
-        <VStack space="md" className="h-full">
-          {/* Header */}
-          <HStack className="items-center justify-between p-4 border-b border-border bg-background">
-            <Heading size="lg" className="text-primary">
-              {kva} kVA Contracts
-            </Heading>
-            <TouchableOpacity onPress={onClose}>
-              <Icon as={X} className="text-primary" size="xl" />
-            </TouchableOpacity>
-          </HStack>
+      {/* Modal Content — centred over full screen */}
+      <Box style={StyleSheet.absoluteFill} className="items-center justify-center" pointerEvents="box-none">
+        <Box
+          className="w-[90%] max-h-[80%] bg-background border border-border rounded-lg shadow-lg overflow-hidden"
+          pointerEvents="auto"
+        >
+          <VStack space="md" className="h-full">
+            {/* Header */}
+            <HStack className="items-center justify-between p-4 border-b border-border bg-background">
+              <Heading size="lg" className="text-primary">
+                {kva} kVA Contracts
+              </Heading>
+              <TouchableOpacity onPress={onClose}>
+                <Icon as={X} className="text-primary" size="xl" />
+              </TouchableOpacity>
+            </HStack>
 
-          {/* Body */}
-          <Box className="flex-1 px-4 pb-4">
-            {isLoading ? (
-              <Box className="items-center justify-center py-10">
-                <Spinner size="large" />
-                <Text className="mt-4 text-primary">Loading contracts...</Text>
-              </Box>
-            ) : error ? (
-              <Box className="items-center justify-center py-10">
-                <Text className="text-red-500">Error loading contracts: {(error as Error).message}</Text>
-              </Box>
-            ) : data && data.contracts.length > 0 ? (
-              <ScrollView horizontal showsHorizontalScrollIndicator={true} className="pb-5">
-                <VStack space="sm" style={{ minWidth: 810 }}>
-                  {/* Table Header */}
-                  <HStack className="pb-3 border-b-2 border-border">
-                    <Box style={{ width: 150 }}>
-                      <Text className="text-xs font-semibold text-primary">Contract #</Text>
-                    </Box>
-                    <Box style={{ width: 180 }}>
-                      <Text className="text-xs font-semibold text-primary">Customer</Text>
-                    </Box>
-                    <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary">Industry</Text>
-                    </Box>
-                    <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary text-right">Contract Value</Text>
-                    </Box>
-                    <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary text-center">Start Date</Text>
-                    </Box>
-                    <Box style={{ width: 120 }}>
-                      <Text className="text-xs font-semibold text-primary text-center">End Date</Text>
-                    </Box>
-                  </HStack>
+            {/* Body */}
+            <Box className="flex-1 px-4 pb-4">
+              {isLoading ? (
+                <Box className="items-center justify-center py-10">
+                  <Spinner size="large" />
+                  <Text className="mt-4 text-primary">Loading contracts...</Text>
+                </Box>
+              ) : error ? (
+                <Box className="items-center justify-center py-10">
+                  <Text className="text-red-500">Error loading contracts: {(error as Error).message}</Text>
+                </Box>
+              ) : data && data.contracts.length > 0 ? (
+                <ScrollView showsVerticalScrollIndicator={true} className="pb-5">
+                  <ScrollView horizontal showsHorizontalScrollIndicator={true}>
+                    <VStack space="sm" style={{ minWidth: 870 }}>
+                      {/* Table Header */}
+                      <HStack className="pb-3 border-b-2 border-border">
+                        <Box style={{ width: 150 }}>
+                          <Text className="text-xs font-semibold text-primary">Contract #</Text>
+                        </Box>
+                        <Box style={{ width: 180 }}>
+                          <Text className="text-xs font-semibold text-primary">Customer</Text>
+                        </Box>
+                        <Box style={{ width: 180 }}>
+                          <Text className="text-xs font-semibold text-primary">Industry</Text>
+                        </Box>
+                        <Box style={{ width: 120 }}>
+                          <Text className="text-xs font-semibold text-primary text-right">Contract Value</Text>
+                        </Box>
+                        <Box style={{ width: 120 }}>
+                          <Text className="text-xs font-semibold text-primary text-center">Start Date</Text>
+                        </Box>
+                        <Box style={{ width: 120 }}>
+                          <Text className="text-xs font-semibold text-primary text-center">End Date</Text>
+                        </Box>
+                      </HStack>
 
-                  {/* Table Rows */}
-                  {data.contracts.map((contract: KvaContractDetail) => (
-                    <HStack key={contract.contract_id} className="py-3 border-b border-border">
-                      <Box style={{ width: 150 }}>
-                        <Text className="text-sm text-primary font-medium">
-                          {contract.contract_number}
-                        </Text>
-                      </Box>
-                      <Box style={{ width: 180 }}>
-                        <Text className="text-sm text-primary">{contract.customer}</Text>
-                      </Box>
-                      <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary">{contract.industry}</Text>
-                      </Box>
-                      <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary text-right">
-                          {formatCurrency(contract.contract_value)}
-                        </Text>
-                      </Box>
-                      <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary text-center">
-                          {formatDate(contract.start_date)}
-                        </Text>
-                      </Box>
-                      <Box style={{ width: 120 }}>
-                        <Text className="text-sm text-primary text-center">
-                          {formatDate(contract.end_date)}
-                        </Text>
-                      </Box>
-                    </HStack>
-                  ))}
-                </VStack>
-              </ScrollView>
-            ) : (
-              <Box className="items-center justify-center py-10">
-                <Text className="text-primary">No contracts found</Text>
-              </Box>
-            )}
-          </Box>
-        </VStack>
+                      {/* Table Rows */}
+                      {data.contracts.map((contract: KvaContractDetail) => (
+                        <HStack key={contract.contract_id} className="py-3 border-b border-border">
+                          <Box style={{ width: 150 }}>
+                            <Text className="text-sm text-primary font-medium" numberOfLines={1}>
+                              {contract.contract_number}
+                            </Text>
+                          </Box>
+                          <Box style={{ width: 180 }}>
+                            <Text className="text-sm text-primary" numberOfLines={1}>{contract.customer}</Text>
+                          </Box>
+                          <Box style={{ width: 180 }}>
+                            <Text className="text-sm text-primary" numberOfLines={1}>{contract.industry}</Text>
+                          </Box>
+                          <Box style={{ width: 120 }}>
+                            <Text className="text-sm text-primary text-right" numberOfLines={1}>
+                              {formatCurrency(contract.contract_value)}
+                            </Text>
+                          </Box>
+                          <Box style={{ width: 120 }}>
+                            <Text className="text-sm text-primary text-center" numberOfLines={1}>
+                              {formatDate(contract.start_date)}
+                            </Text>
+                          </Box>
+                          <Box style={{ width: 120 }}>
+                            <Text className="text-sm text-primary text-center" numberOfLines={1}>
+                              {formatDate(contract.end_date)}
+                            </Text>
+                          </Box>
+                        </HStack>
+                      ))}
+                    </VStack>
+                  </ScrollView>
+                </ScrollView>
+              ) : (
+                <Box className="items-center justify-center py-10">
+                  <Text className="text-primary">No contracts found</Text>
+                </Box>
+              )}
+            </Box>
+          </VStack>
+        </Box>
       </Box>
-    </Box>
+    </Modal>
   )
 }

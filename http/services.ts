@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { DashboardData, KvaRevenueDataAction, KvaContractDetailsAction } from "./actions";
-import { DashBoardFilter, FleetControlData } from "@/types/dashboard";
+import { DashBoardFilter } from "@/types/dashboard";
 import { useAuth } from "@/contexts/AuthContext";
 
 export function useDashboardData(params: DashBoardFilter) {

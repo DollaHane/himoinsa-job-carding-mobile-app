@@ -10,7 +10,9 @@ export default function CustomNavBar() {
 
   const isActive = (href: Href) => {
     const hrefStr = typeof href === "string" ? href : href.pathname ?? "";
-    return pathname === hrefStr || pathname.includes(hrefStr.split("/").pop() || "");
+    if (pathname === hrefStr) return true;
+    const lastSegment = hrefStr.split("/").pop();
+    return !!lastSegment && pathname.includes(lastSegment);
   };
 
   return (

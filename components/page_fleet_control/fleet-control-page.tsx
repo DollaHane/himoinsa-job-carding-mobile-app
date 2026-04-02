@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Box } from "@/components/ui/box";
-import { Center } from "@/components/ui/center";
-import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { ScrollView } from "@/components/ui/scroll-view";
@@ -45,7 +43,7 @@ export default function FleetControlPage({
   kvaOptions,
 }: FleetControlPageProps) {
   const [showKvaDropdown, setShowKvaDropdown] = useState<boolean>(false);
-  if (isLoading) return null;
+  if (isLoading || !dashboard_data) return null;
   return (
     <>
       {/* Filter Section */}

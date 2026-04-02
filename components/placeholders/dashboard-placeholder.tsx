@@ -30,15 +30,41 @@ export default function DashboardPlaceholder({
         <Box className="flex-1 rounded-lg bg-background px-4 py-5 items-center justify-center">
           <VStack space="xs" className="items-center w-full">
             <Skeleton className="h-4 w-16 rounded" />
-            <Skeleton className="h-8 w-20 rounded" />
-            <Skeleton className="h-3 w-24 rounded" />
+            <Skeleton className="h-6 w-32 rounded" />
           </VStack>
         </Box>
         <Box className="flex-1 rounded-lg bg-background px-4 py-5 items-center justify-center">
           <VStack space="xs" className="items-center w-full">
             <Skeleton className="h-4 w-16 rounded" />
-            <Skeleton className="h-8 w-20 rounded" />
-            <Skeleton className="h-3 w-24 rounded" />
+            <Skeleton className="h-6 w-32 rounded" />
+          </VStack>
+        </Box>
+      </HStack>
+      <HStack space="md">
+        <Box className="flex-1 rounded-lg bg-background px-4 py-5 items-center justify-center">
+          <VStack space="xs" className="items-center w-full">
+            <Skeleton className="h-4 w-16 rounded" />
+            <Skeleton className="h-6 w-32 rounded" />
+          </VStack>
+        </Box>
+        <Box className="flex-1 rounded-lg bg-background px-4 py-5 items-center justify-center">
+          <VStack space="xs" className="items-center w-full">
+            <Skeleton className="h-4 w-16 rounded" />
+            <Skeleton className="h-6 w-32 rounded" />
+          </VStack>
+        </Box>
+      </HStack>
+      <HStack space="md">
+        <Box className="flex-1 rounded-lg bg-background px-4 py-5 items-center justify-center">
+          <VStack space="xs" className="items-center w-full">
+            <Skeleton className="h-4 w-16 rounded" />
+            <Skeleton className="h-6 w-32 rounded" />
+          </VStack>
+        </Box>
+        <Box className="flex-1 rounded-lg bg-background px-4 py-5 items-center justify-center">
+          <VStack space="xs" className="items-center w-full">
+            <Skeleton className="h-4 w-16 rounded" />
+            <Skeleton className="h-6 w-32 rounded" />
           </VStack>
         </Box>
       </HStack>
