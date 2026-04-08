@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Himoinsa Director Portal",
-    "slug": "himoinsa-director-portal",
+    "name": "Himoinsa Hiredesk Mobile Application",
+    "slug": "himoinsa-hiredesk-mobile-app-c1k6lh",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "himoinsadirectorportal",
     "userInterfaceStyle": "automatic",
     "primaryColor": "#0c0c6e",
-    "description": "Himoinsa director portal for viewing kVA utilisation and company data.",
+    "description": "The Himoinsa Hiredesk mobile application.",
     "privacy": "unlisted",
     "newArchEnabled": true,
     "splash": {
@@ -29,9 +29,7 @@
     "android": {
       "package": "com.himoinsa.directorportal",
       "versionCode": 1,
-      "permissions": [
-        "INTERNET"
-      ],
+      "permissions": ["INTERNET"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -61,8 +59,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "your-project-id-here"
-      }
-    }
+        "projectId": "a302073f-1c1c-4367-802e-9647f20b7960"
+      },
+      "router": {}
+    },
+    "owner": "cloudx-net-za"
   }
 }
