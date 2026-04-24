@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Himoinsa Hiredesk Mobile Application",
+    "name": "Himoinsa Mobile App",
     "slug": "himoinsa-hiredesk-mobile-app-c1k6lh",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "himoinsadirectorportal",
+    "scheme": "himoinsamobileapp",
     "userInterfaceStyle": "automatic",
     "primaryColor": "#0c0c6e",
-    "description": "The Himoinsa Hiredesk mobile application.",
+    "description": "Himoinsa mobile app for viewing kVA utilisation and company data.",
     "privacy": "unlisted",
     "newArchEnabled": true,
     "splash": {
@@ -18,7 +18,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.himoinsa.directorportal",
+      "bundleIdentifier": "com.himoinsa.mobileapp",
       "buildNumber": "1",
       "infoPlist": {
         "NSCameraUsageDescription": "This app does not use the camera.",
@@ -27,9 +27,11 @@
       }
     },
     "android": {
-      "package": "com.himoinsa.directorportal",
+      "package": "com.himoinsa.mobileapp",
       "versionCode": 1,
-      "permissions": ["INTERNET"],
+      "permissions": [
+        "INTERNET"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -60,9 +62,7 @@
     "extra": {
       "eas": {
         "projectId": "a302073f-1c1c-4367-802e-9647f20b7960"
-      },
-      "router": {}
-    },
-    "owner": "cloudx-net-za"
+      }
+    }
   }
 }

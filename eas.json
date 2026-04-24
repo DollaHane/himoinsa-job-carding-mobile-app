@@ -23,15 +23,18 @@
       "autoIncrement": true,
       "env": {
         "NODE_ENV": "production"
+      },
+      "ios": {
+        "distribution": "store"
       }
     }
   },
   "submit": {
     "production": {
       "ios": {
-        "appleId": "your-apple-id@example.com",
-        "ascAppId": "your-asc-app-id",
-        "appleTeamId": "your-apple-team-id"
+        "appleId": "shane@cloudx.net.za",
+        "ascAppId": "6763586006",
+        "appleTeamId": "DSUWW9P67F"
       },
       "android": {
         "serviceAccountKeyPath": "./path-to-your-service-account-key.json",
