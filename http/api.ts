@@ -1,7 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-export const domain = process.env.EXPO_PUBLIC_API_URL || 'https://himoinsa.cloudx.net.za:8001/';
-export const auth_token = process.env.EXPO_PUBLIC_API_AUTH_TOKEN || '';
+export const domain = process.env.EXPO_PUBLIC_API_URL;
 
 // ITSM Routes
 export const get_ticket = domain + 'api/tickets/';

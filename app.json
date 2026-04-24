@@ -20,11 +20,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.himoinsa.mobileapp",
       "buildNumber": "1",
-      "infoPlist": {
-        "NSCameraUsageDescription": "This app does not use the camera.",
-        "NSPhotoLibraryUsageDescription": "This app does not access your photo library.",
-        "NSLocationWhenInUseUsageDescription": "This app does not use your location."
-      }
+
     },
     "android": {
       "package": "com.himoinsa.mobileapp",

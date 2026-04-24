@@ -32,7 +32,7 @@ export default function TermsPage() {
                     Madrid 28906.
                   </Text>
                   <Text className="text-sm text-primary dark:text-primary">
-                    We operate the mobile application Himoinsa Directors Portal (the
+                     We operate the mobile application Himoinsa Mobile App (the
                     'App'), as well as any other related products and services that refer or
                     link to these legal terms (the 'Legal Terms') (collectively, the
                     'Services').

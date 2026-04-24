@@ -15,15 +15,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormField } from "@/components/form/form-field";
 import { Image } from "@/components/ui/image";
-import { domain, auth_token, post_login, post_auth } from "@/http/api";
+import { post_auth } from "@/http/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { encodeURL } from "@/utils/helpers";
 import { validateAuth, authCreationRequest } from "@/utils/validators/validate-auth";
 
 export default function Home() {
   const router = useRouter();
   const { login, isAuthenticated, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const currentYear = new Date().getFullYear();
 
   React.useEffect(() => {
@@ -55,34 +55,17 @@ export default function Home() {
       setIsSubmitting(false);
       console.log("error", error.message);
       if (error.response?.status === 400) {
-        // return toast({
-        //   title: 'Data Validation Error.',
-        //   description:
-        //     'There was an error processing the data provided. Please try again.',
-        //   variant: 'destructive',
-        // })
-      }
-      if (error.response?.status === 401) {
-        // return toast({
-        //   title: 'Authorisation Error.',
-        //   description: 'Operation was not authorised, please login.',
-        //   variant: 'destructive',
-        // })
-      }
-      if (error.response?.status === 429) {
-        // return toast({
-        //   title: 'Too Many Requests.',
-        //   description: 'Please wait 30sec before trying again.',
-        //   variant: 'destructive',
-        // })
-      }
-      if (error.response?.status === 500) {
-        // return toast({
-        //   title: 'Server Error.',
-        //   description:
-        //     'Failed to complete operation due to a server error. Please try again.',
-        //   variant: 'destructive',
-        // })
+        setErrorMessage("There was an error processing the data provided. Please try again.");
+      } else if (error.response?.status === 401) {
+        setErrorMessage("The username or password you entered is incorrect.");
+      } else if (error.response?.status === 429) {
+        setErrorMessage("Too many attempts. Please wait 30 seconds before trying again.");
+      } else if (error.response?.status === 500) {
+        setErrorMessage("A server error occurred. Please try again later.");
+      } else if (!error.response) {
+        setErrorMessage("Unable to reach the server. Please check your internet connection.");
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
       }
     },
     onSuccess: async (data) => {
@@ -93,15 +76,11 @@ export default function Home() {
         await login(data.token, data.user);
 
         setIsSubmitting(false);
+        setErrorMessage(null);
         form.reset();
 
         // Navigate to tabs
         router.replace("/tabs/tickets");
-
-        // return toast({
-        //   title: "Success!",
-        //   description: "Login successful!"
-        // })
       } catch (error) {
         console.error("Error saving auth data:", error);
         setIsSubmitting(false);
@@ -110,24 +89,18 @@ export default function Home() {
     onSettled: async (_, error) => {
       if (error) {
         console.log("onSettled error:", error);
-      } else {
-        // router.push('/path')
-        // await queryClient.invalidateQueries({ queryKey: ["key"] });
       }
     },
   });
 
   function onSubmit(value: z.infer<typeof validateAuth>) {
+    setErrorMessage(null);
     const payload: authCreationRequest = {
       username: value.username,
       password: value.password,
     };
     handleMutation(payload);
     setIsSubmitting(true);
-    // return toast({
-    //   title: "Form Submitted",
-    //   description: "Processing request."
-    // })
   }
 
   // Show loading while checking auth status
@@ -175,6 +148,10 @@ export default function Home() {
           isRequired={true}
           isDisabled={isSubmitting}
         />
+
+        {errorMessage && (
+          <Text className="text-center text-red-500 text-sm">{errorMessage}</Text>
+        )}
 
         <Button
           className="w-full mt-4"
