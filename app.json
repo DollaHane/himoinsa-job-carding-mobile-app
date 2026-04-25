@@ -20,7 +20,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.himoinsa.mobileapp",
       "buildNumber": "1",
-
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.himoinsa.mobileapp",
