@@ -1,10 +1,24 @@
 import React, { useState, useRef } from "react";
 import { View, Image, Pressable, ScrollView } from "react-native";
-import { CameraView, CameraCapturedPicture } from "expo-camera";
-import { X, Camera as CameraIcon, Trash2 } from "lucide-react-native";
+import { CameraView } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
+import {
+  X,
+  Camera as CameraIcon,
+  Trash2,
+  Image as ImageIcon,
+} from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
-import ModalGroup from "@/components/ui/groups/modal-group";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@/components/ui/modal";
+import { Heading } from "@/components/ui/heading";
 import { Icon } from "@/components/ui/icon";
 
 interface PhotoCaptureProps {
@@ -19,7 +33,31 @@ export default function PhotoCapture({
   maxPhotos = 10,
 }: PhotoCaptureProps) {
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const cameraRef = useRef<CameraView>(null);
+
+  async function handlePickFromGallery() {
+    setPickerOpen(false);
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "images",
+      quality: 0.7,
+      base64: true,
+      allowsMultipleSelection: true,
+    });
+
+    if (!result.canceled && result.assets?.length) {
+      const newPhotos = result.assets.map((asset) => ({
+        uri: asset.uri,
+        base64: asset.base64 ?? undefined,
+      }));
+      onPhotosChange([...photos, ...newPhotos].slice(0, maxPhotos));
+    }
+  }
+
+  async function handleTakePhoto() {
+    setPickerOpen(false);
+    setCameraOpen(true);
+  }
 
   async function handleCapture() {
     if (!cameraRef.current) return;
@@ -39,7 +77,7 @@ export default function PhotoCapture({
       }
       setCameraOpen(false);
     } catch {
-      // camera capture cancelled or failed
+      setCameraOpen(false);
     }
   }
 
@@ -75,7 +113,7 @@ export default function PhotoCapture({
 
         {photos.length < maxPhotos && (
           <Pressable
-            onPress={() => setCameraOpen(true)}
+            onPress={() => setPickerOpen(true)}
             className="w-24 h-24 rounded-lg border-2 border-dashed border-border items-center justify-center gap-1"
           >
             <Icon as={CameraIcon} size="lg" className="text-muted-foreground" />
@@ -84,26 +122,91 @@ export default function PhotoCapture({
         )}
       </ScrollView>
 
-      {cameraOpen && (
-        <View className="absolute inset-0 z-50 bg-black">
+      {/* Source picker modal */}
+      <Modal isOpen={pickerOpen} onClose={() => setPickerOpen(false)}>
+        <ModalBackdrop />
+        <ModalContent className="mt-auto rounded-t-3xl pb-8">
+          <ModalHeader>
+            <Heading size="md" className="text-foreground">
+              Add Photo
+            </Heading>
+          </ModalHeader>
+          <ModalBody>
+            <View className="flex-col gap-4">
+              <Button
+                variant="outline"
+                size="lg"
+                onPress={handleTakePhoto}
+                className="flex-row items-center gap-3 justify-start px-6 h-16"
+              >
+                <Icon as={CameraIcon} size="lg" className="text-foreground" />
+                <View>
+                  <Text className="text-base font-medium text-foreground">
+                    Take Photo
+                  </Text>
+                  <Text className="text-sm text-muted-foreground">
+                    Use your device camera
+                  </Text>
+                </View>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                onPress={handlePickFromGallery}
+                className="flex-row items-center gap-3 justify-start px-6 h-16"
+              >
+                <Icon as={ImageIcon} size="lg" className="text-foreground" />
+                <View>
+                  <Text className="text-base font-medium text-foreground">
+                    Choose from Gallery
+                  </Text>
+                  <Text className="text-sm text-muted-foreground">
+                    Select existing photos
+                  </Text>
+                </View>
+              </Button>
+            </View>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="outline"
+              onPress={() => setPickerOpen(false)}
+              className="w-full"
+            >
+              <ButtonText>Cancel</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Full-screen camera modal */}
+      <Modal
+        isOpen={cameraOpen}
+        onClose={() => setCameraOpen(false)}
+        size="full"
+      >
+        <View className="flex-1 bg-black">
           <CameraView ref={cameraRef} style={{ flex: 1 }} facing="back">
-            <View className="absolute top-12 right-6 z-50">
+            {/* Close button */}
+            <View className="absolute top-14 left-6 z-50">
               <Pressable
                 onPress={() => setCameraOpen(false)}
-                className="w-10 h-10 rounded-full bg-black/50 items-center justify-center"
+                className="w-12 h-12 rounded-full bg-black/50 items-center justify-center"
               >
-                <Icon as={X} size="lg" className="text-white" />
+                <Icon as={X} size="xl" className="text-white" />
               </Pressable>
             </View>
-            <View className="absolute bottom-12 w-full items-center">
+
+            {/* Capture button */}
+            <View className="absolute bottom-16 w-full items-center">
               <Pressable
                 onPress={handleCapture}
-                className="w-16 h-16 rounded-full bg-white border-4 border-gray-300"
+                className="w-20 h-20 rounded-full bg-white border-[6px] border-gray-400"
               />
             </View>
           </CameraView>
         </View>
-      )}
+      </Modal>
     </View>
   );
 }

@@ -16,15 +16,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { FormInput } from "@/components/ui/forms/form-input";
 import Toast from "react-native-toast-message";
 import type { AuthUser } from "@/types/auth";
+import type { ResponseAction } from "@/http";
 
-const validateAuth = z.object({
-  username: z.string().min(1, "Username is required"),
+const validateLogin = z.object({
+  email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
-type AuthCreationRequest = z.input<typeof validateAuth>;
+type LoginCreationRequest = z.input<typeof validateLogin>;
 
-interface LoginResponse {
+interface LoginResponseData {
   user: AuthUser;
   session: string;
 }
@@ -43,25 +44,52 @@ export default function Home() {
     }
   }, [isAuthenticated, router]);
 
-  const { control, handleSubmit } = useForm<AuthCreationRequest>({
-    resolver: zodResolver(validateAuth),
+  const { control, handleSubmit } = useForm<LoginCreationRequest>({
+    resolver: zodResolver(validateLogin),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
   const { mutate: handleMutation, isPending } = useMutation({
-    mutationFn: async (payload: AuthCreationRequest) => {
-      const response = await apiFetch(
-        HimoinsaAPI.api_login,
-        "POST",
-        payload
-      );
-      const json = (await response.json()) as { data?: LoginResponse };
+    mutationFn: async (payload: LoginCreationRequest) => {
+      const response = await apiFetch(HimoinsaAPI.api_login, "POST", payload);
+
+      const json = (await response.json()) as {
+        message: string;
+        action: ResponseAction | null;
+        data: LoginResponseData | null;
+      };
+
       if (!response.ok) {
-        throw new Error(json?.data ? "Login failed" : "Invalid credentials");
+        if (response.status === 422) {
+          throw new Error(
+            "There was an error processing the data provided. Please try again.",
+          );
+        }
+        if (response.status === 401) {
+          throw new Error("The email or password you entered is incorrect.");
+        }
+        if (response.status === 429) {
+          throw new Error(
+            "Too many attempts. Please wait 30 seconds before trying again.",
+          );
+        }
+        if (response.status === 500) {
+          throw new Error("A server error occurred. Please try again later.");
+        }
+
+        if (json.action === "account_inactive") {
+          throw new Error("Your account is not active.");
+        }
+        if (json.action === "verify_device") {
+          throw new Error("Device verification required.");
+        }
+
+        throw new Error(json.message || "Login failed. Please try again.");
       }
+
       return json.data;
     },
     onError: (error: Error) => {
@@ -73,13 +101,13 @@ export default function Home() {
       setErrorMessage(null);
       Toast.show({
         type: "success",
-        text1: "Login successful",
+        text1: "Signed in successfully",
       });
       router.replace(DASHBOARD_ROUTE);
     },
   });
 
-  function onSubmit(value: AuthCreationRequest) {
+  function onSubmit(value: LoginCreationRequest) {
     setErrorMessage(null);
     handleMutation(value);
   }
@@ -100,10 +128,10 @@ export default function Home() {
 
         <FormInput
           control={control}
-          name="username"
-          label="Email / Username"
+          name="email"
+          label="Email"
           type="text"
-          placeholder="Enter email / username"
+          placeholder="Enter email address"
           isRequired
           isDisabled={isPending}
         />
@@ -119,7 +147,9 @@ export default function Home() {
         />
 
         {errorMessage && (
-          <Text className="text-center text-destructive text-sm">{errorMessage}</Text>
+          <Text className="text-center text-destructive text-sm">
+            {errorMessage}
+          </Text>
         )}
 
         <Button

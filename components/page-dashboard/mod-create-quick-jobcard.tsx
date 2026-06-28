@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { View } from "react-native";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,6 +54,10 @@ export default function ModCreateQuickJobcard() {
     resolver: zodResolver(validateQuickJobcard),
   });
 
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues]);
+
   const { handleMutation: onSubmit, isPending } = useMutationHandler({
     route: HimoinsaAPI.api_jobcards_store,
     method: "POST",
@@ -94,13 +98,22 @@ export default function ModCreateQuickJobcard() {
   }
 
   const footer = (
-    <Button
-      onPress={handleSubmit(submit)}
-      isDisabled={isPending}
-      className="w-full"
-    >
-      <ButtonText>{isPending ? "Creating..." : "Create Jobcard"}</ButtonText>
-    </Button>
+    <View className="flex-row gap-2">
+      <Button
+        variant="outline"
+        onPress={() => setOpen(false)}
+        className="flex-1"
+      >
+        <ButtonText>Cancel</ButtonText>
+      </Button>
+      <Button
+        onPress={handleSubmit(submit)}
+        isDisabled={isPending}
+        className="flex-1"
+      >
+        <ButtonText>{isPending ? "Creating..." : "Create Jobcard"}</ButtonText>
+      </Button>
+    </View>
   );
 
   return (

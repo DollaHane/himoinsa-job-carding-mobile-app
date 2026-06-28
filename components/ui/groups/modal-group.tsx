@@ -1,5 +1,7 @@
 import React from "react";
-import { Pressable, View } from "react-native";
+import { View, Pressable } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { X } from "lucide-react-native";
 import type { LucideIcon } from "lucide-react-native";
 import {
   Modal,
@@ -12,6 +14,7 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
 
 export interface ModalGroupProps {
@@ -29,6 +32,7 @@ export interface ModalGroupProps {
   footer?: React.ReactNode;
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  closeable?: boolean;
 }
 
 export default function ModalGroup({
@@ -46,32 +50,40 @@ export default function ModalGroup({
   footer,
   isOpen,
   onOpenChange,
+  closeable = true,
 }: ModalGroupProps) {
   const [internalOpen, setInternalOpen] = React.useState(false);
   const open = isOpen ?? internalOpen;
   const setOpen = onOpenChange ?? setInternalOpen;
+  const insets = useSafeAreaInsets();
+
+  const isFull = size === "full";
 
   return (
     <View>
-      <Pressable onPress={() => setOpen(true)}>
-        <Button
-          action={triggerAction}
-          variant={triggerVariant}
-          size={triggerSize}
-          className={cn(triggerText ? "flex-row items-center" : "px-3")}
-        >
-          {TriggerIcon && (
-            <View className={cn("mr-2", triggerIconClass)}>
-              <TriggerIcon size={16} color="currentColor" />
-            </View>
-          )}
-          {triggerText && <ButtonText>{triggerText}</ButtonText>}
-        </Button>
-      </Pressable>
+      <Button
+        action={triggerAction}
+        variant={triggerVariant}
+        size={triggerSize}
+        className={cn(triggerText ? "flex-row items-center" : "px-3")}
+        onPress={() => setOpen(true)}
+      >
+        {TriggerIcon && (
+          <View className={cn("mr-2", triggerIconClass)}>
+            <TriggerIcon size={16} color="currentColor" />
+          </View>
+        )}
+        {triggerText && <ButtonText>{triggerText}</ButtonText>}
+      </Button>
 
       <Modal isOpen={open} onClose={() => setOpen(false)} size={size}>
         <ModalBackdrop />
-        <ModalContent className={contentClassName}>
+        <ModalContent
+          className={cn(isFull && "mt-auto rounded-b-none", contentClassName)}
+          style={
+            isFull ? { paddingBottom: Math.max(insets.bottom, 16) } : undefined
+          }
+        >
           <ModalHeader>
             <View className="flex-1">
               {title && (
@@ -85,6 +97,14 @@ export default function ModalGroup({
                 </Text>
               )}
             </View>
+            {closeable && (
+              <Pressable
+                onPress={() => setOpen(false)}
+                className="p-1 ml-2 rounded-full"
+              >
+                <Icon as={X} size="md" className="text-muted-foreground" />
+              </Pressable>
+            )}
           </ModalHeader>
           <ModalBody>{children}</ModalBody>
           {footer && <ModalFooter>{footer}</ModalFooter>}

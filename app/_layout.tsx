@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { Slot } from "expo-router";
 import { Image, View } from "react-native";
 import { ReactQueryProvider } from "@/providers/query-client-provider";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider } from "@/providers/Auth/AuthProvider";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { registerSyncOnForeground } from "@/http/offline-sync";

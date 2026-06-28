@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Himoinsa Mobile App",
-    "slug": "himoinsa-hiredesk-mobile-app-c1k6lh",
+    "name": "Himoinsa Workshop Mobile App",
+    "slug": "himoinsa-workshop-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "himoinsamobileapp",
+    "scheme": "himoinsaworkshopmobileapp",
     "userInterfaceStyle": "automatic",
     "primaryColor": "#0c0c6e",
     "description": "Himoinsa technician mobile app for job card execution.",
