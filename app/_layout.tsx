@@ -1,6 +1,10 @@
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider as NavigationThemeProvider,
+} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -9,6 +13,8 @@ import { Image, View } from "react-native";
 import { ReactQueryProvider } from "@/providers/query-client-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
+import { useQueryClient } from "@tanstack/react-query";
+import { registerSyncOnForeground } from "@/http/offline-sync";
 import "@/global.css";
 
 export { ErrorBoundary } from "expo-router";
@@ -34,7 +40,7 @@ export default function RootLayout() {
       <View className="flex-1">
         <Image
           source={require("../assets/images/himoinsa-splash-screen.png")}
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: "100%", height: "100%" }}
           resizeMode="cover"
         />
       </View>
@@ -58,12 +64,26 @@ function ThemedApp() {
   return (
     <AuthProvider>
       <ReactQueryProvider>
+        <SyncHandler />
         <GluestackUIProvider mode={colorMode}>
-          <NavigationThemeProvider value={colorMode === "dark" ? DarkTheme : DefaultTheme}>
+          <NavigationThemeProvider
+            value={colorMode === "dark" ? DarkTheme : DefaultTheme}
+          >
             <Slot />
           </NavigationThemeProvider>
         </GluestackUIProvider>
       </ReactQueryProvider>
     </AuthProvider>
   );
+}
+
+function SyncHandler() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const unregister = registerSyncOnForeground(queryClient);
+    return () => unregister();
+  }, [queryClient]);
+
+  return null;
 }

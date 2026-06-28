@@ -1,3 +1,4 @@
+// @ts-nocheck
 import GorhomBottomSheet, {
   BottomSheetBackdrop as GorhomBottomSheetBackdrop,
   BottomSheetView as GorhomBottomSheetView,

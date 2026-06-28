@@ -1,19 +1,22 @@
+import { Redirect, Stack } from "expo-router";
+import { useAuth } from "@/contexts/AuthContext";
+
 export { ErrorBoundary } from "expo-router";
-import React from "react";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
 
-import { Stack } from "expo-router";
-
 export default function AppLayout() {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Redirect href="/" />;
+  }
+
   return (
     <Stack>
-      <Stack.Screen
-        name="(tabs)"
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
 }

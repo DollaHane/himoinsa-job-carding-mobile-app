@@ -1,31 +1,41 @@
 import React from "react";
-import { ScrollView } from "@/components/ui/scroll-view";
-import { Center } from "@/components/ui/center";
-import { Box } from "@/components/ui/box";
-import { VStack } from "@/components/ui/vstack";
-import { Heading } from "@/components/ui/heading";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "@/components/ui/safe-area-view";
+import { Text } from "@/components/ui/text";
 import { useAuth } from "@/contexts/AuthContext";
-import AuthLoading from "@/components/auth/auth-loading";
-import ProfilePlaceholder from "@/components/placeholders/profile-placeholder";
-import ProfileScreen from "@/components/page_profile/profile-screen";
-import NoData from "@/components/placeholders/no-data";
+import { useGetTechnicianShow } from "@/http/services";
+import ComTechnicianDetail from "@/components/page-profile/com-technician-detail";
+import ComTechnicianStats from "@/components/page-profile/com-technician-stats";
+import ComTechnicianChart from "@/components/page-profile/com-technician-chart";
+import ErrorScreen from "@/components/placeholders/error-screen";
 
 export default function Profile() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user } = useAuth();
+  const technicianId = user?.technician_id ? String(user.technician_id) : null;
+
+  const { data, isLoading, error, refetch } =
+    useGetTechnicianShow(technicianId);
 
   return (
-    <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
-      <Center>
-        <Box className="mx-auto w-full max-w-md px-4 pt-16 pb-36">
-          <VStack className="mb-6 pt-4" space="xs">
-            <Heading className="text-3xl font-bold text-text mb-5">Profile</Heading>
-          </VStack>
-          <ProfilePlaceholder isLoading={isLoading} />
-          <AuthLoading authLoading={isLoading} isAuthenticated={isAuthenticated} />
-          <NoData data={user} isLoading={isLoading} />
-          {user && <ProfileScreen user={user} />}
-        </Box>
-      </Center>
-    </ScrollView>
+    <SafeAreaView className="flex-1 bg-background">
+      <ScrollView
+        className="flex-1 px-4 pt-4"
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
+        <Text className="text-2xl font-bold text-foreground mb-4">Profile</Text>
+
+        <ErrorScreen error={error} refetch={refetch} />
+
+        {data?.technician && (
+          <>
+            <ComTechnicianDetail technician={data.technician} />
+            <View className="my-4">
+              <ComTechnicianStats stats={data.stats} />
+            </View>
+            <ComTechnicianChart monthly={data.stats?.monthly} />
+          </>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }

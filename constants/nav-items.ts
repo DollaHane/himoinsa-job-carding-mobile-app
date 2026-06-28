@@ -1,5 +1,5 @@
 import { Href } from "expo-router";
-import { Zap, HandCoins } from "lucide-react-native";
+import { LayoutDashboard, ClipboardList, User } from "lucide-react-native";
 import type React from "react";
 
 export interface NavItem {
@@ -10,13 +10,18 @@ export interface NavItem {
 
 export const nav_items: NavItem[] = [
   {
-    href: `/tabs/tickets` as Href,
-    label: "Tickets",
-    icon: Zap,
+    href: `/tabs/dashboard` as Href,
+    label: "Dashboard",
+    icon: LayoutDashboard,
   },
   {
-    href: `/tabs/createticketform` as Href,
-    label: "Create Ticket",
-    icon: HandCoins,
+    href: `/tabs/job-cards` as Href,
+    label: "Job Cards",
+    icon: ClipboardList,
+  },
+  {
+    href: `/tabs/profile` as Href,
+    label: "Profile",
+    icon: User,
   },
 ];

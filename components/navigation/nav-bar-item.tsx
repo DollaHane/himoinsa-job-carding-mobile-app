@@ -1,7 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from "react";
 import { Link, Href } from "expo-router";
 import { View, Pressable } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -39,23 +43,17 @@ export default function NavBarItem({ item, active }: NavBarItemProps) {
   const Icon = item.icon;
 
   return (
-    <Link
-      href={item.href}
-      asChild
-    >
+    <Link href={item.href} asChild>
       <AnimatedPressable
         className="flex items-center justify-center"
         style={animatedStyle}
       >
         <View
           className={`h-16 w-16 rounded-full flex items-center justify-center ${
-            active ? "bg-accent-primary text-white" : "bg-background"
+            active ? "bg-primary text-white" : "bg-background"
           }`}
         >
-          <Icon
-            size={24}
-            color={active ? "#ffffff" : "#767676"}
-          />
+          <Icon size={24} color={active ? "#ffffff" : "#767676"} />
         </View>
       </AnimatedPressable>
     </Link>

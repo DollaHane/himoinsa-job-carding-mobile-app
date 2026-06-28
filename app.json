@@ -8,7 +8,7 @@
     "scheme": "himoinsamobileapp",
     "userInterfaceStyle": "automatic",
     "primaryColor": "#0c0c6e",
-    "description": "Himoinsa mobile app for viewing kVA utilisation and company data.",
+    "description": "Himoinsa technician mobile app for job card execution.",
     "privacy": "unlisted",
     "newArchEnabled": true,
     "splash": {
@@ -28,7 +28,11 @@
       "package": "com.himoinsa.mobileapp",
       "versionCode": 1,
       "permissions": [
-        "INTERNET"
+        "INTERNET",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "RECORD_AUDIO"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
@@ -45,6 +49,19 @@
       "expo-router",
       "expo-web-browser",
       "expo-font",
+      "expo-sqlite",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to capture job card photos and signatures."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to track your location for technician travel and job card GPS tagging."
+        }
+      ],
       [
         "expo-splash-screen",
         {

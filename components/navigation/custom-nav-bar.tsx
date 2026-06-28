@@ -9,7 +9,7 @@ export default function CustomNavBar() {
   const pathname = usePathname();
 
   const isActive = (href: Href) => {
-    const hrefStr = typeof href === "string" ? href : href.pathname ?? "";
+    const hrefStr = typeof href === "string" ? href : (href.pathname ?? "");
     if (pathname === hrefStr) return true;
     const lastSegment = hrefStr.split("/").pop();
     return !!lastSegment && pathname.includes(lastSegment);
@@ -18,11 +18,7 @@ export default function CustomNavBar() {
   return (
     <View className="absolute bottom-0 w-full flex-row items-center justify-evenly bg-transparent pb-8 shadow-lg">
       {nav_items.map((item) => (
-        <NavBarItem
-          key={item.label}
-          item={item}
-          active={isActive(item.href)}
-        />
+        <NavBarItem key={item.label} item={item} active={isActive(item.href)} />
       ))}
     </View>
   );
