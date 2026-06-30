@@ -88,7 +88,7 @@ export default function SignatureCapture({
         <ModalContent className="h-[85%] mt-auto rounded-t-3xl">
           <ModalHeader>
             <View className="flex-row w-full items-center justify-between">
-              <Heading size="lg" className="text-foreground">
+              <Heading size="lg" className="text-text">
                 Sign Here
               </Heading>
               <View className="flex-row gap-3">

@@ -8,6 +8,7 @@ import ComTechnicianDetail from "@/components/page-profile/com-technician-detail
 import ComTechnicianStats from "@/components/page-profile/com-technician-stats";
 import ComTechnicianChart from "@/components/page-profile/com-technician-chart";
 import ErrorScreen from "@/components/placeholders/error-screen";
+import ColorPaletteGrid from "@/components/ui/color-pallette-grid";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -22,7 +23,7 @@ export default function Profile() {
         className="flex-1 px-4 pt-4"
         contentContainerStyle={{ paddingBottom: 120 }}
       >
-        <Text className="text-2xl font-bold text-foreground mb-4">Profile</Text>
+        <Text className="text-2xl font-bold text-text mb-4">Profile</Text>
 
         <ErrorScreen error={error} refetch={refetch} />
 
@@ -35,6 +36,7 @@ export default function Profile() {
             <ComTechnicianChart monthly={data.stats?.monthly} />
           </>
         )}
+        {/* <ColorPaletteGrid /> */}
       </ScrollView>
     </SafeAreaView>
   );

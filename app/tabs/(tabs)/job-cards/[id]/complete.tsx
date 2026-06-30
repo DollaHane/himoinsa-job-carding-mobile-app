@@ -127,7 +127,7 @@ export default function CompleteJobCardPage() {
           headerTitle: "Complete Jobcard",
           headerLeft: () => (
             <Pressable onPress={() => router.back()} className="mr-4 p-1">
-              <Icon as={ArrowLeft} size="lg" className="text-foreground" />
+              <Icon as={ArrowLeft} size="lg" className="text-text" />
             </Pressable>
           ),
         }}

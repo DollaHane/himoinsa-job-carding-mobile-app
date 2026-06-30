@@ -71,18 +71,18 @@ export default function ComJobcardDetailReadonly({
         {jobcard.assets && jobcard.assets.length > 0 ? (
           jobcard.assets.map((asset, index) => (
             <View key={asset.id} className="py-1">
-              <Text className="text-foreground">
+              <Text className="text-text">
                 {asset.asset?.fleet_number ??
                   asset.asset?.description ??
                   `Asset ${index + 1}`}
               </Text>
-              <Text className="text-xs text-muted-foreground">
+              <Text className="text-xs text-text-muted">
                 {asset.asset_type ?? "Unknown type"}
               </Text>
             </View>
           ))
         ) : (
-          <Text className="text-muted-foreground">No assets linked.</Text>
+          <Text className="text-text-muted">No assets linked.</Text>
         )}
       </CardGroup>
 
@@ -90,16 +90,16 @@ export default function ComJobcardDetailReadonly({
         {jobcard.tasks && jobcard.tasks.length > 0 ? (
           jobcard.tasks.map((task) => (
             <View key={task.id} className="py-1">
-              <Text className="text-foreground">
+              <Text className="text-text">
                 {task.task_step}. {task.description}
               </Text>
-              <Text className="text-xs text-muted-foreground">
+              <Text className="text-xs text-text-muted">
                 {task.status ?? "Pending"}
               </Text>
             </View>
           ))
         ) : (
-          <Text className="text-muted-foreground">No tasks.</Text>
+          <Text className="text-text-muted">No tasks.</Text>
         )}
       </CardGroup>
 
@@ -107,17 +107,17 @@ export default function ComJobcardDetailReadonly({
         {jobcard.inventory && jobcard.inventory.length > 0 ? (
           jobcard.inventory.map((item) => (
             <View key={item.id} className="py-1">
-              <Text className="text-foreground">
+              <Text className="text-text">
                 {item.inventory?.stock_code ?? `Item #${item.inventory_id}`}
               </Text>
-              <Text className="text-xs text-muted-foreground">
+              <Text className="text-xs text-text-muted">
                 Requested: {item.quantity_requested ?? 0} | Used:{" "}
                 {item.quantity_used ?? 0}
               </Text>
             </View>
           ))
         ) : (
-          <Text className="text-muted-foreground">No inventory.</Text>
+          <Text className="text-text-muted">No inventory.</Text>
         )}
       </CardGroup>
     </View>

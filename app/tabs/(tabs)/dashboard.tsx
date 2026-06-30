@@ -2,12 +2,13 @@ import React from "react";
 import { ScrollView, View, RefreshControl } from "react-native";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { Plus } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGetDashboardStats, useGetJobcardsList } from "@/http/services";
 import ComDashboardStats from "@/components/page-dashboard/com-dashboard-stats";
 import ComDashboardJobcards from "@/components/page-dashboard/com-dashboard-jobcards";
-import ModCreateQuickJobcard from "@/components/page-dashboard/mod-create-quick-jobcard";
 import ErrorScreen from "@/components/placeholders/error-screen";
 
 export default function Dashboard() {
@@ -40,6 +41,10 @@ export default function Dashboard() {
     refetchJobcards();
   }
 
+  function handleCreate() {
+    router.push("/tabs/job-cards/create" as any);
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView
@@ -52,16 +57,19 @@ export default function Dashboard() {
           />
         }
       >
-        <Text className="text-2xl font-bold text-foreground mb-4">
+        <Text className="text-2xl font-bold text-text mb-4">
           Dashboard
         </Text>
 
         <ErrorScreen error={statsError ?? listError} refetch={handleRefresh} />
 
-        <ComDashboardStats stats={stats} />
+        <ComDashboardStats stats={stats} isLoading={statsLoading} />
 
         <View className="my-4">
-          <ModCreateQuickJobcard />
+          <Button onPress={handleCreate}>
+            <ButtonIcon as={Plus} className="mr-1" />
+            <ButtonText>Open New Jobcard</ButtonText>
+          </Button>
         </View>
 
         <ComDashboardJobcards jobcards={jobcards ?? []} onPress={handlePress} />

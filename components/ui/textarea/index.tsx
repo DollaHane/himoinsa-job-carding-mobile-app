@@ -33,7 +33,7 @@ const textareaStyle = tva({
 });
 
 const textareaInputStyle = tva({
-  base: 'p-2 web:outline-0 web:outline-none flex-1 color-text placeholder:text-muted web:cursor-text web:data-[disabled=true]:cursor-not-allowed',
+  base: 'p-2 web:outline-0 web:outline-none flex-1 text-text placeholder:text-text-muted web:cursor-text web:data-[disabled=true]:cursor-not-allowed',
   parentVariants: {
     size: {
       sm: 'text-sm',

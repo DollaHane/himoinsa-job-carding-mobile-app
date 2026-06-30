@@ -21,7 +21,7 @@ export default function ComJobcardsList({
     <FlatList
       data={jobcards}
       keyExtractor={(item) => String(item.id)}
-      contentContainerStyle={{ gap: 8, paddingBottom: 24 }}
+      contentContainerStyle={{ gap: 8, paddingBottom: 120 }}
       refreshControl={
         onRefresh ? (
           <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} />

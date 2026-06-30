@@ -6,6 +6,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { Icon } from "@/components/ui/icon";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -40,7 +41,7 @@ export default function NavBarItem({ item, active }: NavBarItemProps) {
     transform: [{ scale: scale.value }],
   }));
 
-  const Icon = item.icon;
+  const IconComponent = item.icon;
 
   return (
     <Link href={item.href} asChild>
@@ -50,10 +51,14 @@ export default function NavBarItem({ item, active }: NavBarItemProps) {
       >
         <View
           className={`h-16 w-16 rounded-full flex items-center justify-center ${
-            active ? "bg-primary text-white" : "bg-background"
+            active ? "bg-primary" : "bg-background"
           }`}
         >
-          <Icon size={24} color={active ? "#ffffff" : "#767676"} />
+          <Icon
+            as={IconComponent}
+            size="xl"
+            className={active ? "text-primary-foreground" : "text-text"}
+          />
         </View>
       </AnimatedPressable>
     </Link>

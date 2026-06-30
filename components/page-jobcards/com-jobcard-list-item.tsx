@@ -4,6 +4,7 @@ import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Clock, AlertTriangle } from "lucide-react-native";
+import { Icon } from "@/components/ui/icon";
 import type { Jobcard } from "@/types/jobcard";
 import { isOverdue, formatDateLabel } from "@/lib/helpers/date-functions";
 
@@ -37,24 +38,24 @@ export default function ComJobcardListItem({
     <Card className="p-3 border border-border">
       <View className="flex-row justify-between items-start">
         <View className="flex-1">
-          <Text className="font-semibold text-foreground">
+          <Text className="font-semibold text-text">
             {jobcard.jc_number ?? `JC #${jobcard.id}`}
           </Text>
-          <Text className="text-sm text-muted-foreground">
+          <Text className="text-sm text-text-muted">
             {jobcard.customer?.company_name ?? "Unknown customer"}
           </Text>
         </View>
         <View className="flex-row items-center gap-2">
           {overdue && <AlertTriangle size={16} color="red" />}
           <Badge action={getStatusAction(statusName)} size="sm">
-            <Text className="text-xs">{statusName ?? "Unknown"}</Text>
+            <Text className="text-xs text-text">{statusName ?? "Unknown"}</Text>
           </Badge>
         </View>
       </View>
 
       <View className="flex-row items-center gap-1 mt-2">
-        <Clock size={14} className="text-muted-foreground" />
-        <Text className="text-xs text-muted-foreground">
+        <Icon as={Clock} size="xs" className="text-text-muted" />
+        <Text className="text-xs text-text-muted">
           {jobcard.scheduled_datetime
             ? formatDateLabel(jobcard.scheduled_datetime)
             : "No schedule"}

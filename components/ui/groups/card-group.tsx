@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
+import { Icon } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
@@ -19,7 +20,7 @@ export default function CardGroup({
   title,
   description,
   customHeader,
-  icon: Icon,
+  icon,
   children,
   className,
 }: CardGroupProps) {
@@ -31,15 +32,15 @@ export default function CardGroup({
         <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-border">
           <View className="flex-1">
             <View className="flex-row items-center gap-2">
-              {Icon && <Icon size={20} className="text-primary" />}
+              {icon && <Icon as={icon} size="lg" className="text-text" />}
               {title && (
-                <Heading size="sm" className="text-foreground">
+                <Heading size="sm" className="text-text">
                   {title}
                 </Heading>
               )}
             </View>
             {description && (
-              <Text className="text-sm text-muted-foreground mt-1">
+              <Text className="text-sm text-text-muted mt-1">
                 {description}
               </Text>
             )}

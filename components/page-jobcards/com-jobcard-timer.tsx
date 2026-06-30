@@ -88,9 +88,9 @@ export default function ComJobcardTimer({
       {activeTimer ? (
         <>
           <View className="flex-1">
-            <Text className="text-sm text-muted-foreground">Timer running</Text>
+            <Text className="text-sm text-text-muted">Timer running</Text>
             {currentEventName && (
-              <Text className="text-foreground font-medium">
+              <Text className="text-text font-medium">
                 {currentEventName}
               </Text>
             )}
@@ -110,7 +110,7 @@ export default function ComJobcardTimer({
           action="positive"
           onPress={handleStart}
           isDisabled={isStarting}
-          className="flex-row items-center gap-2"
+          className="w-full flex-row items-center gap-2"
         >
           <Play size={16} color="white" />
           <ButtonText>{isStarting ? "Starting..." : "Start Timer"}</ButtonText>

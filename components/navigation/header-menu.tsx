@@ -49,7 +49,7 @@ export default function HeaderMenu() {
           textValue="Profile"
           onPress={() => router.push("/tabs/profile")}
         >
-          <Icon as={User} size="md" className="mr-2" />
+          <Icon as={User} size="md" className="mr-2 text-text" />
           <MenuItemLabel size="md">Profile</MenuItemLabel>
         </MenuItem>
         <MenuItem
@@ -60,7 +60,7 @@ export default function HeaderMenu() {
           <Icon
             as={colorMode === "dark" ? Sun : Moon}
             size="md"
-            className="mr-2"
+            className="mr-2 text-text"
           />
           <MenuItemLabel size="md">
             {colorMode === "dark" ? "Light Mode" : "Dark Mode"}

@@ -87,7 +87,7 @@ const formControlHelperStyle = tva({
 });
 
 const formControlHelperTextStyle = tva({
-  base: 'text-muted',
+  base: 'text-text-muted',
   variants: {
     isTruncated: {
       true: 'web:truncate',
@@ -131,7 +131,7 @@ const formControlLabelStyle = tva({
 });
 
 const formControlLabelTextStyle = tva({
-  base: 'font-medium text',
+  base: 'font-medium text-text',
   variants: {
     isTruncated: {
       true: 'web:truncate',
@@ -171,7 +171,7 @@ const formControlLabelTextStyle = tva({
 });
 
 const formControlLabelAstrickStyle = tva({
-  base: 'font-medium text',
+  base: 'font-medium text-text',
   variants: {
     isTruncated: {
       true: 'web:truncate',

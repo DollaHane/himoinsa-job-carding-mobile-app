@@ -77,7 +77,7 @@ const radioIndicatorStyle = tva({
 });
 
 const radioLabelStyle = tva({
-  base: 'text-muted data-[checked=true]:text data-[hover=true]:text data-[hover=true]:data-[disabled=true]:text-muted data-[hover=true]:data-[disabled=true]:data-[checked=true]:text data-[active=true]:text data-[active=true]:data-[checked=true]:text data-[disabled=true]:opacity-40 web:select-none',
+  base: 'text-text-muted data-[checked=true]:text-text data-[hover=true]:text-text data-[hover=true]:data-[disabled=true]:text-text-muted data-[hover=true]:data-[disabled=true]:data-[checked=true]:text-text data-[active=true]:text-text data-[active=true]:data-[checked=true]:text-text data-[disabled=true]:opacity-40 web:select-none',
   parentVariants: {
     size: {
       '2xs': 'text-2xs',

@@ -73,12 +73,12 @@ export function AlertDialogGroup({
         <AlertDialogBackdrop />
         <AlertDialogContent className={cn("p-4", actionClassName)}>
           <AlertDialogHeader>
-            <Heading size="md" className="text-foreground">
+            <Heading size="md" className="text-text">
               {title}
             </Heading>
           </AlertDialogHeader>
           <AlertDialogBody>
-            <Text className="text-sm text-muted-foreground">{description}</Text>
+            <Text className="text-sm text-text-muted">{description}</Text>
           </AlertDialogBody>
           <AlertDialogFooter className="flex-row justify-end gap-2 mt-4">
             <Button variant="outline" size="sm" onPress={() => setOpen(false)}>

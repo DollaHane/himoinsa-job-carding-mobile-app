@@ -36,6 +36,7 @@ module.exports = {
         text: {
           DEFAULT: 'rgb(var(--color-text)/<alpha-value>)',
           muted: 'rgb(var(--color-text-muted)/<alpha-value>)',
+          inverse: 'rgb(var(--color-text-inverse)/<alpha-value>)',
         },
         border: 'rgb(var(--color-border)/<alpha-value>)',
         background: {

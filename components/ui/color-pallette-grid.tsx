@@ -121,6 +121,11 @@ export default function ColorPaletteGrid() {
                     <Text className="text-base text-primary font-medium">primary (text)</Text>
                   </Box>
                 </HStack>
+                <HStack space="sm">
+                  <Box className="flex-1 h-20 rounded-lg bg-primary items-center justify-center">
+                    <Text className="text-base text-text-inverse font-medium">text-inverse</Text>
+                  </Box>
+                </HStack>
               </VStack>
             </VStack>
           </Box>

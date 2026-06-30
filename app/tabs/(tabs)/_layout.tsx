@@ -2,7 +2,6 @@ import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import CustomNavBar from "@/components/navigation/custom-nav-bar";
-import HeaderMenu from "@/components/navigation/header-menu";
 import { LayoutDashboard, ClipboardList, User } from "lucide-react-native";
 
 function TabBarIcon(props: {
@@ -38,9 +37,7 @@ const routes: Record<string, TabRoute> = {
 
 export default function TabLayout() {
   return (
-    <>
-      <HeaderMenu />
-      <Tabs
+    <Tabs
         tabBar={() => <CustomNavBar />}
         screenOptions={{
           headerShown: false,
@@ -71,6 +68,5 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-    </>
   );
 }

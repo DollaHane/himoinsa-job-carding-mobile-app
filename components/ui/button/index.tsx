@@ -37,17 +37,17 @@ cssInterop(PrimitiveIcon, {
 });
 
 const buttonStyle = tva({
-  base: 'group/button rounded-full bg-primary flex-row items-center justify-center data-[focus-visible=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[disabled=true]:opacity-40 gap-2 shadow-md',
+  base: 'group/button rounded-full bg-tertiary flex-row items-center justify-center data-[focus-visible=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[disabled=true]:opacity-40 gap-2 shadow-md',
   variants: {
     action: {
       primary:
-        'bg-primary text-white data-[hover=true]:bg-primary data-[active=true]:bg-primary border-primary data-[hover=true]:border-primary data-[active=true]:border-primary data-[focus-visible=true]:web:ring-indicator-info',
+        'bg-tertiary text-text-inverse data-[hover=true]:bg-tertiary-muted data-[active=true]:bg-tertiary-muted border-primary data-[hover=true]:border-primary data-[active=true]:border-primary data-[focus-visible=true]:web:ring-indicator-info',
       secondary:
-        'bg-secondary border-secondary data-[hover=true]:bg-secondary data-[hover=true]:border-secondary data-[active=true]:bg-secondary data-[active=true]:border-secondary data-[focus-visible=true]:web:ring-indicator-info',
+        'bg-secondary text-text-inverse border-secondary data-[hover=true]:bg-secondary data-[hover=true]:border-secondary data-[active=true]:bg-secondary data-[active=true]:border-secondary data-[focus-visible=true]:web:ring-indicator-info',
       positive:
-        'bg-success border-success data-[hover=true]:bg-success data-[hover=true]:border-success data-[active=true]:bg-success data-[active=true]:border-success data-[focus-visible=true]:web:ring-indicator-info',
+        'bg-success text-text-inverse border-success data-[hover=true]:bg-success data-[hover=true]:border-success data-[active=true]:bg-success data-[active=true]:border-success data-[focus-visible=true]:web:ring-indicator-info',
       negative:
-        'bg-error border-error data-[hover=true]:bg-error data-[hover=true]:border-error data-[active=true]:bg-error data-[active=true]:border-error data-[focus-visible=true]:web:ring-indicator-info',
+        'bg-error text-text-inverse border-error data-[hover=true]:bg-error data-[hover=true]:border-error data-[active=true]:bg-error data-[active=true]:border-error data-[focus-visible=true]:web:ring-indicator-info',
       default:
         'bg-transparent data-[hover=true]:bg-background-subtle data-[active=true]:bg-transparent',
     },
@@ -119,11 +119,11 @@ const buttonStyle = tva({
 });
 
 const buttonTextStyle = tva({
-  base: 'text-white font-semibold web:select-none',
+  base: 'text-text-inverse font-semibold web:select-none',
   parentVariants: {
     action: {
       primary:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text data-[hover=true]:text-text data-[active=true]:text-text',
       secondary:
         'text-muted data-[hover=true]:text-muted data-[active=true]:text',
       positive:
@@ -135,7 +135,7 @@ const buttonTextStyle = tva({
       link: 'data-[hover=true]:underline data-[active=true]:underline',
       outline: '',
       solid:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text data-[hover=true]:text-text data-[active=true]:text-text',
     },
     size: {
       xs: 'text-xs',
@@ -150,25 +150,25 @@ const buttonTextStyle = tva({
       variant: 'solid',
       action: 'primary',
       class:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
       action: 'secondary',
       class:
-        'text data-[hover=true]:text data-[active=true]:text',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
       action: 'positive',
       class:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
       action: 'negative',
       class:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'outline',
@@ -204,7 +204,7 @@ const buttonIconStyle = tva({
       link: 'data-[hover=true]:underline data-[active=true]:underline',
       outline: '',
       solid:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     size: {
       xs: 'h-3.5 w-3.5',
@@ -215,7 +215,7 @@ const buttonIconStyle = tva({
     },
     action: {
       primary:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text data-[hover=true]:text-text data-[active=true]:text-text',
       secondary:
         'text-muted data-[hover=true]:text-muted data-[active=true]:text',
       positive:
@@ -230,25 +230,25 @@ const buttonIconStyle = tva({
       variant: 'solid',
       action: 'primary',
       class:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
       action: 'secondary',
       class:
-        'text data-[hover=true]:text data-[active=true]:text',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
       action: 'positive',
       class:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
       action: 'negative',
       class:
-        'text-white data-[hover=true]:text-white data-[active=true]:text-white',
+        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
   ],
 });

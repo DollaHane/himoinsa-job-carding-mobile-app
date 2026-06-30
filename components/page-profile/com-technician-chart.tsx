@@ -17,15 +17,15 @@ export default function ComTechnicianChart({
       monthly.map((entry) => ({
         value: entry.count,
         label: entry.month,
-        frontColor: "#0ea5e9",
+        frontColor: "#3b82f6",
       })),
-    [monthly],
-  );
+      [monthly],
+    );
 
   return (
     <CardGroup title="Monthly Jobcards" icon={undefined}>
       {data.length === 0 ? (
-        <Text className="text-muted-foreground text-center py-8">
+        <Text className="text-text-muted text-center py-8">
           No monthly data.
         </Text>
       ) : (
@@ -39,10 +39,8 @@ export default function ComTechnicianChart({
             noOfSections={4}
             yAxisThickness={1}
             xAxisThickness={1}
-            yAxisTextStyle={{ color: "#64748b", fontSize: 10 }}
-            xAxisLabelTextStyle={{ color: "#64748b", fontSize: 10 }}
-            showGradient
-            gradientColor="#38bdf8"
+            yAxisTextStyle={{ color: "#a3a3a3", fontSize: 10 }}
+            xAxisLabelTextStyle={{ color: "#a3a3a3", fontSize: 10 }}
           />
         </View>
       )}

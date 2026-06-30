@@ -23,10 +23,10 @@ export default function ComTechnicianDetail({
           <AvatarFallbackText>{initials}</AvatarFallbackText>
         </Avatar>
         <View className="flex-1">
-          <Text className="text-xl font-bold text-foreground">
+          <Text className="text-xl font-bold text-text">
             {technician.first_name} {technician.last_name}
           </Text>
-          <Text className="text-sm text-muted-foreground">
+          <Text className="text-sm text-text-muted">
             {technician.position_name ?? technician.position ?? "Technician"}
           </Text>
         </View>

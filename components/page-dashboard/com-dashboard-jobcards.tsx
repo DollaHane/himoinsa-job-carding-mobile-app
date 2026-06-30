@@ -82,7 +82,7 @@ export default function ComDashboardJobcards({
         ),
       )}
       {jobcards.length === 0 && (
-        <Text className="text-center text-muted-foreground py-8">
+        <Text className="text-center text-text-muted py-8">
           No upcoming jobcards
         </Text>
       )}

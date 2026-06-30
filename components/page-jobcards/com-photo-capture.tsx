@@ -116,8 +116,8 @@ export default function PhotoCapture({
             onPress={() => setPickerOpen(true)}
             className="w-24 h-24 rounded-lg border-2 border-dashed border-border items-center justify-center gap-1"
           >
-            <Icon as={CameraIcon} size="lg" className="text-muted-foreground" />
-            <Text className="text-xs text-muted-foreground">Add</Text>
+            <Icon as={CameraIcon} size="lg" className="text-text" />
+            <Text className="text-xs text-text-muted">Add</Text>
           </Pressable>
         )}
       </ScrollView>
@@ -127,7 +127,7 @@ export default function PhotoCapture({
         <ModalBackdrop />
         <ModalContent className="mt-auto rounded-t-3xl pb-8">
           <ModalHeader>
-            <Heading size="md" className="text-foreground">
+            <Heading size="md" className="text-text">
               Add Photo
             </Heading>
           </ModalHeader>
@@ -139,12 +139,12 @@ export default function PhotoCapture({
                 onPress={handleTakePhoto}
                 className="flex-row items-center gap-3 justify-start px-6 h-16"
               >
-                <Icon as={CameraIcon} size="lg" className="text-foreground" />
+                <Icon as={CameraIcon} size="lg" className="text-text" />
                 <View>
-                  <Text className="text-base font-medium text-foreground">
+                  <Text className="text-base font-medium text-text">
                     Take Photo
                   </Text>
-                  <Text className="text-sm text-muted-foreground">
+                  <Text className="text-sm text-text-muted">
                     Use your device camera
                   </Text>
                 </View>
@@ -155,12 +155,12 @@ export default function PhotoCapture({
                 onPress={handlePickFromGallery}
                 className="flex-row items-center gap-3 justify-start px-6 h-16"
               >
-                <Icon as={ImageIcon} size="lg" className="text-foreground" />
+                <Icon as={ImageIcon} size="lg" className="text-text" />
                 <View>
-                  <Text className="text-base font-medium text-foreground">
+                  <Text className="text-base font-medium text-text">
                     Choose from Gallery
                   </Text>
-                  <Text className="text-sm text-muted-foreground">
+                  <Text className="text-sm text-text-muted">
                     Select existing photos
                   </Text>
                 </View>

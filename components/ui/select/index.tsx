@@ -52,7 +52,7 @@ const selectStyle = tva({
 });
 
 const selectTriggerStyle = tva({
-  base: 'border border rounded flex-row items-center overflow-hidden data-[hover=true]:border data-[focus=true]:border-primary data-[disabled=true]:opacity-40 data-[disabled=true]:data-[hover=true]:border',
+  base: 'border border-border rounded-full flex-row items-center overflow-hidden data-[hover=true]:border data-[focus=true]:border-primary data-[disabled=true]:opacity-40 data-[disabled=true]:data-[hover=true]:border',
   variants: {
     size: {
       xl: 'h-12',
@@ -72,7 +72,7 @@ const selectTriggerStyle = tva({
 });
 
 const selectInputStyle = tva({
-  base: 'px-3 placeholder:text-muted web:w-full h-full text pointer-events-none web:outline-none ios:leading-[0px] py-0',
+  base: 'px-3 placeholder:text-text-muted web:w-full h-full text-text pointer-events-none web:outline-none ios:leading-[0px] py-0',
   parentVariants: {
     size: {
       xl: 'text-xl',

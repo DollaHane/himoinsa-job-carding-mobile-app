@@ -13,12 +13,12 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Search, ChevronDown } from "lucide-react-native";
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { Search, ChevronDown, Plus } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGetJobcardsList, useGetJobcardMetadata } from "@/http/services";
 import ComJobcardsList from "@/components/page-jobcards/com-jobcards-list";
-import ModCreateQuickJobcard from "@/components/page-dashboard/mod-create-quick-jobcard";
 import ErrorScreen from "@/components/placeholders/error-screen";
 import { mapToOptions } from "@/lib/helpers/form-options";
 
@@ -58,17 +58,27 @@ export default function JobCards() {
     setSearch(text);
   }
 
+  function handleCreate() {
+    router.push("/tabs/job-cards/create" as any);
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1 px-4 pt-4">
-        <Text className="text-2xl font-bold text-foreground mb-4">
-          Job Cards
-        </Text>
+        <View className="flex-row items-center justify-between mb-4">
+          <Text className="text-2xl font-bold text-text">
+            Job Cards
+          </Text>
+          <Button size="sm" onPress={handleCreate}>
+            <ButtonIcon as={Plus} className="mr-1" />
+            <ButtonText>Create</ButtonText>
+          </Button>
+        </View>
 
         <View className="flex flex-row gap-2 mb-3">
           <Input className="flex-1" size="md">
             <InputSlot className="pl-3">
-              <InputIcon as={Search} className="text-muted-foreground" />
+              <InputIcon className="text-text" />
             </InputSlot>
             <InputField
               placeholder="Search..."
@@ -76,7 +86,6 @@ export default function JobCards() {
               onChangeText={handleSearchChange}
             />
           </Input>
-          <ModCreateQuickJobcard />
         </View>
 
         <View className="mb-3">

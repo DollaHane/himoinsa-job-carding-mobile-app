@@ -44,7 +44,7 @@ interface FieldLabelProps {
 export function FieldLabel({ children, className }: FieldLabelProps) {
   return (
     <View className={cn("flex flex-row items-center", className)}>
-      <Text className="text-sm font-medium text-foreground">{children}</Text>
+      <Text className="text-sm font-medium text-text">{children}</Text>
     </View>
   );
 }
@@ -60,7 +60,7 @@ export function FieldDescription({
 }: FieldDescriptionProps) {
   if (!children) return null;
   return (
-    <Text className={cn("text-sm text-muted-foreground", className)}>
+    <Text className={cn("text-sm text-text-muted", className)}>
       {children}
     </Text>
   );
@@ -130,7 +130,7 @@ export function FieldSeparator({ children, className }: FieldSeparatorProps) {
       <View className="absolute inset-0 top-1/2 h-px bg-border" />
       {children && (
         <View className="absolute left-1/2 -translate-x-1/2 -top-0.5 bg-background px-2">
-          <Text className="text-sm text-muted-foreground">{children}</Text>
+          <Text className="text-sm text-text-muted">{children}</Text>
         </View>
       )}
     </View>

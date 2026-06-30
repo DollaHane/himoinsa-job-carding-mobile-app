@@ -87,12 +87,12 @@ export default function ModalGroup({
           <ModalHeader>
             <View className="flex-1">
               {title && (
-                <Heading size="md" className="text-foreground">
+                <Heading size="md" className="text-text">
                   {title}
                 </Heading>
               )}
               {description && (
-                <Text className="text-sm text-muted-foreground mt-1">
+                <Text className="text-sm text-text-muted mt-1">
                   {description}
                 </Text>
               )}
@@ -102,7 +102,7 @@ export default function ModalGroup({
                 onPress={() => setOpen(false)}
                 className="p-1 ml-2 rounded-full"
               >
-                <Icon as={X} size="md" className="text-muted-foreground" />
+                <Icon as={X} size="md" className="text-text" />
               </Pressable>
             )}
           </ModalHeader>

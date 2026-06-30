@@ -83,7 +83,7 @@ export function FormDurationPicker<TFieldValues extends FieldValues>({
                 />
               </Input>
               <View className="justify-center">
-                <Text className="text-lg text-foreground">:</Text>
+                <Text className="text-lg text-text">:</Text>
               </View>
               <Input className={cn("flex-1")} size="md">
                 <InputField
