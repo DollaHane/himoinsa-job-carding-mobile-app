@@ -15,7 +15,8 @@ import { FormCombobox } from "@/components/ui/forms/form-combobox";
 import { FormDatePicker } from "@/components/ui/forms/form-date-picker";
 import { AlertCircle } from "lucide-react-native";
 import type { JobcardCreationRequest } from "@/lib/validators/validate-jobcard-create";
-import { Icon } from "lucide-react-native";
+import { Icon } from "../ui/icon";
+import { Trash2 } from "lucide-react-native";
 
 interface ComInventoryRowProps {
   control: Control<JobcardCreationRequest>;
@@ -34,8 +35,8 @@ export default function ComInventoryRow({
 }: ComInventoryRowProps) {
   return (
     <Card className="p-4 gap-3">
-      <View className="flex-row gap-2 items-start">
-        <View className="w-10 items-center justify-center rounded-lg border border-border bg-background-subtle h-10 mt-1">
+      <View className="flex-row gap-2">
+        <View className="w-10 items-center justify-center rounded-lg border border-border bg-background-subtle h-10">
           <Text className="text-text-muted text-sm font-medium">
             {index + 1}
           </Text>
@@ -51,7 +52,7 @@ export default function ComInventoryRow({
           />
         </View>
 
-        <View className="w-20 mt-1">
+        <View className="w-20">
           <Controller
             control={control}
             name={`inventory.${index}.quantity_requested`}
@@ -63,6 +64,7 @@ export default function ComInventoryRow({
                 <Input size="md">
                   <InputField
                     keyboardType="decimal-pad"
+                    
                     placeholder="Qty"
                     value={value ? String(value) : ""}
                     onChangeText={(text) => {
@@ -131,6 +133,7 @@ export default function ComInventoryRow({
         onPress={onRemove}
         className="self-end border-error"
       >
+        <Icon as={Trash2} className="text-error"/>
         <ButtonText className="text-error">Remove Item</ButtonText>
       </Button>
     </Card>
