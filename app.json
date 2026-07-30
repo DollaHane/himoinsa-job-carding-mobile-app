@@ -2,7 +2,7 @@
   "expo": {
     "name": "Himoinsa Workshop Mobile App",
     "slug": "himoinsa-workshop-mobile-app",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "himoinsaworkshopmobileapp",
@@ -18,7 +18,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.himoinsa.mobileapp",
+      "bundleIdentifier": "com.himoinsa.workshop.mobileapp",
       "buildNumber": "1",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -32,7 +32,11 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "CAMERA",
-        "RECORD_AUDIO"
+        "RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
@@ -76,8 +80,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a302073f-1c1c-4367-802e-9647f20b7960"
-      }
-    }
+        "projectId": "56290da5-cc41-49e3-ad92-e6dfd7571add"
+      },
+      "router": {}
+    },
+    "owner": "cloudx-net-za"
   }
 }
