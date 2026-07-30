@@ -25,7 +25,7 @@
       }
     },
     "android": {
-      "package": "com.himoinsa.mobileapp",
+      "package": "com.himoinsa.workshop.mobileapp",
       "versionCode": 1,
       "permissions": [
         "INTERNET",
