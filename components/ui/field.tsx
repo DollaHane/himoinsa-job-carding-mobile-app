@@ -14,7 +14,7 @@ export function Field({ children, className, invalid }: FieldProps) {
     <View
       className={cn(
         "flex flex-col w-full gap-1",
-        invalid && "text-destructive",
+        invalid && "text-error",
         className,
       )}
     >
@@ -91,7 +91,7 @@ export function FieldError({ errors, className }: FieldErrorProps) {
   if (!content) return null;
 
   return (
-    <Text className={cn("text-sm text-destructive", className)}>{content}</Text>
+    <Text className={cn("text-sm text-error", className)}>{content}</Text>
   );
 }
 

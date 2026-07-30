@@ -1,3 +1,5 @@
+import type { Branch } from "./branch";
+
 export interface JobcardTask {
   id: number;
   jobcard_id?: number | null;
@@ -58,4 +60,5 @@ export interface JobcardAsset {
     lng?: number | null;
     place_id?: string | null;
   };
+  branch_details?: Branch | null;
 }

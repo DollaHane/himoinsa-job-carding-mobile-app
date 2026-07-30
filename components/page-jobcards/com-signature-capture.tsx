@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View } from "react-native";
+import { View, Image } from "react-native";
 import SignaturePad from "react-native-signature-canvas";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
@@ -67,12 +67,10 @@ export default function SignatureCapture({
     <View className="flex flex-col gap-2">
       {hasSignature && (
         <View className="h-20 border border-border rounded-lg overflow-hidden bg-white">
-          <View
-            style={{
-              flex: 1,
-              // Use a simple View with background image approach since RN Image doesn't do base64 data URIs easily
-              backgroundColor: "white",
-            }}
+          <Image
+            source={{ uri: value }}
+            className="w-full h-full"
+            resizeMode="contain"
           />
         </View>
       )}

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const validateCompleteJobcard = z.object({
+  vehicle_arrival_mileage: z.number().optional().nullable(),
   asset_smr: z.array(
     z.object({
       asset_id: z.number().int().positive(),
@@ -22,10 +23,24 @@ export const validateCompleteJobcard = z.object({
     z.object({
       id: z.number().int().positive(),
       quantity_used: z.number().min(0, "Quantity cannot be negative"),
+      reason_not_used: z.string().optional().nullable(),
     }),
   ),
-  signature: z.string().optional().nullable(),
-  photos: z.array(z.string()).optional().default([]),
+  inspection_checklists: z
+    .array(
+      z.object({
+        id: z.number().int().positive(),
+        items: z.array(
+          z.object({
+            step: z.number().int().positive(),
+            checked: z.boolean(),
+            notes: z.string().optional().nullable(),
+          }),
+        ),
+      }),
+    )
+    .optional()
+    .default([]),
 });
 
 export type CompleteJobcardRequest = z.input<typeof validateCompleteJobcard>;

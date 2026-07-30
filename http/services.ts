@@ -24,6 +24,8 @@ import {
   getJobcardMetadata,
   getJobcardShow,
   getJobcardsList,
+  getJobcardSignature,
+  getJobcardSlotImages,
   getLocation,
   getLocationsByEntity,
   getLocationsMap,
@@ -70,7 +72,7 @@ import type { LocationAsset } from "@/types/location-asset";
 import type { Inventory } from "@/types/inventory";
 import type { TimerJobcard } from "@/types/timer-jobcard";
 import type { TimerEvent } from "@/types/timer-event";
-import type { CompleteJobcardPayload } from "@/types/jobcard-complete";
+import type { CompleteJobcardPayload, SlotImage } from "@/types/jobcard-complete";
 import type {
   Contract,
   ContractShowResponse,
@@ -154,6 +156,15 @@ export const QueryKeys = {
     id ?? "",
   ],
   jobcards_metadata: ["jobcards-metadata"] as const,
+  jobcards_signature: (id: string | null): Array<string> => [
+    "jobcard-signature",
+    id ?? "",
+  ],
+  jobcards_slot_images: (jobcardId: number, assetId: number): Array<string> => [
+    "jobcard-slot-images",
+    String(jobcardId),
+    String(assetId),
+  ],
 
   // Calendar
   calendar_h_show: (date?: string): Array<string> => [
@@ -419,7 +430,7 @@ export function useGetJobcardsList(params?: JobcardListParams) {
 }
 
 export function useGetJobcardShow(id: string | null) {
-  return useQuery({
+  return useQuery<Jobcard>({
     queryKey: QueryKeys.jobcards_show(id),
     queryFn: () => getJobcardShow(id!),
     enabled: !!id,
@@ -430,6 +441,25 @@ export function useGetJobcardMetadata() {
   return useQuery({
     queryKey: QueryKeys.jobcards_metadata,
     queryFn: () => getJobcardMetadata(),
+  });
+}
+
+export function useGetJobcardSignature(id: string | null) {
+  return useQuery<{ path: string; url: string } | null>({
+    queryKey: QueryKeys.jobcards_signature(id),
+    queryFn: () => getJobcardSignature(id!),
+    enabled: !!id,
+  });
+}
+
+export function useGetJobcardSlotImages(
+  jobcardId: number,
+  assetId: number,
+) {
+  return useQuery<Array<SlotImage>>({
+    queryKey: QueryKeys.jobcards_slot_images(jobcardId, assetId),
+    queryFn: () => getJobcardSlotImages(jobcardId, assetId),
+    enabled: !!jobcardId && !!assetId,
   });
 }
 
@@ -599,11 +629,11 @@ export function useCompleteJobcard() {
   return useMutation({
     mutationFn: ({
       jobcardId,
-      payload,
+      formData,
     }: {
       jobcardId: number;
-      payload: CompleteJobcardPayload;
-    }) => completeJobcard(jobcardId, payload),
+      formData: FormData;
+    }) => completeJobcard(jobcardId, formData),
     onSuccess: (_data, variables) => {
       toast.success("Jobcard completed");
       queryClient.invalidateQueries({

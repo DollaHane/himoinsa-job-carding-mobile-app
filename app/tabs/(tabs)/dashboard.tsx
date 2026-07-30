@@ -1,15 +1,69 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, View, RefreshControl } from "react-native";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { Plus } from "lucide-react-native";
+import { Icon } from "@/components/ui/icon";
+import CardGroup from "@/components/ui/groups/card-group";
+import { Plus, Timer, Clock } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
-import { useGetDashboardStats, useGetJobcardsList } from "@/http/services";
+import {
+  useGetDashboardStats,
+  useGetJobcardsList,
+  useGetRunningTimers,
+} from "@/http/services";
 import ComDashboardStats from "@/components/page-dashboard/com-dashboard-stats";
 import ComDashboardJobcards from "@/components/page-dashboard/com-dashboard-jobcards";
 import ErrorScreen from "@/components/placeholders/error-screen";
+import { formatSeconds } from "@/lib/helpers/date-functions";
+
+function ActiveTimerBanner() {
+  const { data: timers } = useGetRunningTimers();
+  const activeTimer = timers?.[0];
+  const [elapsed, setElapsed] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!activeTimer) {
+      setElapsed(0);
+      return;
+    }
+
+    function tick() {
+      const start = new Date(activeTimer!.start_time).getTime();
+      const now = Date.now();
+      const diff = Math.max(0, Math.floor((now - start) / 1000));
+      setElapsed(diff);
+    }
+
+    tick();
+    intervalRef.current = setInterval(tick, 1000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [activeTimer?.id, activeTimer?.start_time]);
+
+  if (!activeTimer) return null;
+
+  return (
+    <CardGroup title="Active Timer" icon={Timer}>
+      <View className="flex-row items-center gap-3">
+        <Icon as={Clock} size="lg" className="text-primary" />
+        <View>
+          <Text className="text-text-muted text-sm">JC #{activeTimer.jobcard_id}</Text>
+          <Text className="text-2xl font-bold text-primary">
+            {formatSeconds(elapsed)}
+          </Text>
+        </View>
+      </View>
+    </CardGroup>
+  );
+}
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -57,13 +111,15 @@ export default function Dashboard() {
           />
         }
       >
-        <Text className="text-2xl font-bold text-text mb-4">
-          Dashboard
-        </Text>
+        <Text className="text-2xl font-bold text-text mb-4">Dashboard</Text>
 
         <ErrorScreen error={statsError ?? listError} refetch={handleRefresh} />
 
-        <ComDashboardStats stats={stats} isLoading={statsLoading} />
+        <ActiveTimerBanner />
+
+        <View className="mt-4">
+          <ComDashboardStats stats={stats} isLoading={statsLoading} />
+        </View>
 
         <View className="my-4">
           <Button onPress={handleCreate}>

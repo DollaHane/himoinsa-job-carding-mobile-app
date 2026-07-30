@@ -1,4 +1,6 @@
-import { apiFetch } from "./core";
+import { apiFetch, getDeviceFingerprint } from "./core";
+import { getSessionToken, getSessionUser } from "@/providers/Auth/AuthStorage";
+import { config } from "@/app-config";
 import type { AuthUser } from "@/types/auth";
 import type { User } from "@/types/users";
 import type { Technician } from "@/types/technicians";
@@ -14,7 +16,7 @@ import type {
 } from "@/types/http";
 import type { Customer, CustomerWithLocations } from "@/types/customer";
 import type { Jobcard } from "@/types/jobcard";
-import type { CompleteJobcardPayload } from "@/types/jobcard-complete";
+import type { CompleteJobcardPayload, SlotImage } from "@/types/jobcard-complete";
 import type { Asset } from "@/types/asset";
 import type { LocationAsset } from "@/types/location-asset";
 import type { Inventory } from "@/types/inventory";
@@ -94,6 +96,8 @@ export const HimoinsaAPI = {
   api_jobcards_update: `${route_prefix}jobcards/update`,
   api_jobcards_metadata: `${route_prefix}jobcards/metadata`,
   api_jobcards_complete: `${route_prefix}jobcards/complete`,
+  api_jobcards_signature: `${route_prefix}jobcards/signature`,
+  api_jobcards_generator_images: `${route_prefix}jobcards/generator/images`,
 
   // Calendars
   api_calendar_horizontal_show: `${route_prefix}calendar/horizontal-show`,
@@ -417,16 +421,52 @@ export async function getJobcardMetadata(): Promise<ApiJobcardMetadata> {
 
 export async function completeJobcard(
   jobcardId: number,
-  payload: CompleteJobcardPayload,
+  formData: FormData,
 ): Promise<Jobcard> {
-  const response = await apiFetch(
-    `${HimoinsaAPI.api_jobcards_complete}/${jobcardId}`,
-    "POST",
-    payload,
+  const sessionToken = await getSessionToken();
+  const sessionUser = await getSessionUser();
+  const response = await fetch(
+    `${config.backend_domain}${HimoinsaAPI.api_jobcards_complete}/${jobcardId}`,
+    {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+        "X-Device-Fingerprint": JSON.stringify(getDeviceFingerprint()),
+        "X-Session-User": JSON.stringify(sessionUser),
+        ...(sessionToken ? { "X-Session-Token": sessionToken } : {}),
+      },
+    },
   );
   const json = (await response.json()) as Response<Jobcard>;
   if (!json.data) throw new Error("Failed to complete jobcard.");
   return json.data;
+}
+
+/** *******************
+ * Signature & Generator Images
+ *
+ */
+export async function getJobcardSignature(id: string): Promise<{ path: string; url: string } | null> {
+  const response = await apiFetch(
+    `${HimoinsaAPI.api_jobcards_signature}/${id}`,
+    "GET",
+  );
+  const json = (await response.json()) as Response<{ path: string; url: string } | null>;
+  return json.data ?? null;
+}
+
+export async function getJobcardSlotImages(
+  jobcardId: number,
+  assetId: number,
+): Promise<Array<SlotImage>> {
+  const response = await apiFetch(
+    `${HimoinsaAPI.api_jobcards_generator_images}/${jobcardId}?asset_id=${assetId}`,
+    "GET",
+  );
+  const json = (await response.json()) as Response<{ images: Array<SlotImage> }>;
+  if (!json.data) throw new Error(`Failed to fetch slot images for jobcard id:${jobcardId} asset:${assetId}`);
+  return json.data.images;
 }
 
 /** *******************

@@ -147,7 +147,7 @@ export default function Home() {
         />
 
         {errorMessage && (
-          <Text className="text-center text-destructive text-sm">
+          <Text className="text-center text-error text-sm">
             {errorMessage}
           </Text>
         )}

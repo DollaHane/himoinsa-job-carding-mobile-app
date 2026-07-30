@@ -11,8 +11,10 @@ import {
   type PendingType,
 } from "@/http/offline-queue";
 import { apiFetch, HimoinsaAPI } from "@/http";
+import { completeJobcard } from "@/http/actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryKeys } from "@/http/services";
+import { buildCompleteFormData } from "@/lib/helpers/build-complete-form-data";
 
 export async function isOnline(): Promise<boolean> {
   try {
@@ -67,23 +69,32 @@ export async function syncPendingQueue(
   let synced = 0;
   for (const record of pending) {
     try {
-      const payload = JSON.parse(record.payload);
-      const route =
-        record.type === "create"
-          ? HimoinsaAPI.api_jobcards_store
-          : `${HimoinsaAPI.api_jobcards_complete}/${payload.id ?? ""}`;
+      let response: Response | null = null;
 
-      const response = await apiFetch(
-        route,
-        "POST",
-        record.type === "complete"
-          ? Object.fromEntries(
-              Object.entries(payload).filter(([k]) => k !== "id"),
-            )
-          : payload,
-      );
+      if (record.type === "complete") {
+        const stored = JSON.parse(record.payload);
+        const formData = await buildCompleteFormData(
+          stored.json_payload ?? stored.payload,
+          stored.signature ?? "",
+          stored.slot_images ?? {},
+        );
+        response = await completeJobcard(
+          Number(stored.id),
+          formData,
+        ).then(
+          () => new Response(null, { status: 200 }),
+          () => new Response(null, { status: 500 }),
+        );
+      } else {
+        const payload = JSON.parse(record.payload);
+        const route =
+          record.type === "create"
+            ? HimoinsaAPI.api_jobcards_store
+            : `${HimoinsaAPI.api_jobcards_complete}/${payload.id ?? ""}`;
+        response = await apiFetch(route, "POST", payload);
+      }
 
-      if (response.ok) {
+      if (response?.ok) {
         await removePending(record.id);
         synced++;
       } else {

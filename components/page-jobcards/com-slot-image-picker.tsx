@@ -1,13 +1,8 @@
 import React, { useState, useRef } from "react";
-import { View, Image, Pressable, ScrollView } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { CameraView } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
-import {
-  X,
-  Camera as CameraIcon,
-  Trash2,
-  Image as ImageIcon,
-} from "lucide-react-native";
+import { X, Camera as CameraIcon, Image as ImageIcon } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import {
@@ -21,40 +16,50 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { Icon } from "@/components/ui/icon";
 
-interface PhotoCaptureProps {
-  photos: Array<{ uri: string; base64?: string }>;
-  onPhotosChange: (photos: Array<{ uri: string; base64?: string }>) => void;
-  maxPhotos?: number;
+const SLOT_LABELS: Record<string, string> = {
+  front: "Front",
+  rear: "Rear",
+  left: "Left",
+  right: "Right",
+  fuel: "Fuel",
+};
+
+interface SlotImagePickerProps {
+  slot: string;
+  label?: string;
+  value: string | null;
+  existingUrl?: string | null;
+  onChange: (slot: string, uri: string | null) => void;
+  disabled?: boolean;
 }
 
-export default function PhotoCapture({
-  photos,
-  onPhotosChange,
-  maxPhotos = 10,
-}: PhotoCaptureProps) {
-  const [cameraOpen, setCameraOpen] = useState(false);
+export default function SlotImagePicker({
+  slot,
+  label,
+  value,
+  existingUrl,
+  onChange,
+  disabled = false,
+}: SlotImagePickerProps) {
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
   const cameraRef = useRef<CameraView>(null);
+
+  const displayUri = value ?? existingUrl;
 
   async function handlePickFromGallery() {
     setPickerOpen(false);
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: "images",
-      quality: 0.7,
-      base64: true,
-      allowsMultipleSelection: true,
+      quality: 0.6,
     });
 
     if (!result.canceled && result.assets?.length) {
-      const newPhotos = result.assets.map((asset) => ({
-        uri: asset.uri,
-        base64: asset.base64 ?? undefined,
-      }));
-      onPhotosChange([...photos, ...newPhotos].slice(0, maxPhotos));
+      onChange(slot, result.assets[0].uri);
     }
   }
 
-  async function handleTakePhoto() {
+  function handleOpenCamera() {
     setPickerOpen(false);
     setCameraOpen(true);
   }
@@ -63,17 +68,10 @@ export default function PhotoCapture({
     if (!cameraRef.current) return;
     try {
       const result = await cameraRef.current.takePictureAsync({
-        quality: 0.7,
-        base64: true,
+        quality: 0.6,
       });
       if (result) {
-        onPhotosChange([
-          ...photos,
-          {
-            uri: result.uri,
-            base64: result.base64 ?? undefined,
-          },
-        ]);
+        onChange(slot, result.uri);
       }
       setCameraOpen(false);
     } catch {
@@ -81,54 +79,48 @@ export default function PhotoCapture({
     }
   }
 
-  function handleDelete(index: number) {
-    onPhotosChange(photos.filter((_, i) => i !== index));
+  function handleRemove() {
+    setPickerOpen(false);
+    onChange(slot, null);
   }
 
+  const slotLabel = label ?? SLOT_LABELS[slot] ?? slot;
+
   return (
-    <View className="flex flex-col gap-3">
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="flex-row gap-3"
-      >
-        {photos.map((photo, index) => (
-          <View
-            key={index}
-            className="relative w-24 h-24 rounded-lg overflow-hidden"
-          >
-            <Image
-              source={{ uri: photo.uri }}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
-            <Pressable
-              onPress={() => handleDelete(index)}
-              className="absolute top-1 right-1 bg-black/60 rounded-full p-1"
-            >
-              <Icon as={Trash2} size="xs" className="text-white" />
-            </Pressable>
-          </View>
-        ))}
+    <View className="flex flex-col items-center gap-1">
+      <Text className="text-xs text-text-muted">{slotLabel}</Text>
 
-        {photos.length < maxPhotos && (
+      {displayUri ? (
+        <View className="relative aspect-square w-20 overflow-hidden rounded-lg border border-muted">
+          <Image
+            source={{ uri: displayUri }}
+            className="w-full h-full"
+            resizeMode="cover"
+          />
           <Pressable
-            onPress={() => setPickerOpen(true)}
-            className="w-24 h-24 rounded-lg border-2 border-dashed border-border items-center justify-center gap-1"
+            onPress={() => !disabled && setPickerOpen(true)}
+            className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0"
+            style={({ pressed }) => ({ opacity: pressed ? 1 : 0 })}
           >
-            <Icon as={CameraIcon} size="lg" className="text-text" />
-            <Text className="text-xs text-text-muted">Add</Text>
+            <Icon as={X} size="sm" className="text-white" />
           </Pressable>
-        )}
-      </ScrollView>
+        </View>
+      ) : (
+        <Pressable
+          onPress={() => !disabled && setPickerOpen(true)}
+          className="flex aspect-square w-20 items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25"
+          disabled={disabled}
+        >
+          <Icon as={ImageIcon} size="sm" className="text-muted-foreground" />
+        </Pressable>
+      )}
 
-      {/* Source picker modal */}
       <Modal isOpen={pickerOpen} onClose={() => setPickerOpen(false)}>
         <ModalBackdrop />
         <ModalContent className="mt-auto rounded-t-3xl pb-8">
           <ModalHeader>
             <Heading size="md" className="text-text">
-              Add Photo
+              {slotLabel} — Select Source
             </Heading>
           </ModalHeader>
           <ModalBody>
@@ -136,7 +128,7 @@ export default function PhotoCapture({
               <Button
                 variant="outline"
                 size="lg"
-                onPress={handleTakePhoto}
+                onPress={handleOpenCamera}
                 className="flex-row items-center gap-3 justify-start px-6 h-16"
               >
                 <Icon as={CameraIcon} size="lg" className="text-text" />
@@ -165,6 +157,24 @@ export default function PhotoCapture({
                   </Text>
                 </View>
               </Button>
+              {displayUri && (
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onPress={handleRemove}
+                  className="flex-row items-center gap-3 justify-start px-6 h-16 border-error"
+                >
+                  <Icon as={X} size="lg" className="text-error" />
+                  <View>
+                    <Text className="text-base font-medium text-error">
+                      Remove
+                    </Text>
+                    <Text className="text-sm text-text-muted">
+                      Remove this photo
+                    </Text>
+                  </View>
+                </Button>
+              )}
             </View>
           </ModalBody>
           <ModalFooter>
@@ -179,7 +189,6 @@ export default function PhotoCapture({
         </ModalContent>
       </Modal>
 
-      {/* Full-screen camera modal */}
       <Modal
         isOpen={cameraOpen}
         onClose={() => setCameraOpen(false)}
@@ -187,7 +196,6 @@ export default function PhotoCapture({
       >
         <View className="flex-1 bg-black">
           <CameraView ref={cameraRef} style={{ flex: 1 }} facing="back">
-            {/* Close button */}
             <View className="absolute top-14 left-6 z-50">
               <Pressable
                 onPress={() => setCameraOpen(false)}
@@ -197,7 +205,6 @@ export default function PhotoCapture({
               </Pressable>
             </View>
 
-            {/* Capture button */}
             <View className="absolute bottom-16 w-full items-center">
               <Pressable
                 onPress={handleCapture}

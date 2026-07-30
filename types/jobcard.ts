@@ -10,6 +10,7 @@ import type { Inventory } from "./inventory";
 import type { JobcardTask, JobcardAsset } from "./jobcards";
 import type { JobcardTechnician } from "./technicians";
 import type { Contract } from "./contract";
+import type { JobcardInspectionChecklist } from "./inspection-checklist";
 
 export interface Jobcard {
   id: number;
@@ -29,6 +30,7 @@ export interface Jobcard {
   contract_id?: number | null;
   scheduled_datetime?: string | null;
   travel_time?: number | null;
+  travel_mileage?: number | null;
   reminder_time?: string | null;
   technician_id?: number | null;
   estimated_duration_minutes?: number | null;
@@ -50,4 +52,5 @@ export interface Jobcard {
   tasks?: Array<JobcardTask> | null;
   technicians?: Array<JobcardTechnician> | null;
   contract?: Contract | null;
+  inspection_checklists?: Array<JobcardInspectionChecklist> | null;
 }
