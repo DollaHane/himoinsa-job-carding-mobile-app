@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, Image, Pressable } from "react-native";
-import { CameraView } from "expo-camera";
+import { BlurView } from "expo-blur";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { X, Camera as CameraIcon, Image as ImageIcon } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/modal";
 import { Heading } from "@/components/ui/heading";
 import { Icon } from "@/components/ui/icon";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const SLOT_LABELS: Record<string, string> = {
   front: "Front",
@@ -44,6 +46,8 @@ export default function SlotImagePicker({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
   const cameraRef = useRef<CameraView>(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const { colorMode } = useTheme();
 
   const displayUri = value ?? existingUrl;
 
@@ -59,8 +63,12 @@ export default function SlotImagePicker({
     }
   }
 
-  function handleOpenCamera() {
+  async function handleOpenCamera() {
     setPickerOpen(false);
+    if (!permission?.granted) {
+      const result = await requestPermission();
+      if (!result.granted) return;
+    }
     setCameraOpen(true);
   }
 
@@ -91,7 +99,7 @@ export default function SlotImagePicker({
       <Text className="text-xs text-text-muted">{slotLabel}</Text>
 
       {displayUri ? (
-        <View className="relative aspect-square w-20 overflow-hidden rounded-lg border border-muted">
+        <View className="relative aspect-square w-20 overflow-hidden rounded-lg border border-border">
           <Image
             source={{ uri: displayUri }}
             className="w-full h-full"
@@ -108,16 +116,22 @@ export default function SlotImagePicker({
       ) : (
         <Pressable
           onPress={() => !disabled && setPickerOpen(true)}
-          className="flex aspect-square w-20 items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25"
+          className="flex aspect-square w-20 items-center justify-center rounded-lg border-2 border-dashed border-border"
           disabled={disabled}
         >
-          <Icon as={ImageIcon} size="sm" className="text-muted-foreground" />
+          <Icon as={ImageIcon} size="sm" className="text-text-muted" />
         </Pressable>
       )}
 
       <Modal isOpen={pickerOpen} onClose={() => setPickerOpen(false)}>
-        <ModalBackdrop />
-        <ModalContent className="mt-auto rounded-t-3xl pb-8">
+        <ModalBackdrop className="bg-transparent">
+          <BlurView
+            intensity={40}
+            tint={colorMode === "dark" ? "dark" : "light"}
+            style={{ flex: 1 }}
+          />
+        </ModalBackdrop>
+        <ModalContent className="border-border">
           <ModalHeader>
             <Heading size="md" className="text-text">
               {slotLabel} — Select Source
@@ -194,24 +208,30 @@ export default function SlotImagePicker({
         onClose={() => setCameraOpen(false)}
         size="full"
       >
-        <View className="flex-1 bg-black">
-          <CameraView ref={cameraRef} style={{ flex: 1 }} facing="back">
-            <View className="absolute top-14 left-6 z-50">
-              <Pressable
-                onPress={() => setCameraOpen(false)}
-                className="w-12 h-12 rounded-full bg-black/50 items-center justify-center"
-              >
-                <Icon as={X} size="xl" className="text-white" />
-              </Pressable>
-            </View>
+        <View className="absolute inset-0 bg-black">
+          {permission?.granted && (
+            <CameraView
+              ref={cameraRef}
+              style={{ position: "absolute", inset: 0 }}
+              facing="back"
+            />
+          )}
 
-            <View className="absolute bottom-16 w-full items-center">
-              <Pressable
-                onPress={handleCapture}
-                className="w-20 h-20 rounded-full bg-white border-[6px] border-gray-400"
-              />
-            </View>
-          </CameraView>
+          <View className="absolute top-14 left-6 z-50">
+            <Pressable
+              onPress={() => setCameraOpen(false)}
+              className="w-12 h-12 rounded-full bg-black/50 items-center justify-center"
+            >
+              <Icon as={X} size="xl" className="text-white" />
+            </Pressable>
+          </View>
+
+          <View className="absolute bottom-16 w-full items-center">
+            <Pressable
+              onPress={handleCapture}
+              className="w-20 h-20 rounded-full bg-white border-[6px] border-gray-400"
+            />
+          </View>
         </View>
       </Modal>
     </View>
