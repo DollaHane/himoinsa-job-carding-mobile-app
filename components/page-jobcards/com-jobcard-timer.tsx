@@ -2,10 +2,12 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Play, Square, MapPin } from "lucide-react-native";
-import { useGetRunningTimers, useGetTimerEvents } from "@/http/services";
+import { Play, Square, Timer } from "lucide-react-native";
+import { Icon } from "@/components/ui/icon";
+import { useGetRunningTimers } from "@/http/services";
 import { useMutationHandler } from "@/hooks/mutation";
 import { useLocationSnapshot } from "@/hooks/use-location";
+import { useElapsedTime } from "@/hooks/use-elapsed-time";
 import { HimoinsaAPI } from "@/http/actions";
 import { QueryKeys } from "@/http/services";
 
@@ -20,7 +22,6 @@ export default function ComJobcardTimer({
 }: ComJobcardTimerProps) {
   const { data: runningTimers, refetch: refetchRunning } =
     useGetRunningTimers();
-  const { data: timerEvents } = useGetTimerEvents();
   const { getSnapshot, startPeriodicUpdates, stopPeriodicUpdates } =
     useLocationSnapshot();
 
@@ -33,10 +34,9 @@ export default function ComJobcardTimer({
     );
   }, [runningTimers, jobcardId, technicianId]);
 
-  const currentEventName = useMemo(() => {
-    if (!activeTimer?.event_id) return null;
-    return timerEvents?.find((e) => e.id === activeTimer.event_id)?.name;
-  }, [activeTimer, timerEvents]);
+  const elapsed = useElapsedTime(
+    activeTimer?.event_timestamp ?? activeTimer?.start_time,
+  );
 
   const { handleMutation: startTimer, isPending: isStarting } =
     useMutationHandler({
@@ -84,17 +84,16 @@ export default function ComJobcardTimer({
   if (!technicianId) return null;
 
   return (
-    <View className="flex flex-row items-center gap-3">
+    <View>
       {activeTimer ? (
-        <>
-          <View className="flex-1">
+        <View className="w-full items-center gap-3">
+          <View className="flex-row items-center gap-2">
+            <Icon as={Timer} size="lg" className="text-primary" />
             <Text className="text-sm text-text-muted">Timer running</Text>
-            {currentEventName && (
-              <Text className="text-text font-medium">
-                {currentEventName}
-              </Text>
-            )}
           </View>
+          <Text className="font-mono text-4xl font-bold text-primary tabular-nums">
+            {elapsed}
+          </Text>
           <Button
             action="negative"
             onPress={handleStop}
@@ -104,7 +103,7 @@ export default function ComJobcardTimer({
             <Square size={16} color="white" />
             <ButtonText>{isStopping ? "Stopping..." : "Stop Timer"}</ButtonText>
           </Button>
-        </>
+        </View>
       ) : (
         <Button
           action="positive"

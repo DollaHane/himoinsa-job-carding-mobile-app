@@ -1,67 +1,91 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, View, RefreshControl } from "react-native";
+import React from "react";
+import { ScrollView, View, RefreshControl, Pressable } from "react-native";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import CardGroup from "@/components/ui/groups/card-group";
-import { Plus, Timer, Clock } from "lucide-react-native";
+import { Plus, Timer, Clock, Square } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   useGetDashboardStats,
   useGetJobcardsList,
   useGetRunningTimers,
+  QueryKeys,
 } from "@/http/services";
 import ComDashboardStats from "@/components/page-dashboard/com-dashboard-stats";
 import ComDashboardJobcards from "@/components/page-dashboard/com-dashboard-jobcards";
 import ErrorScreen from "@/components/placeholders/error-screen";
-import { formatSeconds } from "@/lib/helpers/date-functions";
+import { useElapsedTime } from "@/hooks/use-elapsed-time";
+import { useMutationHandler } from "@/hooks/mutation";
+import { useLocationSnapshot } from "@/hooks/use-location";
+import { HimoinsaAPI } from "@/http/actions";
 
 function ActiveTimerBanner() {
-  const { data: timers } = useGetRunningTimers();
+  const { data: timers, refetch: refetchRunning } = useGetRunningTimers();
   const activeTimer = timers?.[0];
-  const [elapsed, setElapsed] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const elapsed = useElapsedTime(
+    activeTimer?.event_timestamp ?? activeTimer?.start_time,
+  );
+  const { stopPeriodicUpdates, getSnapshot } = useLocationSnapshot();
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!activeTimer) {
-      setElapsed(0);
-      return;
-    }
+  const { handleMutation: stopTimer, isPending: isStopping } =
+    useMutationHandler({
+      route: HimoinsaAPI.api_timers_stop,
+      method: "POST",
+      success_message: "Timer stopped.",
+      query_keys: [QueryKeys.timers_running],
+      onSuccess: () => refetchRunning(),
+    });
 
-    function tick() {
-      const start = new Date(activeTimer!.start_time).getTime();
-      const now = Date.now();
-      const diff = Math.max(0, Math.floor((now - start) / 1000));
-      setElapsed(diff);
-    }
-
-    tick();
-    intervalRef.current = setInterval(tick, 1000);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [activeTimer?.id, activeTimer?.start_time]);
+  async function handleStop() {
+    if (!activeTimer) return;
+    stopPeriodicUpdates();
+    const pos = await getSnapshot();
+    stopTimer({
+      timer_id: activeTimer.id,
+      ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
+    });
+  }
 
   if (!activeTimer) return null;
 
+  const jcLabel =
+    activeTimer.jobcard?.jc_number ?? `JC #${activeTimer.jobcard_id}`;
+  const jcId = activeTimer.jobcard_id;
+
+  function handlePress() {
+    router.push(`/tabs/job-cards/${jcId}` as any);
+  }
+
   return (
-    <CardGroup title="Active Timer" icon={Timer}>
-      <View className="flex-row items-center gap-3">
-        <Icon as={Clock} size="lg" className="text-primary" />
-        <View>
-          <Text className="text-text-muted text-sm">JC #{activeTimer.jobcard_id}</Text>
-          <Text className="text-2xl font-bold text-primary">
-            {formatSeconds(elapsed)}
-          </Text>
+    <Card className="p-4 mb-4">
+      <View className="items-center gap-3">
+        <View className="flex-row items-center gap-2">
+          <Icon as={Timer} size="lg" className="text-primary" />
+          <Text className="text-sm text-text-muted">Timer running on</Text>
+          <Pressable onPress={handlePress}>
+            <Text className="text-sm font-semibold text-primary underline">
+              {jcLabel}
+            </Text>
+          </Pressable>
         </View>
+        <Text className="font-mono text-4xl font-bold text-primary tabular-nums">
+          {elapsed}
+        </Text>
+        <Button
+          action="negative"
+          onPress={handleStop}
+          isDisabled={isStopping}
+          className="flex-row items-center gap-2"
+        >
+          <Square size={16} color="white" />
+          <ButtonText>{isStopping ? "Stopping..." : "Stop Timer"}</ButtonText>
+        </Button>
       </View>
-    </CardGroup>
+    </Card>
   );
 }
 
