@@ -24,7 +24,7 @@
       "autoIncrement": true,
       "env": {
         "NODE_ENV": "production",
-        "EXPO_PUBLIC_API_URL": "https://himoinsa.hiredesk.co.za/"
+        "EXPO_PUBLIC_API_URL": "https://himoinsa.cloudx.net.za:8001/"
       },
       "ios": {
         "distribution": "store"
