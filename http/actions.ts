@@ -1,7 +1,6 @@
-import { apiFetch, getDeviceFingerprint } from "./core";
-import { getSessionToken, getSessionUser } from "@/providers/Auth/AuthStorage";
+import { apiFetch } from "./core";
+import { getSessionToken } from "@/providers/Auth/AuthStorage";
 import { config } from "@/app-config";
-import type { AuthUser } from "@/types/auth";
 import type { User } from "@/types/users";
 import type { Technician } from "@/types/technicians";
 import type {
@@ -44,9 +43,8 @@ const route_prefix = "api/hjc/v1/";
 export const HimoinsaAPI = {
   // Auth
   example: "api/v1/example",
-  api_login: "api/v1/login",
+  api_auth: "api/v1/auth",
   api_logout: "api/v1/logout",
-  api_verify: "api/v1/verify",
 
   // Users
   api_users_list: `${route_prefix}users/list`,
@@ -111,6 +109,7 @@ export const HimoinsaAPI = {
   // Timers
   api_timers_start: `${route_prefix}timers/start`,
   api_timers_stop: `${route_prefix}timers/stop`,
+  api_technician_location_ping: `${route_prefix}technician-location/ping`,
   api_timers_running: `${route_prefix}timers/running`,
   api_timers_list: `${route_prefix}timers/list`,
   api_timers_events: `${route_prefix}timers/events`,
@@ -170,21 +169,6 @@ function buildUrl(
 /**
  * Get request functions used in useQuery function
  */
-
-export type VerifySessionResponse = {
-  user: AuthUser;
-  session: string;
-  action: string | null;
-};
-
-export async function verifySession(): Promise<VerifySessionResponse> {
-  const response = await apiFetch(HimoinsaAPI.api_verify, "POST");
-  const json = (await response.json()) as Response<VerifySessionResponse>;
-  if (!response.ok)
-    throw new Error(json.message ?? "Session verification failed.");
-  if (!json.data) throw new Error("No session data returned.");
-  return json.data;
-}
 
 /** *******************
  * Users
@@ -424,7 +408,6 @@ export async function completeJobcard(
   formData: FormData,
 ): Promise<Jobcard> {
   const sessionToken = await getSessionToken();
-  const sessionUser = await getSessionUser();
   const response = await fetch(
     `${config.backend_domain}${HimoinsaAPI.api_jobcards_complete}/${jobcardId}`,
     {
@@ -432,9 +415,7 @@ export async function completeJobcard(
       body: formData,
       headers: {
         Accept: "application/json",
-        "X-Device-Fingerprint": JSON.stringify(getDeviceFingerprint()),
-        "X-Session-User": JSON.stringify(sessionUser),
-        ...(sessionToken ? { "X-Session-Token": sessionToken } : {}),
+        ...(sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {}),
       },
     },
   );
@@ -632,6 +613,19 @@ export async function stopTimer(timerId: number): Promise<TimerJobcard> {
   const json = (await response.json()) as Response<TimerJobcard>;
   if (!json.data) throw new Error("Failed to stop timer.");
   return json.data;
+}
+
+export async function pingTechnicianLocation(
+  lat: number,
+  lng: number,
+  accuracyMeters?: number,
+): Promise<void> {
+  await apiFetch(HimoinsaAPI.api_technician_location_ping, "POST", {
+    lat,
+    lng,
+    ...(accuracyMeters !== undefined ? { accuracy_meters: accuracyMeters } : {}),
+    source: "mobile",
+  });
 }
 
 export async function getRunningTimers(): Promise<Array<TimerJobcard>> {

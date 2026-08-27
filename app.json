@@ -63,7 +63,11 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to track your location for technician travel and job card GPS tagging."
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to track your location for technician travel, including while the app is in the background so dispatchers can see your live position en route.",
+          "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to access your location while using the app.",
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": true,
+          "isIosBackgroundLocationEnabled": true
         }
       ],
       [

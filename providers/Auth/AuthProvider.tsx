@@ -7,6 +7,10 @@ import {
   clearPersistedSession,
 } from "@/providers/Auth/AuthStorage";
 import { setNavigateForAuth } from "@/http";
+import {
+  startBackgroundLocationTracking,
+  stopBackgroundLocationTracking,
+} from "@/lib/background-location-task";
 import type { AuthUser, AuthSession } from "@/types/auth";
 
 interface AuthProviderProps {
@@ -37,6 +41,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setNavigateForAuth(router);
   }, [router]);
 
+  // Re-fires (and re-registers the background task) on every cold start
+  // once the persisted session rehydrates, satisfying Expo's requirement
+  // that startLocationUpdatesAsync be called again on each app launch —
+  // hasStartedLocationUpdatesAsync inside it keeps this idempotent.
+  useEffect(() => {
+    if (session?.isAuthenticated) {
+      startBackgroundLocationTracking();
+    }
+  }, [session?.isAuthenticated]);
+
   const setSession = useCallback(
     async (user: AuthUser, sessionToken: string) => {
       await persistSession(user, sessionToken);
@@ -47,6 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const clearSession = useCallback(async () => {
     await clearPersistedSession();
+    await stopBackgroundLocationTracking();
     setSessionState({ user: null, sessionToken: null, isAuthenticated: false });
   }, []);
 

@@ -15,6 +15,7 @@ import { AuthProvider } from "@/providers/Auth/AuthProvider";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { registerSyncOnForeground } from "@/http/offline-sync";
+import "@/lib/background-location-task";
 import "@/global.css";
 
 export { ErrorBoundary } from "expo-router";

@@ -16,10 +16,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { FormInput } from "@/components/ui/forms/form-input";
 import Toast from "react-native-toast-message";
 import type { AuthUser } from "@/types/auth";
-import type { ResponseAction } from "@/http";
 
 const validateLogin = z.object({
-  email: z.string().email("Invalid email address"),
+  username: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
@@ -27,7 +26,7 @@ type LoginCreationRequest = z.input<typeof validateLogin>;
 
 interface LoginResponseData {
   user: AuthUser;
-  session: string;
+  token: string;
 }
 
 const DASHBOARD_ROUTE = "/tabs/(tabs)/dashboard" as Href;
@@ -47,19 +46,19 @@ export default function Home() {
   const { control, handleSubmit } = useForm<LoginCreationRequest>({
     resolver: zodResolver(validateLogin),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   const { mutate: handleMutation, isPending } = useMutation({
     mutationFn: async (payload: LoginCreationRequest) => {
-      const response = await apiFetch(HimoinsaAPI.api_login, "POST", payload);
+      const response = await apiFetch(HimoinsaAPI.api_auth, "POST", payload);
 
       const json = (await response.json()) as {
         message: string;
-        action: ResponseAction | null;
-        data: LoginResponseData | null;
+        token?: string;
+        user?: AuthUser;
       };
 
       if (!response.ok) {
@@ -80,24 +79,18 @@ export default function Home() {
           throw new Error("A server error occurred. Please try again later.");
         }
 
-        if (json.action === "account_inactive") {
-          throw new Error("Your account is not active.");
-        }
-        if (json.action === "verify_device") {
-          throw new Error("Device verification required.");
-        }
-
         throw new Error(json.message || "Login failed. Please try again.");
       }
 
-      return json.data;
+      if (!json.token || !json.user) return null;
+      return { user: json.user, token: json.token } as LoginResponseData;
     },
     onError: (error: Error) => {
       setErrorMessage(error.message || "Login failed. Please try again.");
     },
     onSuccess: async (data) => {
       if (!data) return;
-      await setSession(data.user, data.session);
+      await setSession(data.user, data.token);
       setErrorMessage(null);
       Toast.show({
         type: "success",
@@ -128,7 +121,7 @@ export default function Home() {
 
         <FormInput
           control={control}
-          name="email"
+          name="username"
           label="Email"
           type="text"
           placeholder="Enter email address"
