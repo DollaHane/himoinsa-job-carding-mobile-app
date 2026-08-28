@@ -37,5 +37,16 @@ export interface CompleteJobcardPayload {
       notes?: string | null;
     }>;
   }>;
-  vehicle_arrival_mileage?: number | null;
+  technician_signature_name?: string | null;
+  customer_signature_name?: string | null;
+}
+
+export interface TicketCreatePayload {
+  subject: string;
+  description: string;
+  customer_id?: number | null;
+  asset_id?: number | null;
+  asset_type?: string | null;
+  jobcard_id?: number | null;
+  priority?: "low" | "normal" | "high" | "urgent";
 }

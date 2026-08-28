@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addTicketInventoryItem,
   completeJobcard,
+  createTicket,
   getAsset,
   getAssetsList,
   getAssetsSearchCustomer,
@@ -21,6 +22,7 @@ import {
   getCustomersSearch,
   getDashboardStats,
   getInventoryList,
+  getJobcardEta,
   getJobcardMetadata,
   getJobcardShow,
   getJobcardsList,
@@ -38,6 +40,7 @@ import {
   getServiceTicket,
   getServiceTicketsList,
   getSettings,
+  getTechnicianLocations,
   getTechnicianShow,
   getTechniciansList,
   getTimerEvents,
@@ -73,6 +76,10 @@ import type { Inventory } from "@/types/inventory";
 import type { TimerJobcard } from "@/types/timer-jobcard";
 import type { TimerEvent } from "@/types/timer-event";
 import type { CompleteJobcardPayload, SlotImage } from "@/types/jobcard-complete";
+import type {
+  TechnicianLocation,
+  JobcardEtaResponse,
+} from "@/types/technician-location";
 import type {
   Contract,
   ContractShowResponse,
@@ -219,6 +226,16 @@ export const QueryKeys = {
     date_from?: string;
     date_to?: string;
   }): Array<string | Record<string, unknown>> => ["timers-list", params ?? {}],
+
+  // Technician location + ETA
+  technician_locations: (technicianIds: Array<number> | "all"): Array<string> => [
+    "technician-locations",
+    technicianIds === "all" ? "all" : technicianIds.join(","),
+  ],
+  jobcard_eta: (jobcardId: number): Array<string> => [
+    "jobcard-eta",
+    String(jobcardId),
+  ],
 
   // Contracts
   contracts_list: (params?: {
@@ -523,6 +540,31 @@ export function useGetLocationsMap() {
   return useQuery<ApiLocationsMapResponse>({
     queryKey: QueryKeys.locations_map,
     queryFn: () => getLocationsMap(),
+  });
+}
+
+/** *******************
+ * Technician location + ETA
+ *
+ */
+export function useGetTechnicianLocations(
+  technicianIds: Array<number> | "all",
+  enabled = true,
+) {
+  return useQuery<Array<TechnicianLocation>>({
+    queryKey: QueryKeys.technician_locations(technicianIds),
+    queryFn: () => getTechnicianLocations(technicianIds),
+    enabled,
+    refetchInterval: 60000,
+  });
+}
+
+export function useGetJobcardEta(jobcardId: number, enabled: boolean) {
+  return useQuery<JobcardEtaResponse>({
+    queryKey: QueryKeys.jobcard_eta(jobcardId),
+    queryFn: () => getJobcardEta(jobcardId),
+    enabled: !!jobcardId && enabled,
+    refetchInterval: 60000,
   });
 }
 

@@ -1,14 +1,28 @@
 import React, { useMemo, useCallback, useState } from "react";
-import { ScrollView, View, Pressable, TouchableOpacity } from "react-native";
+import { ScrollView, View, Pressable } from "react-native";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { Text } from "@/components/ui/text";
 import { Spinner } from "@/components/ui/spinner";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+import {
+  Checkbox,
+  CheckboxIcon,
+  CheckboxIndicator,
+} from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectTrigger,
+  SelectInput,
+  SelectIcon,
+  SelectPortal,
+  SelectBackdrop,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { Icon } from "@/components/ui/icon";
 import CardGroup from "@/components/ui/groups/card-group";
-import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   useGetJobcardShow,
@@ -20,13 +34,27 @@ import { enqueuePending } from "@/http/offline-queue";
 import Toast from "react-native-toast-message";
 import SignatureCapture from "@/components/page-jobcards/com-signature-capture";
 import GeneratorSection from "@/components/page-jobcards/com-generator-section";
+import ModConfirmCloseWithTicket from "@/components/page-jobcards/mod-confirm-close-with-ticket";
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
-import { ArrowLeft } from "lucide-react-native";
-import { Icon } from "@/components/ui/icon";
+import {
+  ArrowLeft,
+  Briefcase,
+  ClipboardList,
+  Box,
+  Truck,
+  Pencil,
+  Camera,
+  CircleCheck,
+  CircleX,
+  ArrowRightToLine,
+  Check,
+  ChevronDown,
+} from "lucide-react-native";
 import ErrorScreen from "@/components/placeholders/error-screen";
 import { useCompleteFormState } from "@/components/page-jobcards/use-complete-form-state";
 import { getMissingCloseFields } from "@/lib/helpers/close-form-validator";
 import { buildCompleteFormData } from "@/lib/helpers/build-complete-form-data";
+import { formatSeconds } from "@/lib/helpers/date-functions";
 import type { Jobcard } from "@/types/jobcard";
 
 const INVENTORY_REASONS = [
@@ -35,61 +63,22 @@ const INVENTORY_REASONS = [
   { label: "Other", value: "Other" },
 ];
 
-function ReasonSelect({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (val: string) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const selectedLabel = INVENTORY_REASONS.find((r) => r.value === value)?.label;
-
-  return (
-    <View className="flex flex-col gap-2">
-      <Text className="text-sm text-text">
-        Reason not fully used <Text className="text-error">*</Text>
-      </Text>
-      <TouchableOpacity
-        onPress={() => setOpen(!open)}
-        className="rounded-lg border border-border px-3 py-2 flex-row items-center justify-between"
-      >
-        <Text className={selectedLabel ? "text-text" : "text-text-muted"}>
-          {selectedLabel || "Select a reason..."}
-        </Text>
-        <Text className="text-text-muted text-xs">{open ? "\u25B2" : "\u25BC"}</Text>
-      </TouchableOpacity>
-      {open && (
-        <View className="rounded-lg border border-border bg-background overflow-hidden">
-          {INVENTORY_REASONS.map((option) => (
-            <Pressable
-              key={option.value}
-              onPress={() => {
-                onChange(option.value);
-                setOpen(false);
-              }}
-              className="px-3 py-3 border-t border-border"
-            >
-              <Text
-                className={
-                  value === option.value ? "text-text font-medium" : "text-text"
-                }
-              >
-                {option.label}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      )}
-    </View>
-  );
-}
-
 function assetLabel(a: any): string {
   return (
     a.asset?.fleet_number ??
     a.asset?.description ??
     `Asset #${a.asset_id}`
+  );
+}
+
+function inventoryItemName(inv: any): string {
+  return (
+    [inv.inventory?.stock_code, inv.inventory?.description]
+      .filter(Boolean)
+      .join(" - ") ||
+    inv.inventory?.barcode ||
+    inv.inventory?.serial_number ||
+    `Item #${inv.inventory_id}`
   );
 }
 
@@ -102,9 +91,6 @@ function buildCompletePayload(
   const inventory = jobcard.inventory ?? [];
   const checklists = jobcard.inspection_checklists ?? [];
   const today = new Date().toISOString().split("T")[0];
-  const assetType = jobcard.is_fleet_jc
-    ? "App\\Models\\Asset"
-    : "App\\Models\\CustomerAsset";
 
   return {
     asset_smr: assets.map((a) => {
@@ -115,7 +101,8 @@ function buildCompletePayload(
       };
       return {
         asset_id: a.asset_id,
-        asset_type: assetType,
+        asset_type:
+          a.asset_type ?? (jobcard.is_fleet_jc ? "fleet_asset" : "customer_asset"),
         date: today,
         smr_reading: entry.smr_reading,
         equipment_condition: entry.equipment_condition || null,
@@ -147,9 +134,8 @@ function buildCompletePayload(
           state.checklist_item_notes?.[`${cl.id}_${item.step}`] ?? "",
       })),
     })),
-    vehicle_arrival_mileage: state.travel_mileage
-      ? Number(state.travel_mileage)
-      : null,
+    technician_signature_name: state.technician_signature_name || null,
+    customer_signature_name: state.customer_signature_name || null,
   };
 }
 
@@ -172,6 +158,9 @@ export default function CompleteJobCardPage() {
     id ? Number(id) : 0,
   );
 
+  const [confirmCloseOpen, setConfirmCloseOpen] = useState(false);
+  const [isSigning, setIsSigning] = useState(false);
+
   const technicianId = user?.technician_id ?? null;
 
   const isAssigned = useMemo(() => {
@@ -187,8 +176,8 @@ export default function CompleteJobCardPage() {
     [state, jobcard],
   );
 
-  const handleSubmit = useCallback(async () => {
-    if (!jobcard) return;
+  const handleComplete = useCallback(async (): Promise<boolean> => {
+    if (!jobcard) return false;
 
     const hasRunning = (runningTimers ?? []).some(
       (t) =>
@@ -203,7 +192,7 @@ export default function CompleteJobCardPage() {
         text2:
           "You have a running timer. Please stop it before closing this jobcard.",
       });
-      return;
+      return false;
     }
 
     const payload = buildCompletePayload(state, jobcard);
@@ -211,7 +200,8 @@ export default function CompleteJobCardPage() {
     try {
       const formData = await buildCompleteFormData(
         payload,
-        state.signature,
+        state.technician_signature,
+        state.customer_signature,
         state.slot_images,
       );
 
@@ -227,7 +217,8 @@ export default function CompleteJobCardPage() {
         await enqueuePending("complete", {
           id: jobcard.id,
           json_payload: payload,
-          signature: state.signature,
+          technician_signature: state.technician_signature,
+          customer_signature: state.customer_signature,
           slot_images: state.slot_images,
         });
         Toast.show({
@@ -238,8 +229,10 @@ export default function CompleteJobCardPage() {
         clearState();
         router.back();
       }
+
+      return true;
     } catch {
-      // error handled by mutation onError
+      return false;
     }
   }, [
     jobcard,
@@ -288,112 +281,287 @@ export default function CompleteJobCardPage() {
           <ScrollView
             className="flex-1 px-4 pt-4"
             contentContainerStyle={{ paddingBottom: 120 }}
+            scrollEnabled={!isSigning}
           >
             <View className="flex flex-col gap-4">
-              <CardGroup title="Travel" icon={undefined}>
-                <FieldGroup>
-                  <View className="flex flex-col gap-1">
-                    <Text className="text-sm text-text">
-                      Vehicle Arrival Mileage{" "}
-                      <Text className="text-error">*</Text>
-                    </Text>
-                    <Input size="md">
-                      <InputField
-                        placeholder="e.g. 12.5"
-                        keyboardType="numeric"
-                        value={state.travel_mileage}
-                        onChangeText={(text) =>
-                          dispatch({
-                            type: "SET_FIELD",
-                            field: "travel_mileage",
-                            value: text,
-                          })
-                        }
-                      />
-                    </Input>
-                  </View>
-                </FieldGroup>
+              <CardGroup title="Work Description" icon={Briefcase}>
+                <View className="rounded-lg bg-background-subtle p-2">
+                  <Text className="text-sm">
+                    {jobcard.work_description || "No description"}
+                  </Text>
+                </View>
               </CardGroup>
 
-              {jobcard.inspection_checklists &&
-                jobcard.inspection_checklists.length > 0 && (
-                  <CardGroup title="Inspection Checklists" icon={undefined}>
-                    <FieldSet>
-                      {jobcard.inspection_checklists.map((checklist) => (
-                        <View key={checklist.id}>
-                          <FieldLegend>{checklist.template_name}</FieldLegend>
-                          {checklist.items.map((item) => {
-                            const key = `${checklist.id}_${item.step}`;
-                            const checked =
-                              state.checklist_item_checked?.[key] ??
-                              item.checked ??
-                              false;
-                            const notes =
-                              state.checklist_item_notes?.[key] ?? "";
+              {(jobcard.tasks ?? []).length > 0 && (
+                <CardGroup title="Tasks" icon={ClipboardList}>
+                  {(jobcard.tasks ?? []).map((task) => {
+                    const completed = state.task_status[task.id] ?? false;
+                    return (
+                      <View
+                        key={task.id}
+                        className={
+                          completed
+                            ? "mb-3 flex flex-col gap-3 rounded-lg border border-success bg-success/10 p-2"
+                            : "mb-3 flex flex-col gap-3 rounded-lg border border-border bg-background-subtle p-2"
+                        }
+                      >
+                        <View className="flex-row items-center gap-3">
+                          <Checkbox
+                            size="sm"
+                            value={`task-${task.id}`}
+                            isChecked={completed}
+                            onChange={(val: boolean) =>
+                              dispatch({
+                                type: "SET_TASK_STATUS",
+                                taskId: task.id,
+                                completed: val,
+                              })
+                            }
+                          >
+                            <CheckboxIndicator>
+                              <CheckboxIcon as={Check} />
+                            </CheckboxIndicator>
+                          </Checkbox>
+                          <Text className="flex-1 text-sm">
+                            <Text className="font-medium">
+                              Step {task.task_step}: {task.description}
+                            </Text>
+                            <Text className="text-text-muted">
+                              {" "}
+                              ({formatSeconds(task.duration ?? 0)})
+                            </Text>
+                          </Text>
+                          {completed ? (
+                            <Icon as={CircleCheck} size="sm" className="text-success" />
+                          ) : (
+                            <Icon as={CircleX} size="sm" className="text-text-muted" />
+                          )}
+                        </View>
+                        {!completed && (
+                          <Input size="md">
+                            <InputField
+                              placeholder="Reason for incomplete (optional)"
+                              value={state.task_reasons[task.id] ?? ""}
+                              onChangeText={(text) =>
+                                dispatch({
+                                  type: "SET_TASK_REASON",
+                                  taskId: task.id,
+                                  reason: text,
+                                })
+                              }
+                            />
+                          </Input>
+                        )}
+                      </View>
+                    );
+                  })}
+                </CardGroup>
+              )}
 
-                            return (
-                              <View
-                                key={key}
-                                className="flex flex-col gap-2 mb-2"
-                              >
-                                <View className="flex-row items-center justify-between">
-                                  <Text className="flex-1 text-text text-sm">
-                                    {item.step}. {item.description}
-                                  </Text>
-                                  <Switch
-                                    value={checked}
-                                    onValueChange={(val) =>
+              {(jobcard.inspection_checklists ?? []).length > 0 && (
+                <CardGroup title="Inspection Checklists" icon={ClipboardList}>
+                  {(jobcard.inspection_checklists ?? []).map((checklist) => (
+                    <View key={checklist.id} className="mb-4">
+                      <Text className="mb-2 text-sm font-semibold">
+                        {checklist.template_name}
+                      </Text>
+                      <View className="flex flex-col gap-2">
+                        {checklist.items.map((item) => {
+                          const key = `${checklist.id}_${item.step}`;
+                          const checked =
+                            state.checklist_item_checked?.[key] ??
+                            item.checked ??
+                            false;
+                          const notes =
+                            state.checklist_item_notes?.[key] ?? "";
+
+                          return (
+                            <View
+                              key={key}
+                              className={
+                                checked
+                                  ? "flex flex-col gap-2 rounded-lg border border-success bg-success/10 p-2"
+                                  : "flex flex-col gap-2 rounded-lg border border-border bg-background-subtle p-2"
+                              }
+                            >
+                              <View className="flex-row items-center gap-3">
+                                <Checkbox
+                                  size="sm"
+                                  value={`checklist-${checklist.id}-${item.step}`}
+                                  isChecked={checked}
+                                  onChange={(val: boolean) =>
+                                    dispatch({
+                                      type: "SET_CHECKLIST_ITEM",
+                                      checklistId: checklist.id,
+                                      step: item.step,
+                                      checked: val,
+                                    })
+                                  }
+                                >
+                                  <CheckboxIndicator>
+                                    <CheckboxIcon as={Check} />
+                                  </CheckboxIndicator>
+                                </Checkbox>
+                                <Text className="flex-1 text-sm">
+                                  <Text className="font-medium">
+                                    Step {item.step}:
+                                  </Text>{" "}
+                                  {item.description}
+                                </Text>
+                                {checked ? (
+                                  <Icon as={CircleCheck} size="sm" className="text-success" />
+                                ) : (
+                                  <Icon as={CircleX} size="sm" className="text-text-muted" />
+                                )}
+                              </View>
+                              {!checked && (
+                                <Input size="sm">
+                                  <InputField
+                                    placeholder="Notes (optional)"
+                                    value={notes}
+                                    onChangeText={(text) =>
                                       dispatch({
-                                        type: "SET_CHECKLIST_ITEM",
+                                        type: "SET_CHECKLIST_NOTE",
                                         checklistId: checklist.id,
                                         step: item.step,
-                                        checked: val,
+                                        note: text,
                                       })
                                     }
                                   />
-                                </View>
-                                {!checked && (
-                                  <Input size="sm">
-                                    <InputField
-                                      placeholder="Notes (optional)"
-                                      value={notes}
-                                      onChangeText={(text) =>
-                                        dispatch({
-                                          type: "SET_CHECKLIST_NOTE",
-                                          checklistId: checklist.id,
-                                          step: item.step,
-                                          note: text,
-                                        })
-                                      }
-                                    />
-                                  </Input>
-                                )}
-                              </View>
-                            );
-                          })}
-                        </View>
-                      ))}
-                    </FieldSet>
-                  </CardGroup>
-                )}
+                                </Input>
+                              )}
+                            </View>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  ))}
+                </CardGroup>
+              )}
 
-              {jobcard.assets && jobcard.assets.length > 0 && (
-                <CardGroup title="SMR Readings" icon={undefined}>
-                  <FieldSet>
-                    {jobcard.assets.map((asset) => {
-                      const entry = state.smr_entries[asset.id] ?? {
-                        smr_reading: "",
-                        equipment_condition: "",
-                        recommendations: "",
-                      };
-                      return (
-                        <View key={asset.id} className="mb-3">
-                          <FieldLegend>{assetLabel(asset)}</FieldLegend>
-                          <View className="flex flex-col gap-2 mb-2">
-                            <Text className="text-sm text-text">
-                              SMR Reading{" "}
-                              <Text className="text-error">*</Text>
+              {(jobcard.inventory ?? []).length > 0 && (
+                <CardGroup title="Inventory" icon={Box}>
+                  {(jobcard.inventory ?? []).map((item) => {
+                    const qtyRequested = item.quantity_requested ?? 0;
+                    const used = state.inventory_used[item.id] ?? 0;
+                    const fullyUsed = used >= qtyRequested;
+                    const reason = state.inventory_reasons?.[item.id] ?? "";
+
+                    return (
+                      <View
+                        key={item.id}
+                        className={
+                          fullyUsed
+                            ? "mb-3 flex flex-col gap-3 rounded-lg border border-success bg-success/10 p-2"
+                            : "mb-3 flex flex-col gap-3 rounded-lg border border-border bg-background-subtle p-2"
+                        }
+                      >
+                        <View className="flex-row items-center justify-between gap-2">
+                          <Text className="flex-1 font-medium">
+                            {inventoryItemName(item)}
+                          </Text>
+                          {fullyUsed ? (
+                            <Icon as={CircleCheck} size="sm" className="text-success" />
+                          ) : (
+                            <Icon as={CircleX} size="sm" className="text-text-muted" />
+                          )}
+                        </View>
+
+                        <Text className="text-sm text-text-muted">
+                          Quantity Requested: ( x{qtyRequested} )
+                        </Text>
+
+                        <View className="flex flex-col gap-3">
+                          <View className="flex flex-col gap-1.5">
+                            <Text className="text-xs text-text-muted">
+                              Qty Used
                             </Text>
+                            <Input size="sm">
+                              <InputField
+                                keyboardType="numeric"
+                                placeholder="0"
+                                value={used > 0 ? String(used) : ""}
+                                onChangeText={(text) => {
+                                  const parsed = parseFloat(text || "0");
+                                  dispatch({
+                                    type: "SET_INVENTORY_USED",
+                                    invId: item.id,
+                                    qty: isNaN(parsed) ? 0 : parsed,
+                                  });
+                                }}
+                              />
+                            </Input>
+                          </View>
+
+                          {used < qtyRequested && (
+                            <View className="flex flex-col gap-1.5">
+                              <Text className="text-xs text-text-muted">
+                                Reason not fully used{" "}
+                                <Text className="text-error">*</Text>
+                              </Text>
+                              <Select
+                                selectedValue={reason}
+                                onValueChange={(val) =>
+                                  dispatch({
+                                    type: "SET_INVENTORY_REASON",
+                                    invId: item.id,
+                                    reason: val,
+                                  })
+                                }
+                              >
+                                <SelectTrigger
+                                  variant="outline"
+                                  size="sm"
+                                  className="justify-between"
+                                >
+                                  <SelectInput placeholder="Select a reason..." />
+                                  <SelectIcon className="mr-3" as={ChevronDown} />
+                                </SelectTrigger>
+                                <SelectPortal>
+                                  <SelectBackdrop />
+                                  <SelectContent>
+                                    {INVENTORY_REASONS.map((option) => (
+                                      <SelectItem
+                                        key={option.value}
+                                        label={option.label}
+                                        value={option.value}
+                                      />
+                                    ))}
+                                  </SelectContent>
+                                </SelectPortal>
+                              </Select>
+                            </View>
+                          )}
+                        </View>
+                      </View>
+                    );
+                  })}
+                </CardGroup>
+              )}
+
+              {(jobcard.assets ?? []).length > 0 && (
+                <CardGroup title="SMR Reading" icon={Truck}>
+                  {(jobcard.assets ?? []).map((asset) => {
+                    const entry = state.smr_entries[asset.id] ?? {
+                      smr_reading: "",
+                      equipment_condition: "",
+                      recommendations: "",
+                    };
+
+                    return (
+                      <View
+                        key={asset.id}
+                        className="mb-3 flex flex-col gap-5 rounded-lg border border-border bg-background-subtle p-3"
+                      >
+                        <View className="flex-row items-center justify-start gap-3">
+                          <Icon as={ArrowRightToLine} size="sm" className="text-accent-primary" />
+                          <Text className="text-lg font-medium">
+                            {assetLabel(asset)}
+                          </Text>
+                        </View>
+                        <View className="flex flex-col gap-5">
+                          <View className="flex flex-col gap-1.5">
+                            <Text className="text-text-muted">SMR Reading</Text>
                             <Input size="md">
                               <InputField
                                 placeholder="Enter SMR reading"
@@ -409,8 +577,8 @@ export default function CompleteJobCardPage() {
                               />
                             </Input>
                           </View>
-                          <View className="flex flex-col gap-2 mb-2">
-                            <Text className="text-sm text-text">
+                          <View className="flex flex-col gap-1.5">
+                            <Text className="text-text-muted">
                               Equipment Condition
                             </Text>
                             <Textarea size="md">
@@ -428,13 +596,14 @@ export default function CompleteJobCardPage() {
                               />
                             </Textarea>
                           </View>
-                          <View className="flex flex-col gap-2">
-                            <Text className="text-sm text-text">
-                              Recommendations
+                          <View className="flex flex-col gap-1.5">
+                            <Text className="text-text-muted">
+                              Work Performed{" "}
+                              <Text className="text-error">*</Text>
                             </Text>
                             <Textarea size="md">
                               <TextareaInput
-                                placeholder="Any recommendations"
+                                placeholder="Describe the work performed on this asset"
                                 value={entry.recommendations}
                                 onChangeText={(text) =>
                                   dispatch({
@@ -448,158 +617,105 @@ export default function CompleteJobCardPage() {
                             </Textarea>
                           </View>
                         </View>
-                      );
-                    })}
-                  </FieldSet>
+                      </View>
+                    );
+                  })}
                 </CardGroup>
               )}
 
-              {jobcard.tasks && jobcard.tasks.length > 0 && (
-                <CardGroup title="Tasks" icon={undefined}>
-                  <FieldSet>
-                    {jobcard.tasks.map((task) => {
-                      const completed =
-                        state.task_status[task.id] ?? false;
-                      return (
-                        <View
-                          key={task.id}
-                          className="flex flex-col gap-2 mb-2"
-                        >
-                          <View className="flex-row items-center justify-between">
-                            <Text className="flex-1 text-text text-sm">
-                              {task.task_step}. {task.description}
-                            </Text>
-                            <Switch
-                              value={completed}
-                              onValueChange={(val) =>
-                                dispatch({
-                                  type: "SET_TASK_STATUS",
-                                  taskId: task.id,
-                                  completed: val,
-                                })
-                              }
-                            />
-                          </View>
-                          {!completed && (
-                            <Input size="sm">
-                              <InputField
-                                placeholder="Reason for incomplete (optional)"
-                                value={
-                                  state.task_reasons[task.id] ?? ""
-                                }
-                                onChangeText={(text) =>
-                                  dispatch({
-                                    type: "SET_TASK_REASON",
-                                    taskId: task.id,
-                                    reason: text,
-                                  })
-                                }
-                              />
-                            </Input>
-                          )}
-                        </View>
-                      );
-                    })}
-                  </FieldSet>
-                </CardGroup>
-              )}
-
-              {jobcard.inventory && jobcard.inventory.length > 0 && (
-                <CardGroup title="Parts Used" icon={undefined}>
-                  <FieldSet>
-                    {jobcard.inventory.map((item) => {
-                      const itemName =
-                        item.inventory?.stock_code ??
-                        `Item #${item.inventory_id}`;
-                      const qtyRequested =
-                        item.quantity_requested ?? 0;
-                      const used =
-                        state.inventory_used[item.id] ?? 0;
-                      const reason =
-                        state.inventory_reasons?.[item.id] ?? "";
-
-                      return (
-                        <View key={item.id} className="mb-3">
-                          <FieldLegend>{itemName}</FieldLegend>
-                          <Text className="text-sm text-text-muted mb-1">
-                            Quantity Requested: ( x{qtyRequested} )
-                          </Text>
-                          <View className="flex flex-col gap-2 mb-2">
-                            <Text className="text-sm text-text">
-                              Qty Used:
-                            </Text>
-                            <Input size="md">
-                              <InputField
-                                keyboardType="numeric"
-                                placeholder="0"
-                                value={used > 0 ? String(used) : ""}
-                                onChangeText={(text) => {
-                                  const parsed = parseFloat(text || "0");
-                                  dispatch({
-                                    type: "SET_INVENTORY_USED",
-                                    invId: item.id,
-                                    qty: isNaN(parsed) ? 0 : parsed,
-                                  });
-                                }}
-                              />
-                            </Input>
-                          </View>
-                          {used < qtyRequested && (
-                            <ReasonSelect
-                              value={reason}
-                              onChange={(val) =>
-                                dispatch({
-                                  type: "SET_INVENTORY_REASON",
-                                  invId: item.id,
-                                  reason: val,
-                                })
-                              }
-                            />
-                          )}
-                        </View>
-                      );
-                    })}
-                  </FieldSet>
-                </CardGroup>
-              )}
-
-              <CardGroup title="Sign-off" icon={undefined}>
-                <FieldGroup>
+              <CardGroup title="Technician Signature" icon={Pencil}>
+                <View className="flex flex-col gap-3">
+                  <View className="flex flex-col gap-1.5">
+                    <Text className="text-text-muted">
+                      Technician Name <Text className="text-error">*</Text>
+                    </Text>
+                    <Input size="md">
+                      <InputField
+                        placeholder="Technician full name"
+                        value={state.technician_signature_name}
+                        onChangeText={(text) =>
+                          dispatch({
+                            type: "SET_FIELD",
+                            field: "technician_signature_name",
+                            value: text,
+                          })
+                        }
+                      />
+                    </Input>
+                  </View>
                   <SignatureCapture
-                    value={state.signature}
+                    value={state.technician_signature}
                     onChange={(val) =>
                       dispatch({
                         type: "SET_FIELD",
-                        field: "signature",
+                        field: "technician_signature",
                         value: val,
                       })
                     }
+                    onActiveChange={setIsSigning}
                   />
-                  {jobcard.assets && jobcard.assets.length > 0 && (
-                    <GeneratorSection
-                      jobcardId={jobcard.id}
-                      assets={jobcard.assets ?? []}
-                      slotImages={state.slot_images}
-                      onSlotChange={(key, uri) =>
-                        dispatch({
-                          type: "SET_SLOT_IMAGE",
-                          key,
-                          dataUrl: uri ?? "",
-                        })
-                      }
-                      disabled={false}
-                    />
-                  )}
-                </FieldGroup>
+                </View>
               </CardGroup>
 
+              <CardGroup title="Customer Signature" icon={Pencil}>
+                <View className="flex flex-col gap-3">
+                  <View className="flex flex-col gap-1.5">
+                    <Text className="text-text-muted">
+                      Customer Name <Text className="text-error">*</Text>
+                    </Text>
+                    <Input size="md">
+                      <InputField
+                        placeholder="Customer full name"
+                        value={state.customer_signature_name}
+                        onChangeText={(text) =>
+                          dispatch({
+                            type: "SET_FIELD",
+                            field: "customer_signature_name",
+                            value: text,
+                          })
+                        }
+                      />
+                    </Input>
+                  </View>
+                  <SignatureCapture
+                    value={state.customer_signature}
+                    onChange={(val) =>
+                      dispatch({
+                        type: "SET_FIELD",
+                        field: "customer_signature",
+                        value: val,
+                      })
+                    }
+                    onActiveChange={setIsSigning}
+                  />
+                </View>
+              </CardGroup>
+
+              {(jobcard.assets ?? []).length > 0 && (
+                <CardGroup title="Generator Photos" icon={Camera}>
+                  <GeneratorSection
+                    jobcardId={jobcard.id}
+                    assets={jobcard.assets ?? []}
+                    slotImages={state.slot_images}
+                    onSlotChange={(key, uri) =>
+                      dispatch({
+                        type: "SET_SLOT_IMAGE",
+                        key,
+                        dataUrl: uri ?? "",
+                      })
+                    }
+                    disabled={false}
+                  />
+                </CardGroup>
+              )}
+
               {missingFields.length > 0 && (
-                <View className="flex flex-col gap-1">
-                  <Text className="text-error text-xs font-medium">
-                    Please complete before closing:
+                <View className="rounded-md border border-error/50 bg-error/5 p-3">
+                  <Text className="font-medium text-error">
+                    Please complete the following before closing:
                   </Text>
                   {missingFields.map((field, i) => (
-                    <Text key={i} className="text-error text-xs ml-2">
+                    <Text key={i} className="text-error ml-2 mt-1">
                       {"\u2022"} {field}
                     </Text>
                   ))}
@@ -608,32 +724,26 @@ export default function CompleteJobCardPage() {
             </View>
           </ScrollView>
 
-          <View
-            className="flex-col gap-3 px-4 pt-3 pb-24 border-t border-border bg-background"
-          >
-            <View className="flex-row gap-3">
-              <Button
-                variant="outline"
-                onPress={() => router.back()}
-                className="flex-1"
-              >
-                <ButtonText>Cancel</ButtonText>
-              </Button>
-              <Button
-                onPress={handleSubmit}
-                isDisabled={
-                  completeMutation.isPending || missingFields.length > 0
-                }
-                className="flex-1"
-              >
-                <ButtonText>
-                  {completeMutation.isPending
-                    ? "Completing..."
-                    : "Close And Complete Jobcard"}
-                </ButtonText>
-              </Button>
-            </View>
+          <View className="flex-col gap-3 px-4 pt-3 pb-24 border-t border-border bg-background">
+            <Button
+              onPress={() => setConfirmCloseOpen(true)}
+              isDisabled={completeMutation.isPending || missingFields.length > 0}
+              className="w-full"
+            >
+              <ButtonText>
+                {completeMutation.isPending
+                  ? "Completing..."
+                  : "Close And Complete Jobcard"}
+              </ButtonText>
+            </Button>
           </View>
+
+          <ModConfirmCloseWithTicket
+            open={confirmCloseOpen}
+            onOpenChange={setConfirmCloseOpen}
+            jobcard={jobcard}
+            onConfirm={handleComplete}
+          />
         </View>
       )}
     </SafeAreaView>

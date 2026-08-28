@@ -32,7 +32,7 @@ export default function CardGroup({
         <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-border">
           <View className="flex-1">
             <View className="flex-row items-center gap-2">
-              {icon && <Icon as={icon} size="lg" className="text-text" />}
+              {icon && <Icon as={icon} size="lg" className="text-accent-primary" />}
               {title && (
                 <Heading size="sm" className="text-text">
                   {title}

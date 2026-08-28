@@ -12,6 +12,7 @@ import { useGetJobcardShow } from "@/http/services";
 import ComJobcardTimer from "@/components/page-jobcards/com-jobcard-timer";
 import ComJobcardTimerHistory from "@/components/page-jobcards/com-jobcard-timer-history";
 import ComJobcardCompletedView from "@/components/page-jobcards/com-jobcard-completed-view";
+import ComJobcardMap from "@/components/page-jobcards/com-jobcard-map";
 import { Button, ButtonText } from "@/components/ui/button";
 import CardGroup from "@/components/ui/groups/card-group";
 import InfoGroup from "@/components/ui/groups/info-group";
@@ -502,6 +503,9 @@ export default function JobCardDetail() {
               <CustomerDetails jobcard={jobcard} />
               <ContractDetails jobcard={jobcard} />
               <BranchDetails jobcard={jobcard} />
+              <CardGroup title="Map" icon={MapPin}>
+                <ComJobcardMap jobcard={jobcard} />
+              </CardGroup>
             </View>
 
             {isCompleted && <ComJobcardCompletedView jobcard={jobcard} />}

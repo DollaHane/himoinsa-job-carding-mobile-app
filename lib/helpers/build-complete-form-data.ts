@@ -11,24 +11,30 @@ function base64ToBytes(base64: string): Uint8Array {
 
 export async function buildCompleteFormData(
   payload: Record<string, any>,
-  signature: string,
+  technicianSignature: string,
+  customerSignature: string,
   slotImages: Record<string, string>,
 ): Promise<FormData> {
   const formData = new FormData();
   formData.append("payload", JSON.stringify(payload));
 
-  if (signature && signature.length > 10) {
-    const base64 = signature.includes("base64,")
-      ? signature.split("base64,")[1]
-      : signature;
-    const file = new File(Paths.cache, `sig-${Date.now()}.png`);
-    await file.write(base64ToBytes(base64));
-    formData.append("signature", {
-      uri: file.uri,
-      name: "signature.png",
-      type: "image/png",
-    } as any);
-  }
+  const appendSignature = async (partName: string, signature: string) => {
+    if (signature && signature.length > 10) {
+      const base64 = signature.includes("base64,")
+        ? signature.split("base64,")[1]
+        : signature;
+      const file = new File(Paths.cache, `sig-${partName}-${Date.now()}.png`);
+      await file.write(base64ToBytes(base64));
+      formData.append(partName, {
+        uri: file.uri,
+        name: `${partName}.png`,
+        type: "image/png",
+      } as any);
+    }
+  };
+
+  await appendSignature("signature_technician", technicianSignature);
+  await appendSignature("signature_customer", customerSignature);
 
   for (const [key, uri] of Object.entries(slotImages)) {
     const parts = key.split("_");

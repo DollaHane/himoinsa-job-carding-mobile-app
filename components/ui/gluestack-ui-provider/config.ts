@@ -24,7 +24,7 @@ export const config = {
     '--color-background-subtle': '245, 245, 244',
 
     /* Accent colors */
-    '--color-accent-primary': '207 17 29',
+    '--color-accent-primary': '209 10 17',
     '--color-accent-muted': '252, 165, 165',
   }),
   dark: vars({
@@ -49,7 +49,7 @@ export const config = {
     '--color-background-subtle': '68, 64, 60',
 
     /* Accent colors */
-    '--color-accent-primary': '207 17 29',
+    '--color-accent-primary': '209 10 17',
     '--color-accent-muted': '252, 165, 165',
   }),
 };

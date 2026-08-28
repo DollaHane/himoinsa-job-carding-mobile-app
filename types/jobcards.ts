@@ -38,6 +38,7 @@ export interface JobcardInventoryItem {
     warehouse_code?: string;
     barcode?: string;
     serial_number?: string;
+    description?: string;
   };
 }
 

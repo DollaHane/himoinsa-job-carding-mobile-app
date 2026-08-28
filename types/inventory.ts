@@ -4,6 +4,7 @@ export interface Inventory {
   warehouse_code?: string | null;
   barcode?: string | null;
   serial_number?: string | null;
+  description?: string | null;
   tax_code?: string | null;
   quantity?: number | null;
   to_process?: number | null;

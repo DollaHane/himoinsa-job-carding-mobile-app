@@ -15,7 +15,15 @@ import type {
 } from "@/types/http";
 import type { Customer, CustomerWithLocations } from "@/types/customer";
 import type { Jobcard } from "@/types/jobcard";
-import type { CompleteJobcardPayload, SlotImage } from "@/types/jobcard-complete";
+import type {
+  CompleteJobcardPayload,
+  SlotImage,
+  TicketCreatePayload,
+} from "@/types/jobcard-complete";
+import type {
+  TechnicianLocation,
+  JobcardEtaResponse,
+} from "@/types/technician-location";
 import type { Asset } from "@/types/asset";
 import type { LocationAsset } from "@/types/location-asset";
 import type { Inventory } from "@/types/inventory";
@@ -96,6 +104,7 @@ export const HimoinsaAPI = {
   api_jobcards_complete: `${route_prefix}jobcards/complete`,
   api_jobcards_signature: `${route_prefix}jobcards/signature`,
   api_jobcards_generator_images: `${route_prefix}jobcards/generator/images`,
+  api_jobcards_eta: `${route_prefix}jobcards`,
 
   // Calendars
   api_calendar_horizontal_show: `${route_prefix}calendar/horizontal-show`,
@@ -110,6 +119,7 @@ export const HimoinsaAPI = {
   api_timers_start: `${route_prefix}timers/start`,
   api_timers_stop: `${route_prefix}timers/stop`,
   api_technician_location_ping: `${route_prefix}technician-location/ping`,
+  api_technician_location_list: `${route_prefix}technician-location`,
   api_timers_running: `${route_prefix}timers/running`,
   api_timers_list: `${route_prefix}timers/list`,
   api_timers_events: `${route_prefix}timers/events`,
@@ -120,6 +130,9 @@ export const HimoinsaAPI = {
 
   // Dashboard
   api_dashboard_stats: `${route_prefix}dashboard/stats`,
+
+  // Tickets (after-sales)
+  api_tickets_store: `${route_prefix}tickets/store`,
 
   // Service Schedules
   api_service_schedules_list: `${route_prefix}service-schedules/list`,
@@ -424,6 +437,21 @@ export async function completeJobcard(
   return json.data;
 }
 
+export async function createTicket(payload: TicketCreatePayload): Promise<void> {
+  await apiFetch(HimoinsaAPI.api_tickets_store, "POST", payload);
+}
+
+export async function getJobcardEta(
+  jobcardId: number,
+): Promise<JobcardEtaResponse> {
+  const response = await apiFetch(
+    `${HimoinsaAPI.api_jobcards_eta}/${jobcardId}/eta`,
+    "GET",
+  );
+  const json = (await response.json()) as JobcardEtaResponse;
+  return json;
+}
+
 /** *******************
  * Signature & Generator Images
  *
@@ -626,6 +654,22 @@ export async function pingTechnicianLocation(
     ...(accuracyMeters !== undefined ? { accuracy_meters: accuracyMeters } : {}),
     source: "mobile",
   });
+}
+
+export async function getTechnicianLocations(
+  technicianIds: Array<number> | "all",
+): Promise<Array<TechnicianLocation>> {
+  const params = new URLSearchParams();
+  if (technicianIds !== "all") {
+    technicianIds.forEach((id) => params.append("technician_ids[]", String(id)));
+  }
+  const url = params.toString()
+    ? `${HimoinsaAPI.api_technician_location_list}?${params.toString()}`
+    : HimoinsaAPI.api_technician_location_list;
+  const response = await apiFetch(url, "GET");
+  const json = (await response.json()) as Response<Array<TechnicianLocation>>;
+  if (!json.data) throw new Error("Failed to fetch technician locations.");
+  return json.data;
 }
 
 export async function getRunningTimers(): Promise<Array<TimerJobcard>> {

@@ -20,7 +20,7 @@ async function getDb(): Promise<SQLite.SQLiteDatabase> {
   return db;
 }
 
-type PendingType = "create" | "complete";
+type PendingType = "create" | "complete" | "ticket";
 
 export type { PendingType };
 

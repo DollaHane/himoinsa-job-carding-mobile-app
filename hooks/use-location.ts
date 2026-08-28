@@ -59,7 +59,7 @@ export function useLocationSnapshot() {
       setPending(true);
       setError(null);
       const pos = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
+        accuracy: Location.Accuracy.High,
       });
       const result: LocationResult = {
         lat: pos.coords.latitude,

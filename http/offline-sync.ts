@@ -15,7 +15,6 @@ import { completeJobcard } from "@/http/actions";
 import { useQueryClient } from "@tanstack/react-query";
 import { QueryKeys } from "@/http/services";
 import { buildCompleteFormData } from "@/lib/helpers/build-complete-form-data";
-
 export async function isOnline(): Promise<boolean> {
   try {
     const state = await Network.getNetworkStateAsync();
@@ -75,7 +74,8 @@ export async function syncPendingQueue(
         const stored = JSON.parse(record.payload);
         const formData = await buildCompleteFormData(
           stored.json_payload ?? stored.payload,
-          stored.signature ?? "",
+          stored.technician_signature ?? "",
+          stored.customer_signature ?? "",
           stored.slot_images ?? {},
         );
         response = await completeJobcard(
@@ -85,6 +85,9 @@ export async function syncPendingQueue(
           () => new Response(null, { status: 200 }),
           () => new Response(null, { status: 500 }),
         );
+      } else if (record.type === "ticket") {
+        const payload = JSON.parse(record.payload);
+        response = await apiFetch(HimoinsaAPI.api_tickets_store, "POST", payload);
       } else {
         const payload = JSON.parse(record.payload);
         const route =

@@ -7,8 +7,10 @@ interface SmrEntry {
 }
 
 interface State {
-  travel_mileage: string;
-  signature: string;
+  technician_signature: string;
+  customer_signature: string;
+  technician_signature_name: string;
+  customer_signature_name: string;
   slot_images: Record<string, string>;
   smr_entries: Record<number, SmrEntry>;
   task_status: Record<number, boolean>;
@@ -20,7 +22,15 @@ interface State {
 }
 
 type Action =
-  | { type: "SET_FIELD"; field: "travel_mileage" | "signature"; value: string }
+  | {
+      type: "SET_FIELD";
+      field:
+        | "technician_signature"
+        | "customer_signature"
+        | "technician_signature_name"
+        | "customer_signature_name";
+      value: string;
+    }
   | { type: "SET_SLOT_IMAGE"; key: string; dataUrl: string }
   | { type: "SET_SMR"; assetId: number; field: keyof SmrEntry; value: string }
   | { type: "SET_TASK_STATUS"; taskId: number; completed: boolean }
@@ -33,8 +43,10 @@ type Action =
 
 function initialState(): State {
   return {
-    travel_mileage: "",
-    signature: "",
+    technician_signature: "",
+    customer_signature: "",
+    technician_signature_name: "",
+    customer_signature_name: "",
     slot_images: {},
     smr_entries: {},
     task_status: {},

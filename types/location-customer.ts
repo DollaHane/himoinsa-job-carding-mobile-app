@@ -9,5 +9,6 @@ export interface LocationCustomer {
   lat?: number | null;
   lng?: number | null;
   notes?: string | null;
+  is_primary?: boolean | null;
   deleted_at?: string | null;
 }

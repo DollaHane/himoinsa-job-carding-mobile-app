@@ -21,7 +21,10 @@
       "bundleIdentifier": "com.himoinsa.workshop.mobileapp",
       "buildNumber": "1",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to access your location while using the app.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to track your location for technician travel, including while the app is in the background so dispatchers can see your live position en route.",
+        "NSLocationAlwaysUsageDescription": "Allow $(PRODUCT_NAME) to track your location for technician travel."
       }
     },
     "android": {
@@ -41,6 +44,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY_HERE"
+        }
       },
       "edgeToEdgeEnabled": true
     },

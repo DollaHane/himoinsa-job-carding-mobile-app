@@ -1,29 +1,15 @@
-import React, { useRef, useState } from "react";
-import { View, Image } from "react-native";
+import React, { useRef } from "react";
+import { View } from "react-native";
 import SignaturePad from "react-native-signature-canvas";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Text } from "@/components/ui/text";
-import {
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-} from "@/components/ui/modal";
-import { Heading } from "@/components/ui/heading";
 
 interface SignatureCaptureProps {
   value: string;
   onChange: (base64: string) => void;
+  onActiveChange?: (active: boolean) => void;
 }
 
-export default function SignatureCapture({
-  value,
-  onChange,
-}: SignatureCaptureProps) {
-  const [open, setOpen] = useState(false);
-  const sigRef = useRef<any>(null);
-
-  const style = `* {
+const style = `* {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
   }
@@ -48,75 +34,47 @@ export default function SignatureCapture({
   }
   .m-signature-pad--footer { display: none; }`;
 
-  function handleOK(signature: string) {
-    onChange(signature);
-    setOpen(false);
-  }
+export default function SignatureCapture({
+  value,
+  onChange,
+  onActiveChange,
+}: SignatureCaptureProps) {
+  const sigRef = useRef<any>(null);
 
-  function handleClear() {
-    sigRef.current?.clearSignature();
+  function handleOK(signature: string) {
+    onActiveChange?.(false);
+    onChange(signature);
   }
 
   function handleEmpty() {
-    setOpen(false);
+    onActiveChange?.(false);
+    onChange("");
   }
 
-  const hasSignature = value && value.length > 10;
+  function handleClear() {
+    onActiveChange?.(false);
+    sigRef.current?.clearSignature();
+    onChange("");
+  }
 
   return (
     <View className="flex flex-col gap-2">
-      {hasSignature && (
-        <View className="h-20 border border-border rounded-lg overflow-hidden bg-white">
-          <Image
-            source={{ uri: value }}
-            className="w-full h-full"
-            resizeMode="contain"
-          />
-        </View>
-      )}
-
-      <Button variant="outline" onPress={() => setOpen(true)}>
-        <ButtonText>
-          {hasSignature ? "Re-capture Signature" : "Capture Signature"}
-        </ButtonText>
+      <View className="h-40 overflow-hidden rounded-lg border border-border bg-white">
+        <SignaturePad
+          ref={sigRef}
+          onOK={handleOK}
+          onEmpty={handleEmpty}
+          onBegin={() => onActiveChange?.(true)}
+          onEnd={() => onActiveChange?.(false)}
+          autoClear={false}
+          descriptionText=""
+          webStyle={style}
+          style={{ flex: 1 }}
+        />
+      </View>
+      <Button variant="outline" size="sm" onPress={handleClear}>
+        <ButtonText>Clear</ButtonText>
       </Button>
-
-      <Modal isOpen={open} onClose={handleEmpty} size="full">
-        <ModalBackdrop />
-        <ModalContent className="h-[85%] mt-auto rounded-t-3xl">
-          <ModalHeader>
-            <View className="flex-row w-full items-center justify-between">
-              <Heading size="lg" className="text-text">
-                Sign Here
-              </Heading>
-              <View className="flex-row gap-3">
-                <Button variant="outline" size="sm" onPress={handleClear}>
-                  <ButtonText>Clear</ButtonText>
-                </Button>
-                <Button
-                  size="sm"
-                  onPress={() => sigRef.current?.readSignature()}
-                >
-                  <ButtonText>Save</ButtonText>
-                </Button>
-              </View>
-            </View>
-          </ModalHeader>
-          <View className="flex-1 mb-6 overflow-hidden mx-[-24px] px-6">
-            <View className="flex-1 border border-border rounded-xl overflow-hidden bg-white">
-              <SignaturePad
-                ref={sigRef}
-                onOK={handleOK}
-                onEmpty={handleEmpty}
-                autoClear={false}
-                descriptionText=""
-                webStyle={style}
-                style={{ flex: 1 }}
-              />
-            </View>
-          </View>
-        </ModalContent>
-      </Modal>
     </View>
   );
 }

@@ -47,7 +47,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // hasStartedLocationUpdatesAsync inside it keeps this idempotent.
   useEffect(() => {
     if (session?.isAuthenticated) {
-      startBackgroundLocationTracking();
+      startBackgroundLocationTracking().catch(() => {});
     }
   }, [session?.isAuthenticated]);
 

@@ -34,33 +34,43 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
  * is running or the app is in the foreground.
  */
 export async function startBackgroundLocationTracking(): Promise<boolean> {
-  const foreground = await Location.requestForegroundPermissionsAsync();
-  if (foreground.status !== "granted") return false;
+  try {
+    const foreground = await Location.requestForegroundPermissionsAsync();
+    if (foreground.status !== "granted") return false;
 
-  const background = await Location.requestBackgroundPermissionsAsync();
-  if (background.status !== "granted") return false;
+    const background = await Location.requestBackgroundPermissionsAsync();
+    if (background.status !== "granted") return false;
 
-  if (await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME)) {
+    if (await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME)) {
+      return true;
+    }
+
+    await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+      accuracy: Location.Accuracy.High,
+      timeInterval: 60000,
+      distanceInterval: 25,
+      foregroundService: {
+        notificationTitle: "Himoinsa Workshop",
+        notificationBody: "Sharing your location while you're logged in.",
+      },
+      showsBackgroundLocationIndicator: true,
+      pausesUpdatesAutomatically: false,
+    });
+
     return true;
+  } catch {
+    // Never throw: a missing Info.plist usage-description (stale dev-client
+    // build) or a denied OS permission must not crash the app on login.
+    return false;
   }
-
-  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-    accuracy: Location.Accuracy.Balanced,
-    timeInterval: 60000,
-    distanceInterval: 50,
-    foregroundService: {
-      notificationTitle: "Himoinsa Workshop",
-      notificationBody: "Sharing your location while you're logged in.",
-    },
-    showsBackgroundLocationIndicator: true,
-    pausesUpdatesAutomatically: false,
-  });
-
-  return true;
 }
 
 export async function stopBackgroundLocationTracking(): Promise<void> {
-  if (await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME)) {
-    await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+  try {
+    if (await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME)) {
+      await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
+    }
+  } catch {
+    // ignore — nothing to clean up.
   }
 }
