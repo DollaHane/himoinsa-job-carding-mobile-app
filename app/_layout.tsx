@@ -1,10 +1,5 @@
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider as NavigationThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -67,11 +62,7 @@ function ThemedApp() {
       <ReactQueryProvider>
         <SyncHandler />
         <GluestackUIProvider mode={colorMode}>
-          <NavigationThemeProvider
-            value={colorMode === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <Slot />
-          </NavigationThemeProvider>
+          <Slot />
         </GluestackUIProvider>
       </ReactQueryProvider>
     </AuthProvider>

@@ -31,6 +31,10 @@ export interface Jobcard {
   scheduled_datetime?: string | null;
   travel_time?: number | null;
   travel_mileage?: number | null;
+  travel_rate?: number | string | null;
+  labour_rate?: number | string | null;
+  technician_signature_name?: string | null;
+  customer_signature_name?: string | null;
   reminder_time?: string | null;
   technician_id?: number | null;
   estimated_duration_minutes?: number | null;
@@ -53,4 +57,40 @@ export interface Jobcard {
   technicians?: Array<JobcardTechnician> | null;
   contract?: Contract | null;
   inspection_checklists?: Array<JobcardInspectionChecklist> | null;
+  sla_jobcards?: Array<{
+    id: number;
+    sla_id: number;
+    sla_service_id?: number | null;
+    jobcard_id: number;
+  }> | null;
+  quotation_jobcards?: Array<{
+    id: number;
+    quotation_id: number;
+    jobcard_id: number;
+    quotation?: {
+      id: number;
+      ref?: string | null;
+      company_name?: string | null;
+      contact_name?: string | null;
+      contact_email?: string | null;
+      contact_phone?: string | null;
+      asset_type?: string | null;
+      asset_type_name?: string | null;
+      asset_description?: string | null;
+      asset_kva?: number | string | null;
+      customer?: Customer | null;
+    } | null;
+  }> | null;
+  quotation_contact?: {
+    company_name?: string | null;
+    contact_name?: string | null;
+    contact_email?: string | null;
+    contact_phone?: string | null;
+  } | null;
+  technician_branch_distance?: {
+    branch_name: string;
+    distance_meters: number;
+    duration_seconds: number | null;
+  } | null;
+  mileage_status_reason?: string | null;
 }

@@ -51,13 +51,13 @@ export default function NavBarItem({ item, active }: NavBarItemProps) {
       >
         <View
           className={`h-16 w-16 rounded-full flex items-center justify-center ${
-            active ? "bg-primary" : "bg-background"
+            active ? "bg-accent-primary" : "bg-background"
           }`}
         >
           <Icon
             as={IconComponent}
             size="xl"
-            className={active ? "text-primary-foreground" : "text-text"}
+            className={active ? "text-white" : "text-text"}
           />
         </View>
       </AnimatedPressable>

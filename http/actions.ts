@@ -106,6 +106,10 @@ export const HimoinsaAPI = {
   api_jobcards_generator_images: `${route_prefix}jobcards/generator/images`,
   api_jobcards_eta: `${route_prefix}jobcards`,
 
+  // SLAs
+  api_slas_list: `${route_prefix}slas/list`,
+  api_slas_services_prefill: `${route_prefix}slas/services`,
+
   // Calendars
   api_calendar_horizontal_show: `${route_prefix}calendar/horizontal-show`,
   api_calendar_day_show: `${route_prefix}calendar/day-show`,

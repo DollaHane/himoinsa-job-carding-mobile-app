@@ -3,10 +3,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import CustomNavBar from "@/components/navigation/custom-nav-bar";
 import { LayoutDashboard, ClipboardList, User } from "lucide-react-native";
+import type { ColorValue } from "react-native";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
+  color: ColorValue;
 }) {
   return <FontAwesome size={18} style={{ marginBottom: -3 }} {...props} />;
 }

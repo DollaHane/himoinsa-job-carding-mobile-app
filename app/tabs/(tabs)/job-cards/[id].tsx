@@ -5,7 +5,7 @@ import { Text } from "@/components/ui/text";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
-import { ArrowLeft } from "lucide-react-native";
+import { ArrowLeft, Pencil, Ban, Tag } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGetJobcardShow } from "@/http/services";
@@ -13,6 +13,11 @@ import ComJobcardTimer from "@/components/page-jobcards/com-jobcard-timer";
 import ComJobcardTimerHistory from "@/components/page-jobcards/com-jobcard-timer-history";
 import ComJobcardCompletedView from "@/components/page-jobcards/com-jobcard-completed-view";
 import ComJobcardMap from "@/components/page-jobcards/com-jobcard-map";
+import ComJobcardCostSummary from "@/components/page-jobcards/com-jobcard-cost-summary";
+import ModTechnicianAssign from "@/components/page-jobcards/mod-technician-assign";
+import ModCancelJobcard from "@/components/page-jobcards/mod-cancel-jobcard";
+import ModChangeStatus from "@/components/page-jobcards/mod-change-status";
+import ModEditScheduledDate from "@/components/page-jobcards/mod-edit-scheduled-date";
 import { Button, ButtonText } from "@/components/ui/button";
 import CardGroup from "@/components/ui/groups/card-group";
 import InfoGroup from "@/components/ui/groups/info-group";
@@ -36,6 +41,9 @@ import {
   Gauge,
   AlertTriangle,
   Lightbulb,
+  Route,
+  CircleDollarSign,
+  LinkIcon,
 } from "lucide-react-native";
 
 const TABS = ["Timer", "Assets", "Tasks", "Inventory"] as const;
@@ -73,7 +81,13 @@ function TotalDuration({ jobcard }: { jobcard: Jobcard }) {
   );
 }
 
-function BasicDetails({ jobcard }: { jobcard: Jobcard }) {
+function BasicDetails({
+  jobcard,
+  onEditDate,
+}: {
+  jobcard: Jobcard;
+  onEditDate: () => void;
+}) {
   return (
     <CardGroup title="Jobcard" icon={Hash}>
       <View className="flex flex-col gap-2">
@@ -100,21 +114,37 @@ function BasicDetails({ jobcard }: { jobcard: Jobcard }) {
           data={jobcard.service_type?.name}
           icon={Briefcase}
         />
-        <InfoGroup
-          label="Scheduled"
-          data={
-            jobcard.scheduled_datetime
-              ? formatDateLabel(jobcard.scheduled_datetime)
-              : "Not scheduled"
-          }
-          icon={Calendar}
-        />
+        <Pressable onPress={onEditDate}>
+          <InfoGroup
+            label="Scheduled"
+            data={
+              jobcard.scheduled_datetime
+                ? formatDateLabel(jobcard.scheduled_datetime)
+                : "Not scheduled — tap to set"
+            }
+            icon={Calendar}
+          />
+        </Pressable>
         <TotalDuration jobcard={jobcard} />
+        {jobcard.technician_branch_distance && (
+          <InfoGroup
+            label="Technician's Branch"
+            data={`${jobcard.technician_branch_distance.branch_name} — ${(jobcard.technician_branch_distance.distance_meters / 1000).toFixed(1)} km`}
+            icon={Route}
+          />
+        )}
         {jobcard.smr_reading && (
           <InfoGroup
             label="SMR Reading"
             data={jobcard.smr_reading}
             icon={Gauge}
+          />
+        )}
+        {jobcard.quotation_jobcards && jobcard.quotation_jobcards.length > 0 && (
+          <InfoGroup
+            label="Quotation"
+            data={jobcard.quotation_jobcards[0]?.quotation?.ref ?? `QUO-${jobcard.quotation_jobcards[0]?.quotation_id}`}
+            icon={LinkIcon}
           />
         )}
         {jobcard.equipment_condition && (
@@ -151,7 +181,13 @@ function BasicDetails({ jobcard }: { jobcard: Jobcard }) {
   );
 }
 
-function TechnicianBadge({ jobcard }: { jobcard: Jobcard }) {
+function TechnicianBadge({
+  jobcard,
+  onPress,
+}: {
+  jobcard: Jobcard;
+  onPress?: () => void;
+}) {
   const techs = jobcard.technicians ?? [];
   if (techs.length === 0) return null;
   const names = techs
@@ -162,11 +198,19 @@ function TechnicianBadge({ jobcard }: { jobcard: Jobcard }) {
     })
     .join(", ");
   return (
-    <InfoGroup label="Technicians" data={names || "—"} icon={User} />
+    <Pressable onPress={onPress}>
+      <InfoGroup label="Technicians" data={names || "—"} icon={User} />
+    </Pressable>
   );
 }
 
-function CustomerDetails({ jobcard }: { jobcard: Jobcard }) {
+function CustomerDetails({
+  jobcard,
+  onTechnicianPress,
+}: {
+  jobcard: Jobcard;
+  onTechnicianPress?: () => void;
+}) {
   const customer = jobcard.customer;
   if (!customer) return null;
   return (
@@ -177,7 +221,7 @@ function CustomerDetails({ jobcard }: { jobcard: Jobcard }) {
           data={customer.company_name}
           icon={Building2}
         />
-        <TechnicianBadge jobcard={jobcard} />
+        <TechnicianBadge jobcard={jobcard} onPress={onTechnicianPress} />
         {customer.contact_person && (
           <InfoGroup
             label="Contact Person"
@@ -316,6 +360,34 @@ function BranchDetails({ jobcard }: { jobcard: Jobcard }) {
 
 function AssetsTab({ jobcard }: { jobcard: Jobcard }) {
   if (!jobcard.assets || jobcard.assets.length === 0) {
+    // Check for ad-hoc asset from quotation
+    const quotation = jobcard.quotation_jobcards?.[0]?.quotation;
+    if (quotation?.asset_description) {
+      return (
+        <View className="py-2">
+          <CardGroup title="Asset Details" icon={Wrench}>
+            <View className="space-y-2">
+              <View className="flex-row">
+                <Text className="text-muted-foreground w-24">Description:</Text>
+                <Text className="font-medium flex-1">{quotation.asset_description}</Text>
+              </View>
+              {quotation.asset_type_name && (
+                <View className="flex-row">
+                  <Text className="text-muted-foreground w-24">Type:</Text>
+                  <Text className="font-medium flex-1">{quotation.asset_type_name}</Text>
+                </View>
+              )}
+              {quotation.asset_kva != null && (
+                <View className="flex-row">
+                  <Text className="text-muted-foreground w-24">kVA:</Text>
+                  <Text className="font-medium flex-1">{Number(quotation.asset_kva).toFixed(2)}</Text>
+                </View>
+              )}
+            </View>
+          </CardGroup>
+        </View>
+      );
+    }
     return <Text className="text-text-muted py-4">No assets linked.</Text>;
   }
   return (
@@ -427,6 +499,8 @@ export default function JobCardDetail() {
   const router = useRouter();
   const technicianId = user?.technician_id;
   const [tab, setTab] = useState<number>(0);
+  const [showTechAssign, setShowTechAssign] = useState(false);
+  const [showDateEdit, setShowDateEdit] = useState(false);
 
   const {
     data: jobcard,
@@ -448,6 +522,12 @@ export default function JobCardDetail() {
     return jobcard.status.name.toLowerCase() === "completed";
   }, [jobcard]);
 
+  const isCancelled = useMemo(() => {
+    if (!jobcard?.status?.name) return false;
+    return jobcard.status.name.toLowerCase() === "cancelled";
+  }, [jobcard]);
+
+  const isEditable = !isCompleted && !isCancelled;
   const showComplete = isAssigned && !isCompleted;
 
   const jobcardLabel = jobcard
@@ -478,7 +558,20 @@ export default function JobCardDetail() {
           <Pressable onPress={() => router.back()} className="p-1">
             <Icon as={ArrowLeft} size="lg" className="text-text" />
           </Pressable>
-          <Text className="text-lg font-bold text-text">{jobcardLabel}</Text>
+          <Text className="text-lg font-bold text-text flex-1">{jobcardLabel}</Text>
+          {jobcard && isEditable && (
+            <ModChangeStatus jobcard={jobcard} />
+          )}
+          {jobcard && isEditable && (
+            <ModCancelJobcard
+              jobcardId={jobcard.id}
+              trigger={
+                <Pressable className="p-1">
+                  <Icon as={Ban} size="lg" className="text-error" />
+                </Pressable>
+              }
+            />
+          )}
         </View>
 
         <ErrorScreen error={error} refetch={refetch} />
@@ -499,13 +592,14 @@ export default function JobCardDetail() {
             )}
 
             <View className="flex flex-col gap-4 mb-4">
-              <BasicDetails jobcard={jobcard} />
-              <CustomerDetails jobcard={jobcard} />
+              <BasicDetails jobcard={jobcard} onEditDate={() => setShowDateEdit(true)} />
+              <CustomerDetails jobcard={jobcard} onTechnicianPress={() => setShowTechAssign(true)} />
               <ContractDetails jobcard={jobcard} />
               <BranchDetails jobcard={jobcard} />
               <CardGroup title="Map" icon={MapPin}>
                 <ComJobcardMap jobcard={jobcard} />
               </CardGroup>
+              <ComJobcardCostSummary jobcard={jobcard} />
             </View>
 
             {isCompleted && <ComJobcardCompletedView jobcard={jobcard} />}
@@ -555,6 +649,21 @@ export default function JobCardDetail() {
           </>
         )}
       </ScrollView>
+
+      {jobcard && (
+        <>
+          <ModTechnicianAssign
+            jobcard={jobcard}
+            open={showTechAssign}
+            onOpenChange={setShowTechAssign}
+          />
+          <ModEditScheduledDate
+            jobcard={jobcard}
+            open={showDateEdit}
+            onOpenChange={setShowDateEdit}
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 }

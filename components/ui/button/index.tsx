@@ -41,7 +41,7 @@ const buttonStyle = tva({
   variants: {
     action: {
       primary:
-        'bg-tertiary text-text-inverse data-[hover=true]:bg-tertiary-muted data-[active=true]:bg-tertiary-muted border-primary data-[hover=true]:border-primary data-[active=true]:border-primary data-[focus-visible=true]:web:ring-indicator-info',
+        'bg-accent-primary text-white data-[hover=true]:bg-tertiary-muted data-[active=true]:bg-tertiary-muted border-primary data-[hover=true]:border-primary data-[active=true]:border-primary data-[focus-visible=true]:web:ring-indicator-info',
       secondary:
         'bg-secondary text-text-inverse border-secondary data-[hover=true]:bg-secondary data-[hover=true]:border-secondary data-[active=true]:bg-secondary data-[active=true]:border-secondary data-[focus-visible=true]:web:ring-indicator-info',
       positive:
@@ -119,11 +119,11 @@ const buttonStyle = tva({
 });
 
 const buttonTextStyle = tva({
-  base: 'text-text-inverse font-semibold web:select-none',
+  base: 'text-white font-semibold web:select-none',
   parentVariants: {
     action: {
       primary:
-        'text-text data-[hover=true]:text-text data-[active=true]:text-text',
+        'text-white data-[hover=true]:text-text data-[active=true]:text-text',
       secondary:
         'text-muted data-[hover=true]:text-muted data-[active=true]:text',
       positive:
@@ -135,7 +135,7 @@ const buttonTextStyle = tva({
       link: 'data-[hover=true]:underline data-[active=true]:underline',
       outline: '',
       solid:
-        'text-text data-[hover=true]:text-text data-[active=true]:text-text',
+        'text-white data-[hover=true]:text-text data-[active=true]:text-text',
     },
     size: {
       xs: 'text-xs',
@@ -150,7 +150,7 @@ const buttonTextStyle = tva({
       variant: 'solid',
       action: 'primary',
       class:
-        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
+        'text-white data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
@@ -215,7 +215,7 @@ const buttonIconStyle = tva({
     },
     action: {
       primary:
-        'text-text data-[hover=true]:text-text data-[active=true]:text-text',
+        'text-white data-[hover=true]:text-text data-[active=true]:text-text',
       secondary:
         'text-muted data-[hover=true]:text-muted data-[active=true]:text',
       positive:
@@ -230,7 +230,7 @@ const buttonIconStyle = tva({
       variant: 'solid',
       action: 'primary',
       class:
-        'text-text-inverse data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
+        'text-white data-[hover=true]:text-text-inverse data-[active=true]:text-text-inverse',
     },
     {
       variant: 'solid',
