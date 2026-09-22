@@ -50,6 +50,8 @@ export default function JobCards() {
     status_id: statusId ? [Number(statusId)] : null,
   } as any);
 
+  console.log('jobcards', jobcards);
+
   function handlePress(id: number) {
     router.push(`/tabs/job-cards/${id}` as any);
   }

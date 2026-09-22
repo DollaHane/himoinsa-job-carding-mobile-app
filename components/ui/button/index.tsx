@@ -41,7 +41,7 @@ const buttonStyle = tva({
   variants: {
     action: {
       primary:
-        'bg-accent-primary text-white data-[hover=true]:bg-tertiary-muted data-[active=true]:bg-tertiary-muted border-primary data-[hover=true]:border-primary data-[active=true]:border-primary data-[focus-visible=true]:web:ring-indicator-info',
+        'bg-accent-primary text-white data-[hover=true]:bg-accent-muted data-[active=true]:bg-accent-muted border-primary data-[hover=true]:border-primary data-[active=true]:border-primary data-[focus-visible=true]:web:ring-indicator-info',
       secondary:
         'bg-secondary text-text-inverse border-secondary data-[hover=true]:bg-secondary data-[hover=true]:border-secondary data-[active=true]:bg-secondary data-[active=true]:border-secondary data-[focus-visible=true]:web:ring-indicator-info',
       positive:
@@ -54,16 +54,16 @@ const buttonStyle = tva({
     variant: {
       link: 'px-0',
       outline:
-        'bg-transparent border data-[hover=true]:bg-background-subtle data-[active=true]:bg-transparent',
+        'bg-transparent border border-secondary data-[hover=true]:bg-background-subtle data-[active=true]:bg-transparent',
       solid: '',
     },
 
     size: {
       xs: 'px-3.5 h-8',
       sm: 'px-4 h-9',
-      md: 'px-5 h-10',
-      lg: 'px-6 h-11',
-      xl: 'px-7 h-12',
+      md: 'px-5 h-12',
+      lg: 'px-6 h-16',
+      xl: 'px-7 h-16',
     },
   },
   compoundVariants: [

@@ -115,7 +115,7 @@ export function FormMultiSelect<TFieldValues extends FieldValues>({
               disabled={isDisabled}
               className={cn(
                 "my-1 flex flex-row items-center justify-between rounded-lg border border-border bg-background px-3 py-2",
-                size === "sm" ? "min-h-8" : size === "lg" ? "min-h-12" : "min-h-10",
+                size === "sm" ? "min-h-8" : size === "lg" ? "min-h-16" : "min-h-12",
                 !!error && "border-error",
                 isDisabled && "opacity-50"
               )}

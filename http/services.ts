@@ -18,6 +18,7 @@ import {
   getCustomerAssetsList,
   getCustomerAssetsSearch,
   getCustomerMetadata,
+  getInspectionChecklistsList,
   getCustomersList,
   getCustomersSearch,
   getDashboardStats,
@@ -727,6 +728,13 @@ export function useGetServiceKit(id: string | null) {
     queryKey: QueryKeys.service_kit_show(id),
     queryFn: () => getServiceKit(id!),
     enabled: !!id,
+  });
+}
+
+export function useGetInspectionChecklistsList() {
+  return useQuery<Array<{ id: number; name: string }>>({
+    queryKey: ["inspection-checklists-list"],
+    queryFn: () => getInspectionChecklistsList(),
   });
 }
 

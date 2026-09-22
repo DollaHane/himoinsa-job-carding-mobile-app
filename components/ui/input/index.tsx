@@ -34,13 +34,13 @@ cssInterop(PrimitiveIcon, {
 });
 
 const inputStyle = tva({
-  base: 'bg-background text-text border border-border flex-row overflow-hidden content-center data-[hover=true]:border data-[focus=true]:border-primary data-[focus=true]:hover:border-primary data-[disabled=true]:opacity-40 data-[disabled=true]:hover:border items-center',
+  base: 'bg-background text-text border border-primary-muted flex-row overflow-hidden content-center data-[hover=true]:border data-[focus=true]:border-primary data-[focus=true]:hover:border-primary data-[disabled=true]:opacity-40 data-[disabled=true]:hover:border items-center',
 
   variants: {
     size: {
       xl: 'h-12',
       lg: 'h-11',
-      md: 'h-10',
+      md: 'h-12',
       sm: 'h-9',
     },
 

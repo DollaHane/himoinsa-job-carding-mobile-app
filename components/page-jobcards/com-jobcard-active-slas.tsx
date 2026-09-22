@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
-import { Checkbox, CheckboxIndicator, CheckboxIcon } from "@/components/ui/checkbox";
-import { CheckIcon } from "@/components/ui/icon";
+import { Check } from "lucide-react-native";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { apiFetch } from "@/http/core";
 import { HimoinsaAPI } from "@/http/actions";
 import type { Sla, SlaServicePrefill } from "@/types/sla";
+import { ShieldCheck } from "lucide-react-native";
+import { cn } from "@/lib/utils";
+import { Icon } from "../ui/icon";
 
 interface ComJobcardActiveSlasProps {
   customerId: number | null;
@@ -22,13 +24,6 @@ function formatDate(dateStr: string | null | undefined): string {
   } catch {
     return dateStr;
   }
-}
-
-interface ComJobcardActiveSlasProps {
-  customerId: number | null;
-  onPrefill: (prefill: SlaServicePrefill) => void;
-  selectedServiceId: number | null;
-  onSelectService: (id: number | null) => void;
 }
 
 export default function ComJobcardActiveSlas({
@@ -120,50 +115,52 @@ export default function ComJobcardActiveSlas({
 
   return (
     <View className="mt-4">
-      <Text className="text-sm font-semibold mb-2">Active SLAs</Text>
+      <View className="flex flex-row gap-3 mb-2 items-center justify-items-center">
+        <Icon as={ShieldCheck} className="text-accent-primary"/>
+        <Text className="text-text text-md font-semibold mb-2">Active SLAs for this customer:</Text>
+      </View>
       <ScrollView horizontal={false} className="max-h-48">
-        {rows.map((row) => (
-          <Pressable
-            key={`${row.slaId}-${row.serviceId}`}
-            onPress={() => {
-              if (row.serviceId) {
-                onSelectService(
-                  selectedServiceId === row.serviceId ? null : row.serviceId
-                );
-              }
-            }}
-            className="flex-row items-center gap-2 rounded border border-border px-2 py-1.5 mb-1"
-          >
-            <Checkbox
-              value={selectedServiceId === row.serviceId ? "checked" : "unchecked"}
-              onChange={() => {
-                if (row.serviceId) {
-                  onSelectService(
-                    selectedServiceId === row.serviceId ? null : row.serviceId
-                  );
+        {rows.map((row) => {
+          const isSelected = selectedServiceId === row.serviceId;
+          const isRowDisabled = !row.serviceId || (selectedServiceId !== null && !isSelected);
+
+          return (
+            <Pressable
+              key={`${row.slaId}-${row.serviceId}`}
+              onPress={() => {
+                if (row.serviceId && !isRowDisabled) {
+                  onSelectService(isSelected ? null : row.serviceId);
                 }
               }}
-              isDisabled={!row.serviceId}
+              disabled={isRowDisabled}
+              className={`flex-row items-center gap-2 rounded-full border border-border px-2 py-1.5 mb-4 ${
+                isRowDisabled ? "opacity-50" : ""
+              }`}
             >
-              <CheckboxIndicator>
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-            </Checkbox>
-            <View className="flex-1">
-              <Text className="text-xs font-medium">{row.slaRef}</Text>
-              {row.serviceName && (
-                <Badge size="sm" variant="outline">
-                  <BadgeText className="text-xs">{row.serviceName}</BadgeText>
-                </Badge>
+              <View
+                className={cn(
+                  "w-8 h-8 rounded-full border items-center justify-center",
+                  isSelected
+                    ? "bg-accent-primary border-accent-primary"
+                    : "border-border bg-background"
+                )}
+              >
+                {isSelected && <Icon as={Check} className="w-3 h-3 text-white" />}
+              </View>
+              <View className="flex-1">
+                <Text className="text-xs text-text font-medium">{row.slaRef}</Text>
+                {row.serviceName && (
+                    <Text className="text-xs text-text-muted">{row.serviceName}</Text>
+                )}
+              </View>
+              {row.termEnd && (
+                <Text className="text-xs text-text-muted">
+                  Exp: {formatDate(row.termEnd)}
+                </Text>
               )}
-            </View>
-            {row.termEnd && (
-              <Text className="text-xs text-text-muted">
-                Exp: {formatDate(row.termEnd)}
-              </Text>
-            )}
-          </Pressable>
-        ))}
+            </Pressable>
+          );
+        })}
       </ScrollView>
       {isPrefilling && (
         <View className="flex-row items-center gap-2 mt-2">

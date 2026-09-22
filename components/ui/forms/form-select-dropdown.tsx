@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form-control";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
+import { Icon } from "../icon";
 
 export type SelectOption = { value: string; label: string };
 
@@ -94,7 +95,7 @@ export function FormSelectDropdown<TFieldValues extends FieldValues>({
               disabled={isDisabled}
               className={cn(
                 "my-1 flex flex-row items-center justify-between rounded-lg border border-border bg-background px-3",
-                size === "sm" ? "h-8" : size === "lg" ? "h-12" : "h-10",
+                size === "sm" ? "h-8" : size === "lg" ? "h-16" : "h-12",
                 !!error && "border-error",
                 isDisabled && "opacity-50"
               )}
@@ -109,9 +110,9 @@ export function FormSelectDropdown<TFieldValues extends FieldValues>({
                 {displayLabel || placeholderText}
               </Text>
               {open ? (
-                <ChevronUp size={16} className="text-text" />
+                <Icon as={ChevronUp} className="text-text" />
               ) : (
-                <ChevronDown size={16} className="text-text" />
+                <Icon as={ChevronDown} className="text-text" />
               )}
             </TouchableOpacity>
 

@@ -1,15 +1,14 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Heading } from "@/components/ui/heading";
-import type { CustomerWithLocations } from "@/types/customer";
-import type { JobcardCreationRequest } from "@/lib/validators/validate-jobcard-create";
 import type { Control } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import type { JobcardCreationRequest } from "@/lib/validators/validate-jobcard-create";
 
-const STEP_LABELS = ["1", "2", "3", "4", "5"];
+const STEP_LABELS = ["Customer & Asset", "Details", "Tasks & Inventory"];
 
 interface CreateJobcardLayoutProps {
   title: string;
@@ -23,13 +22,9 @@ interface CreateJobcardLayoutProps {
   handleReset: () => void;
   handleFinalSubmit: () => void;
   goNext: () => void;
-  customerName?: string;
-  contractLabel?: string | null;
   step1: React.ReactNode;
   step2: React.ReactNode;
   step3: React.ReactNode;
-  stepInventory: React.ReactNode;
-  stepSummary: React.ReactNode;
 }
 
 export default function CreateJobcardLayout({
@@ -46,8 +41,6 @@ export default function CreateJobcardLayout({
   step1,
   step2,
   step3,
-  stepInventory,
-  stepSummary,
 }: CreateJobcardLayoutProps) {
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -56,17 +49,26 @@ export default function CreateJobcardLayout({
           {title}
         </Heading>
 
-        <View className="mb-4 w-full flex flex-row justify-between px-10">
+        <View className="mb-4 w-full flex flex-row justify-between">
           {STEP_LABELS.map((label, i) => (
-            <Button
-              key={label}
-              variant={i === step ? "solid" : "outline"}
-              size="sm"
-              onPress={() => setStep(i)}
-              className={cn("flex", i === step ? "bg-tertiary" : "border-tertiary")}
-            >
-              <ButtonText className="text-xs">{label}</ButtonText>
-            </Button>
+            <View key={label} className="flex-1 items-center">
+              <Button
+                variant={i === step ? "solid" : "outline"}
+                size="sm"
+                onPress={() => setStep(i)}
+                className={cn("w-8 h-8 relative", i === step ? "bg-accent-primary" : "border-accent-primary")}
+              >
+                <ButtonText className="text-xs absolute">{i + 1}</ButtonText>
+              </Button>
+              <Text
+                className={cn(
+                  "text-xs mt-1 text-center",
+                  i === step ? "text-primary font-medium" : "text-text-muted"
+                )}
+              >
+                {label}
+              </Text>
+            </View>
           ))}
         </View>
 
@@ -77,8 +79,6 @@ export default function CreateJobcardLayout({
           {step === 0 && step1}
           {step === 1 && step2}
           {step === 2 && step3}
-          {step === 3 && stepInventory}
-          {step === 4 && stepSummary}
         </ScrollView>
 
         <View className="flex-row items-center justify-between border-t border-input px-4 py-4 pb-24">

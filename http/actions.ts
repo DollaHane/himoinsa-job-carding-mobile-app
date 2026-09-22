@@ -119,6 +119,9 @@ export const HimoinsaAPI = {
   api_inventory_list: `${route_prefix}inventory/list`,
   api_inventory_search: `${route_prefix}inventory/search`,
 
+  // Inspection Checklists
+  api_inspection_checklists_list: `${route_prefix}inspection-checklists/list`,
+
   // Timers
   api_timers_start: `${route_prefix}timers/start`,
   api_timers_stop: `${route_prefix}timers/stop`,
@@ -616,6 +619,13 @@ export async function getCustomerMetadata(
   const response = await apiFetch(url, "GET");
   const json = (await response.json()) as Response<CustomerMetadataResponse>;
   if (!json.data) throw new Error("Failed to fetch customer metadata.");
+  return json.data;
+}
+
+export async function getInspectionChecklistsList(): Promise<Array<{ id: number; name: string }>> {
+  const response = await apiFetch(HimoinsaAPI.api_inspection_checklists_list, "GET");
+  const json = (await response.json()) as Response<Array<{ id: number; name: string }>>;
+  if (!json.data) throw new Error("Failed to fetch inspection checklists.");
   return json.data;
 }
 

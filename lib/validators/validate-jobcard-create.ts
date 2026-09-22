@@ -1,19 +1,18 @@
 import { z } from "zod";
 
-const optionalNumber = z.preprocess(
-  (v) => (v === "" || v === undefined || v === null ? undefined : Number(v)),
-  z.coerce.number().int().positive().optional()
-);
-
 export const validateJobcardCreate = z
   .object({
     is_fleet_jc: z.coerce.boolean().default(false),
-    contract_id: optionalNumber,
-    customer_id: z.preprocess(
-      (v) => (v === "" ? 0 : Number(v)),
-      z.coerce.number().int().default(0)
-    ),
-    customer_location_id: optionalNumber,
+    contract_id: z.coerce.number().int().positive().nullable().optional(),
+    customer_id: z.coerce.number().int().default(0),
+    customer_location_id: z.coerce
+      .number()
+      .int()
+      .positive()
+      .nullable()
+      .optional(),
+    sla_id: z.coerce.number().int().positive().nullable().optional(),
+    sla_service_id: z.coerce.number().int().positive().nullable().optional(),
     work_description: z.string().min(1),
     service_type: z.coerce.number().int().positive().default(1),
     recurring_interval: z.coerce.number().int().positive().default(1),
@@ -25,7 +24,12 @@ export const validateJobcardCreate = z
       .array(
         z.object({
           asset_id: z.coerce.number().int().positive(),
-          asset_location_id: z.coerce.number().int().positive(),
+          asset_location_id: z.coerce
+            .number()
+            .int()
+            .positive()
+            .nullable()
+            .optional(),
         })
       )
       .min(1, "At least one asset is required"),
@@ -39,19 +43,24 @@ export const validateJobcardCreate = z
       )
       .optional(),
     technicians: z.array(z.coerce.number().int().positive()).default([]),
+    inspection_checklist_ids: z
+      .array(z.coerce.number().int().positive())
+      .default([]),
     inventory: z
       .array(
         z.object({
           inventory_id: z.coerce.number().int().positive(),
           quantity_requested: z.coerce.number().min(0.0001),
           requested_by: z.coerce.number().int().positive(),
-          date_requested: z.string().min(1),
+          date_requested: z.string().min(1).optional(),
           estimated_arrival_date: z.string().nullable().optional(),
           notes: z.string().nullable().optional(),
         })
       )
       .optional()
       .default([]),
+    parent_jobcard_id: z.coerce.number().int().positive().nullable().optional(),
+    status_id: z.coerce.number().int().positive().nullable().optional(),
   })
   .refine(
     (data) => {

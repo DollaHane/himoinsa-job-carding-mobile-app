@@ -55,9 +55,9 @@ const selectTriggerStyle = tva({
   base: 'border border-border rounded-full flex-row items-center overflow-hidden data-[hover=true]:border data-[focus=true]:border-primary data-[disabled=true]:opacity-40 data-[disabled=true]:data-[hover=true]:border',
   variants: {
     size: {
-      xl: 'h-12',
-      lg: 'h-11',
-      md: 'h-10',
+      xl: 'h-16',
+      lg: 'h-16',
+      md: 'h-12',
       sm: 'h-9',
     },
     variant: {

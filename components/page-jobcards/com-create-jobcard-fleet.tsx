@@ -4,12 +4,11 @@ import CreateJobcardLayout from "./com-create-jobcard-layout";
 import TabStep1Fleet from "./com-jobcard-step-1-fleet";
 import TabStep2 from "./com-jobcard-step-2";
 import TabStep3 from "./com-jobcard-step-3";
-import TabStepInventory from "./com-jobcard-step-inventory";
-import TabStepSummary from "./com-jobcard-step-summary";
 
 export default function ComCreateJobcardFleet() {
   const {
     control,
+    setValue,
     step,
     setStep,
     isPending,
@@ -24,7 +23,7 @@ export default function ComCreateJobcardFleet() {
   >(null);
 
   const isFirst = step === 0;
-  const isLast = step === 4;
+  const isLast = step === 2;
 
   return (
     <CreateJobcardLayout
@@ -39,23 +38,15 @@ export default function ComCreateJobcardFleet() {
       handleReset={handleReset}
       handleFinalSubmit={handleFinalSubmit}
       goNext={goNext}
-      contractLabel={selectedContractLabel}
       step1={
         <TabStep1Fleet
           control={control}
+          setValue={setValue}
           onContractChange={setSelectedContractLabel}
         />
       }
       step2={<TabStep2 control={control} />}
       step3={<TabStep3 control={control} />}
-      stepInventory={<TabStepInventory control={control} />}
-      stepSummary={
-        <TabStepSummary
-          control={control}
-          isPending={isPending}
-          contractLabel={selectedContractLabel}
-        />
-      }
     />
   );
 }

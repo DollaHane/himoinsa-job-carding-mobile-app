@@ -15,6 +15,7 @@ import {
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
+import { Icon } from "../icon";
 
 export type ComboboxOption = { value: string; label: string };
 
@@ -133,7 +134,7 @@ export function FormCombobox<TFieldValues extends FieldValues>({
               disabled={isDisabled}
               className={cn(
                 "my-1 flex flex-row items-center justify-between rounded-lg border border-border bg-background px-3",
-                size === "sm" ? "h-8" : size === "lg" ? "h-12" : "h-10",
+                size === "sm" ? "h-8" : size === "lg" ? "h-16" : "h-12",
                 !!error && "border-error",
                 isDisabled && "opacity-50"
               )}
@@ -150,14 +151,14 @@ export function FormCombobox<TFieldValues extends FieldValues>({
               <View className="flex-row items-center gap-1">
                 {displayLabel ? (
                   <Pressable onPress={handleClear} className="p-1">
-                    <X size={14} className="text-text" />
+                    <Icon as={X} className="text-text" />
                   </Pressable>
                 ) : null}
                 <View className="p-1">
                   {open ? (
-                    <ChevronUp size={16} className="text-text" />
+                    <Icon as={ChevronUp} className="text-text" />
                   ) : (
-                    <ChevronDown size={16} className="text-text" />
+                    <Icon as={ChevronDown} className="text-text" />
                   )}
                 </View>
               </View>

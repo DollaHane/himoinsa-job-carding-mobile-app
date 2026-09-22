@@ -36,7 +36,6 @@ export default function AssetLocationSelect<TFieldValues extends FieldValues>({
           <FormSelectDropdown
             control={control}
             name={name}
-            label="Location"
             placeholder="Select location..."
             options={locationOptions}
           />

@@ -4,13 +4,12 @@ import CreateJobcardLayout from "./com-create-jobcard-layout";
 import TabStep1Customer from "./com-jobcard-step-1-customer";
 import TabStep2 from "./com-jobcard-step-2";
 import TabStep3 from "./com-jobcard-step-3";
-import TabStepInventory from "./com-jobcard-step-inventory";
-import TabStepSummary from "./com-jobcard-step-summary";
 import type { CustomerWithLocations } from "@/types/customer";
 
 export default function ComCreateJobcardCustomer() {
   const {
     control,
+    setValue,
     step,
     setStep,
     isPending,
@@ -24,7 +23,7 @@ export default function ComCreateJobcardCustomer() {
     useState<CustomerWithLocations | null>(null);
 
   const isFirst = step === 0;
-  const isLast = step === 4;
+  const isLast = step === 2;
 
   return (
     <CreateJobcardLayout
@@ -39,23 +38,15 @@ export default function ComCreateJobcardCustomer() {
       handleReset={handleReset}
       handleFinalSubmit={handleFinalSubmit}
       goNext={goNext}
-      customerName={selectedCustomer?.company_name}
       step1={
         <TabStep1Customer
           control={control}
+          setValue={setValue}
           onCustomerChange={setSelectedCustomer}
         />
       }
       step2={<TabStep2 control={control} />}
       step3={<TabStep3 control={control} />}
-      stepInventory={<TabStepInventory control={control} />}
-      stepSummary={
-        <TabStepSummary
-          control={control}
-          isPending={isPending}
-          customerName={selectedCustomer?.company_name}
-        />
-      }
     />
   );
 }

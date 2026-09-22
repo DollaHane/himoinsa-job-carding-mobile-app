@@ -21,6 +21,7 @@ export function useJobcardCreate(isFleetJc: boolean) {
 
   const scheduledDate = new Date();
   scheduledDate.setDate(scheduledDate.getDate() + 1);
+  scheduledDate.setHours(9, 0, 0, 0);
 
   const defaultValues = useMemo<JobcardCreationRequest>(
     () => ({
@@ -28,6 +29,8 @@ export function useJobcardCreate(isFleetJc: boolean) {
       contract_id: undefined,
       customer_id: 0,
       customer_location_id: undefined,
+      sla_id: undefined,
+      sla_service_id: undefined,
       work_description: "",
       service_type: undefined,
       is_recurring: false,
@@ -38,7 +41,10 @@ export function useJobcardCreate(isFleetJc: boolean) {
       assets: [],
       tasks: [],
       technicians: [],
+      inspection_checklist_ids: [],
       inventory: [],
+      parent_jobcard_id: undefined,
+      status_id: undefined,
     }),
     []
   );
@@ -75,7 +81,6 @@ export function useJobcardCreate(isFleetJc: boolean) {
 
   const onSubmit = useCallback(
     async (values: JobcardCreationRequest) => {
-      console.log("[DEBUG] onSubmit called with values:", JSON.stringify(values, null, 2));
       const scheduledDateVal = values.scheduled_datetime
         ? new Date(values.scheduled_datetime as Date)
         : null;
@@ -94,6 +99,10 @@ export function useJobcardCreate(isFleetJc: boolean) {
             : undefined,
         customer_location_id: values.customer_location_id
           ? Number(values.customer_location_id)
+          : undefined,
+        sla_id: values.sla_id ? Number(values.sla_id) : undefined,
+        sla_service_id: values.sla_service_id
+          ? Number(values.sla_service_id)
           : undefined,
         service_type: values.service_type
           ? Number(values.service_type)
@@ -114,6 +123,8 @@ export function useJobcardCreate(isFleetJc: boolean) {
           duration: t.duration ?? undefined,
         })),
         technicians: values.technicians?.map((t) => Number(t)) || [],
+        inspection_checklist_ids:
+          values.inspection_checklist_ids?.map((id) => Number(id)) || [],
         inventory:
           values.inventory?.map((item) => ({
             inventory_id: Number(item.inventory_id),
@@ -123,10 +134,12 @@ export function useJobcardCreate(isFleetJc: boolean) {
             estimated_arrival_date: item.estimated_arrival_date ?? undefined,
             notes: item.notes ?? undefined,
           })) || [],
+        parent_jobcard_id: values.parent_jobcard_id
+          ? Number(values.parent_jobcard_id)
+          : undefined,
       };
 
       const online = await isOnline();
-      console.log("[DEBUG] online:", online, "payload:", JSON.stringify(payload, null, 2));
       if (online) {
         submitMutation(payload as Record<string, unknown>);
       } else {
@@ -144,7 +157,7 @@ export function useJobcardCreate(isFleetJc: boolean) {
   );
 
   const goNext = useCallback(() => {
-    if (step < 4) setStep(step + 1);
+    if (step < 2) setStep(step + 1);
   }, [step]);
 
   const goBack = useCallback(() => {
@@ -160,9 +173,7 @@ export function useJobcardCreate(isFleetJc: boolean) {
   submitRef.current = handleSubmit(onSubmit);
 
   const handleFinalSubmit = useCallback(async () => {
-    console.log("[DEBUG] handleFinalSubmit called");
     const valid = await trigger();
-    console.log("[DEBUG] trigger result:", valid, "errors:", JSON.stringify(errors, null, 2));
     if (!valid) {
       Toast.show({
         type: "error",
@@ -171,9 +182,8 @@ export function useJobcardCreate(isFleetJc: boolean) {
       });
       return;
     }
-    console.log("[DEBUG] validation passed, calling submitRef");
     submitRef.current();
-  }, [trigger, errors]);
+  }, [trigger]);
 
   return {
     control,
